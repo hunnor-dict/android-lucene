@@ -29,7 +29,6 @@ public class SearchActivity extends Activity implements View.OnClickListener {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.search_menu, menu);
 		return true;
 	}
@@ -65,7 +64,7 @@ public class SearchActivity extends Activity implements View.OnClickListener {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.menu.database:
-			launchActivity("net.hunnor.dict.lucene.ACTIVITY_DATABASE");
+			launchActivity("net.hunnor.dict.ACTIVITY_DATABASE");
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
