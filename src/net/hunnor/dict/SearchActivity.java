@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
@@ -23,8 +25,29 @@ public class SearchActivity extends Activity implements View.OnClickListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_search);
-		Button button = (Button) findViewById(R.search.searchButton);
+		Button button = (Button) findViewById(R.search.search_button);
 		button.setOnClickListener(this);
+		DictionaryProvider dictionaryProvider = new DictionaryProvider();
+		if (!dictionaryProvider.ready()) {
+			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+			alertDialogBuilder
+					.setTitle(R.string.database_alert_title)
+					.setMessage(R.string.database_alert_text)
+					.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							dialog.cancel();
+						}
+					})
+					.setNegativeButton("No", new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							dialog.cancel();
+						}
+					});
+			AlertDialog alertDialog = alertDialogBuilder.create();
+			alertDialog.show();
+		}
 	}
 
 	@Override

@@ -25,23 +25,23 @@ import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.NIOFSDirectory;
 
-import android.os.Environment;
-
 @SuppressWarnings("deprecation")
 public class DictionaryProvider implements LuceneConstants {
-
-	public static String PACKAGE_PATH = "net.hunnor.dict.lucene";
 
 	private IndexReader indexReader = null;
 	private Analyzer analyzer = null;
 
+	public boolean ready() {
+		if (indexReader == null) {
+			return constructIndexReader();
+		} else {
+			return true;
+		}
+	}
+
 	public List<IndexObject> search(String queryString) {
 		if (indexReader == null) {
-			try {
-				indexReader = constructIndexReader();
-			} catch (CorruptIndexException e) {
-				return null;
-			} catch (IOException e) {
+			if (!constructIndexReader()) {
 				return null;
 			}
 		}
@@ -88,18 +88,22 @@ public class DictionaryProvider implements LuceneConstants {
 		return results;
 	}
 
-	private IndexReader constructIndexReader() throws CorruptIndexException, IOException {
-		IndexReader indexReader = null;
-		String separator = File.separator;
-		StringBuilder sb = new StringBuilder();
-		sb.append(Environment.getExternalStorageDirectory().getAbsolutePath()).append(separator);
-		sb.append("Android").append(separator).append("data").append(separator);
-		sb.append(PACKAGE_PATH).append(separator);
-		sb.append(INDEX_DIR);
-		File indexDir = new File(sb.toString());
-		Directory directory = new NIOFSDirectory(indexDir);
-		indexReader = IndexReader.open(directory);
-		return indexReader;
+	private boolean constructIndexReader() {
+		try {
+			FileManager fileManager = new FileManager();
+			String separator = File.separator;
+			StringBuilder sb = new StringBuilder();
+			sb.append(fileManager.getAppDirectory());
+			sb.append(separator).append(INDEX_DIR);
+			File indexDir = new File(sb.toString());
+			Directory directory = new NIOFSDirectory(indexDir);
+			indexReader = IndexReader.open(directory);
+		} catch (CorruptIndexException exception) {
+			return false;
+		} catch (IOException exception) {
+			return false;
+		}
+		return true;
 	}
 
 	private Analyzer constructAnalyzer() {

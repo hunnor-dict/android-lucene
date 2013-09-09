@@ -4,10 +4,12 @@
 	<string name="app_name">HunNor Lucene</string>
 	<string name="action_settings">Settings</string>
 	<string name="search_exception">SearchException</string>
-	<string name="search_hint">Enter query&#8230;</string>
+	<string name="search_hint">v2&#8230;</string>
 	<string name="search_button">Search!</string>
 
-	<string name="menu_search">Search</string>
+	<string name="database_alert_title">MyTitle</string>
+	<string name="database_alert_text">Must download database</string>
+		<string name="menu_search">Search</string>
 	<string name="menu_database">Database</string>
 
 	<string name="database_info">DB Info</string>

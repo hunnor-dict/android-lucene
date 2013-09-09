@@ -22,7 +22,7 @@
 				android:singleLine="true"
 				android:hint="@string/search_hint"/>
 		<Button
-				android:id="@+search/searchButton"
+				android:id="@+search/search_button"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:text="@string/search_button"/>
