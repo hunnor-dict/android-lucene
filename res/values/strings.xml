@@ -2,16 +2,34 @@
 <resources>
 
 	<string name="app_name">HunNor Lucene</string>
+
+	<string name="ok">OK</string>
+	<string name="error">Error</string>
+
+	<string name="database_read_write">read/write</string>
+	<string name="database_read_only">read only</string>
+	<string name="database_not_ready">not ready</string>
+	<string name="database_storage_check">Checking extertal storage</string>
+	<string name="database_directory_check">Checking app directory</string>
+	<string name="database_directory_created">created</string>
+	<string name="database_directory_create_failed">failed to create</string>
+	<string name="database_index_directory_check">Checking index directory</string>
+	<string name="database_index_directory_empty">Index directory empty</string>
+	<string name="database_index_check">Checking index integrity</string>
+	<string name="database_index_last_modified">Last modified</string>
+	<string name="database_index_corrupt">corrupt index</string>
+		
 	<string name="action_settings">Settings</string>
 	<string name="search_exception">SearchException</string>
-	<string name="search_hint">v2&#8230;</string>
+	<string name="search_hint">v23&#8230;</string>
 	<string name="search_button">Search!</string>
 
 	<string name="database_alert_title">MyTitle</string>
 	<string name="database_alert_text">Must download database</string>
-		<string name="menu_search">Search</string>
+	<string name="menu_search">Search</string>
 	<string name="menu_database">Database</string>
 
-	<string name="database_info">DB Info</string>
+	<string name="database_info">This is the default content of the database Intent. If you see this, something went wrong in the application :)</string>
+	<string name="database_update_check_button_label">Check for updates</string>
 
 </resources>

@@ -39,6 +39,17 @@ public class DictionaryProvider implements LuceneConstants {
 		}
 	}
 
+	public boolean getData() {
+		FileManager fileManager = new FileManager();
+		boolean state = fileManager.downloadFile(INDEX_URL,
+				fileManager.getAppDirectory() + File.separator + INDEX_DIR + File.separator + INDEX_ZIP);
+		if (state) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	public List<IndexObject> search(String queryString) {
 		if (indexReader == null) {
 			if (!constructIndexReader()) {

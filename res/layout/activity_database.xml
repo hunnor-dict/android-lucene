@@ -12,7 +12,17 @@
 	<TextView
 		android:id="@+database/databaseInfo"
 		android:layout_width="fill_parent"
-		android:layout_height="fill_parent"
+		android:layout_height="wrap_content"
 		android:text="@string/database_info" />
+	<Button
+		android:id="@+database/update_check_button"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="@string/database_update_check_button_label"/>
+	<TextView
+		android:id="@+database/update_status"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		/>
 
 </LinearLayout>

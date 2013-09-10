@@ -1,12 +1,16 @@
 package net.hunnor.dict;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.channels.Channels;
-import java.nio.channels.ReadableByteChannel;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+
+import org.apache.commons.io.FileUtils;
 
 import android.os.Environment;
 
@@ -21,35 +25,28 @@ public class FileManager {
 
 	public static final String APP_DATA_DIR = "net.hunnor.dict.lucene";
 
-	public enum State {
-		STORAGE_NOT_READY,
-		STORAGE_MOUNTED_READ_ONLY,
-		STORAGE_MOUNTED,
-
-		NET_NOT_AVAILABLE,
-		NET_AVAILABLE,
-
-		DOWNLOAD_BAD_URL,
-		DOWNLOAD_IO_FAIL,
-		DOWNLOAD_SUCCESS;
+	/**
+	 *
+	 * <p>Returns if external storage is readable
+	 *
+	 * @return true if external storage is readable, false otherwise
+	 *
+	 */
+	public boolean storageReadable() {
+		String storageState = Environment.getExternalStorageState();
+		return (Environment.MEDIA_MOUNTED.equals(storageState) || Environment.MEDIA_MOUNTED_READ_ONLY.equals(storageState));
 	}
 
 	/**
 	 *
-	 * <p>Returns the state of external storage
+	 * <p>Returns if external storage is writable
 	 *
-	 * @return STORAGE_MOUNTED, STORAGE_MOUNTED_READ_ONLY or STORAGE_NOT_READY
+	 * @return true if external storage is writable, false otherwise
 	 *
 	 */
-	public State getStorageState() {
+	public boolean storageWriteable() {
 		String storageState = Environment.getExternalStorageState();
-		if (Environment.MEDIA_MOUNTED.equals(storageState)) {
-			return State.STORAGE_MOUNTED;
-		}
-		if (Environment.MEDIA_MOUNTED_READ_ONLY.equals(storageState)) {
-			return State.STORAGE_MOUNTED_READ_ONLY;
-		}
-		return State.STORAGE_NOT_READY;
+		return (Environment.MEDIA_MOUNTED.equals(storageState));
 	}
 
 	/**
@@ -73,33 +70,73 @@ public class FileManager {
 	 *
 	 * @param from The URL to download from
 	 * @param to The file to save to
-	 * @return DOWNLOAD_BAD_URL, DOWNLOAD_IO_FAIL or DOWNLOAD_SUCCESS
+	 * @return true if file download was successful, false otherwise
 	 *
 	 */
-	public State downloadFile(String from, String to) {
-		URL url = null;
+	public boolean downloadFile(String from, String to) {
 		try {
-			url = new URL(from);
+			URL url = new URL(from);
+			File destination = new File(to);
+			FileUtils.copyURLToFile(url, destination);
 		} catch (MalformedURLException exception) {
-			return State.DOWNLOAD_BAD_URL;
-		}
-		FileOutputStream fileOutputStream = null;
-		try {
-			fileOutputStream = new FileOutputStream(to);
-			ReadableByteChannel readableByteChannel = Channels.newChannel(url.openStream());
-			fileOutputStream.getChannel().transferFrom(readableByteChannel, 0, Long.MAX_VALUE);
+			return false;
 		} catch (IOException exception) {
-			return State.DOWNLOAD_IO_FAIL;
-		} finally {
-			if (fileOutputStream != null) {
-				try {
-					fileOutputStream.close();
-				} catch (IOException exception) {
-					return State.DOWNLOAD_IO_FAIL;
-				}
-			}
+			return false;
 		}
-		return State.DOWNLOAD_SUCCESS;
+		return true;
+	}
+
+	/**
+	 *
+	 * <p>Unzips a file to the specified directory
+	 *
+	 * @param from The file to unzip
+	 * @param to The directory to unzip into
+	 * @return true if decompression is successful, false otherwise
+	 *
+	 */
+	public boolean unZip(String from, String to) {
+		try {
+			byte[] buffer = new byte[256 * 1024];
+			ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(from));
+			ZipEntry zipEntry = zipInputStream.getNextEntry();
+			while (zipEntry != null) {
+				String fileName = zipEntry.getName();
+				File newFile = new File(to + File.separator + fileName);
+				new File(newFile.getParent()).mkdirs();
+				FileOutputStream fileOutputStream = new FileOutputStream(newFile); 
+				int length;
+				while ((length = zipInputStream.read(buffer)) > 0) {
+					fileOutputStream.write(buffer, 0, length);
+				}
+				fileOutputStream.close();
+				zipEntry = zipInputStream.getNextEntry();
+			}
+			zipInputStream.closeEntry();
+			zipInputStream.close();
+		} catch (FileNotFoundException exception) {
+			return false;
+		} catch (IOException e) {
+			return false;
+		}
+		return true;
+	}
+
+	/**
+	 *
+	 * <p>Deletes a directory recursively
+	 *
+	 * @param directory The directory to delete
+	 * @return true if the directory is deleted, false otherwise
+	 *
+	 */
+	public boolean deleteDirectory(String directory) {
+		try {
+			FileUtils.deleteDirectory(new File(directory));
+		} catch (IOException exception) {
+			return false;
+		}
+		return true;
 	}
 
 }

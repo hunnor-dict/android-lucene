@@ -36,13 +36,22 @@ public class SearchActivity extends Activity implements View.OnClickListener {
 					.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
-							dialog.cancel();
+							DictionaryProvider provider = new DictionaryProvider();
+							if (provider.getData()) {
+								// TODO proceed with search
+							} else {
+								// TODO some error; prompt and open DB activity
+							}
+							
 						}
 					})
 					.setNegativeButton("No", new DialogInterface.OnClickListener() {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
-							dialog.cancel();
+							try {
+								startActivity(new Intent("net.hunnor.dict.ACTIVITY_DATABASE"));
+							} catch (ActivityNotFoundException e) {
+							}		
 						}
 					});
 			AlertDialog alertDialog = alertDialogBuilder.create();
