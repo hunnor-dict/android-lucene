@@ -139,20 +139,33 @@ public class DatabaseActivity extends Activity implements View.OnClickListener {
 	}
 
 	private void checkRemote() {
+
+		boolean check = true;
+
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append(getResources().getString(R.string.database_update_check)).append("... ");
-		try {
-			URL url = new URL(LuceneConstants.INDEX_URL);
-			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-			connection.setRequestMethod("HEAD");
-			stringBuilder.append("<br>").append(getResources().getString(R.string.database_last_modified)).append(": ").append(connection.getHeaderField("Last-Modified"));
-			stringBuilder.append("<br>").append(getResources().getString(R.string.database_size)).append(": ").append(connection.getHeaderField("Content-Length"));
-		} catch (MalformedURLException exception) {
-			stringBuilder.append("<font color=\"red\"><b>").append(getResources().getString(R.string.error)).append("</b></font> (").append(getResources().getString(R.string.database_update_malformed_url)).append(")");
-		} catch (ProtocolException exception) {
-			stringBuilder.append("<font color=\"red\"><b>").append(getResources().getString(R.string.error)).append("</b></font> (").append(getResources().getString(R.string.database_update_protocol_exception)).append(")");
-		} catch (IOException exception) {
-			stringBuilder.append("<font color=\"red\"><b>").append(getResources().getString(R.string.error)).append("</b></font> (").append(getResources().getString(R.string.database_update_io_exception)).append(")");
+		FileManager fileManager = new FileManager();
+		if (fileManager.deviceOnline(this)) {
+			stringBuilder.append("<font color=\"green\"><b>").append(getResources().getString(R.string.ok)).append("</b></font> (").append(getResources().getString(R.string.database_connectivity_online)).append(")");
+		} else {
+			stringBuilder.append("<font color=\"red\"><b>").append(getResources().getString(R.string.error)).append("</b></font> (").append(getResources().getString(R.string.database_connectivity_offline)).append(")");
+			check = false;
+		}
+
+		if (check) {
+			try {
+				URL url = new URL(LuceneConstants.INDEX_URL);
+				HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+				connection.setRequestMethod("HEAD");
+				stringBuilder.append("<br>").append(getResources().getString(R.string.database_last_modified)).append(": ").append(connection.getHeaderField("Last-Modified"));
+				stringBuilder.append("<br>").append(getResources().getString(R.string.database_size)).append(": ").append(connection.getHeaderField("Content-Length"));
+			} catch (MalformedURLException exception) {
+				stringBuilder.append("<font color=\"red\"><b>").append(getResources().getString(R.string.error)).append("</b></font> (").append(getResources().getString(R.string.database_update_malformed_url)).append(")");
+			} catch (ProtocolException exception) {
+				stringBuilder.append("<font color=\"red\"><b>").append(getResources().getString(R.string.error)).append("</b></font> (").append(getResources().getString(R.string.database_update_protocol_exception)).append(")");
+			} catch (IOException exception) {
+				stringBuilder.append("<font color=\"red\"><b>").append(getResources().getString(R.string.error)).append("</b></font> (").append(getResources().getString(R.string.database_update_io_exception)).append(")");
+			}
 		}
 		
 		TextView textView = (TextView) findViewById(R.database.update_status);
