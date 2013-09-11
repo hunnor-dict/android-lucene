@@ -12,6 +12,9 @@ import java.util.zip.ZipInputStream;
 
 import org.apache.commons.io.FileUtils;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Environment;
 
 /**
@@ -35,6 +38,12 @@ public class FileManager {
 	public boolean storageReadable() {
 		String storageState = Environment.getExternalStorageState();
 		return (Environment.MEDIA_MOUNTED.equals(storageState) || Environment.MEDIA_MOUNTED_READ_ONLY.equals(storageState));
+	}
+
+	public boolean deviceOnline(Context context) {
+		ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+		return networkInfo != null && networkInfo.isConnected();
 	}
 
 	/**

@@ -3,12 +3,16 @@ package net.hunnor.dict;
 import java.io.File;
 import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.NIOFSDirectory;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
@@ -17,17 +21,27 @@ import android.os.Bundle;
 import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
-public class DatabaseActivity extends Activity {
+public class DatabaseActivity extends Activity implements View.OnClickListener {
 
-	@SuppressLint("SimpleDateFormat")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_database);
 
-		// TODO Set up layout elements
+		Button button1 = (Button) findViewById(R.database.update_download_button);
+		button1.setOnClickListener(this);
+		Button button2 = (Button) findViewById(R.database.update_check_button);
+		button2.setOnClickListener(this);
+
+		checkLocals();
+	}
+
+	@SuppressLint("SimpleDateFormat")
+	private void checkLocals() {
 
 		boolean check = true;
 
@@ -112,7 +126,7 @@ public class DatabaseActivity extends Activity {
 					long lastMod = IndexReader.lastModified(directory);
 					Date date = new Date(lastMod);
 					SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-mm-dd");
-					listBuilder.append("<br>  ").append(getResources().getString(R.string.database_index_last_modified)).append(": ").append(simpleDateFormat.format(date));
+					listBuilder.append("<br>").append(getResources().getString(R.string.database_last_modified)).append(": ").append(simpleDateFormat.format(date));
 					stringBuilder.append(listBuilder);
 				} catch (IOException e) {
 					stringBuilder.append("<font color=\"red\"><b>").append(getResources().getString(R.string.error)).append("</b></font> (").append(getResources().getString(R.string.database_index_corrupt)).append(")");
@@ -124,47 +138,70 @@ public class DatabaseActivity extends Activity {
 		textView.setText(Html.fromHtml(stringBuilder.toString()));
 	}
 
-/*
-		stringBuilder.append("<b>Remote data:</b>");
+	private void checkRemote() {
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append(getResources().getString(R.string.database_update_check)).append("... ");
 		try {
-			URL url = new URL("http://dict.hunnor.net/port/lucene/hunnor-lucene-3.6.zip");
+			URL url = new URL(LuceneConstants.INDEX_URL);
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			connection.setRequestMethod("HEAD");
-			stringBuilder.append("Size: ").append(connection.getHeaderField("Content-Length")).append("<br>");
-			stringBuilder.append("Date: ").append(connection.getHeaderField("Last-Modified")).append("<br>");
-		} catch (Exception e) {
-			stringBuilder.append("Net error.");
+			stringBuilder.append("<br>").append(getResources().getString(R.string.database_last_modified)).append(": ").append(connection.getHeaderField("Last-Modified"));
+			stringBuilder.append("<br>").append(getResources().getString(R.string.database_size)).append(": ").append(connection.getHeaderField("Content-Length"));
+		} catch (MalformedURLException exception) {
+			stringBuilder.append("<font color=\"red\"><b>").append(getResources().getString(R.string.error)).append("</b></font> (").append(getResources().getString(R.string.database_update_malformed_url)).append(")");
+		} catch (ProtocolException exception) {
+			stringBuilder.append("<font color=\"red\"><b>").append(getResources().getString(R.string.error)).append("</b></font> (").append(getResources().getString(R.string.database_update_protocol_exception)).append(")");
+		} catch (IOException exception) {
+			stringBuilder.append("<font color=\"red\"><b>").append(getResources().getString(R.string.error)).append("</b></font> (").append(getResources().getString(R.string.database_update_io_exception)).append(")");
 		}
 		
-		stringBuilder.append("<b>Download:</b>");
-		boolean state = fileManager.downloadFile(LuceneConstants.INDEX_URL, fileManager.getAppDirectory() + File.separator + LuceneConstants.INDEX_DIR + File.separator + LuceneConstants.INDEX_ZIP);
-		stringBuilder.append(state).append("<br>");
+		TextView textView = (TextView) findViewById(R.database.update_status);
+		textView.setText(Html.fromHtml(stringBuilder.toString()));
+	}
 
-		stringBuilder.append("<b>Extract:</b>");
-		boolean unzipState = fileManager.unZip(
-				fileManager.getAppDirectory() + File.separator + LuceneConstants.INDEX_DIR + File.separator + LuceneConstants.INDEX_ZIP,
-				fileManager.getAppDirectory());
-		if (unzipState) {
-			stringBuilder.append("Unzipped<br>");
+	private void getRemote() {
+
+		boolean check = true;
+
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append(getResources().getString(R.string.database_download_begin)).append("... ");
+		FileManager fileManager = new FileManager();
+		if (fileManager.downloadFile(LuceneConstants.INDEX_URL, fileManager.getAppDirectory() + File.separator + LuceneConstants.INDEX_ZIP)) {
+			stringBuilder.append("<font color=\"green\"><b>").append(getResources().getString(R.string.ok)).append("</b></font>");
 		} else {
-			stringBuilder.append("Failed to unzip<br>");
+			stringBuilder.append("<font color=\"red\"><b>").append(getResources().getString(R.string.error)).append("</b></font> (").append(getResources().getString(R.string.database_download_fail)).append(")");
+			check = false;
 		}
 
-		stringBuilder.append("<b>Listing:</b>");
-		try {
-			File file = new File(fileManager.getAppDirectory() + File.separator + LuceneConstants.INDEX_DIR);
-			stringBuilder.append("For: ").append(file.getAbsolutePath() + ":<br>");
-			//for (String f: file.list()) {
-				//stringBuilder.append(f).append("<br>");
-			//}
-		} catch (Exception exception) {
-			stringBuilder.append("Error.<br>");
+		if (check) {
+			stringBuilder.append("<br>");
+			stringBuilder.append(getResources().getString(R.string.database_extract_begin)).append("... ");
+			if (fileManager.unZip(fileManager.getAppDirectory() + File.separator + LuceneConstants.INDEX_ZIP, fileManager.getAppDirectory())) {
+				stringBuilder.append("<font color=\"green\"><b>").append(getResources().getString(R.string.ok)).append("</b></font>");
+			} else {
+				stringBuilder.append("<font color=\"red\"><b>").append(getResources().getString(R.string.error)).append("</b></font> (").append(getResources().getString(R.string.database_extract_fail)).append(")");
+				check = false;
+			}
 		}
-		fileManager.deleteDirectory(fileManager.getAppDirectory() + File.separator + LuceneConstants.INDEX_DIR);
-		File f = new File(fileManager.getAppDirectory() + File.separator + "hunnor-lucene-index");
-		f.renameTo(new File(fileManager.getAppDirectory() + File.separator + LuceneConstants.INDEX_DIR));
-		stringBuilder.append("<br>Done.");
-*/
+
+		if (check) {
+			stringBuilder.append("<br>");
+			stringBuilder.append(getResources().getString(R.string.database_install_begin)).append("... ");
+			if (fileManager.deleteDirectory(fileManager.getAppDirectory() + File.separator + LuceneConstants.INDEX_DIR)) {
+				File f = new File(fileManager.getAppDirectory() + File.separator + "hunnor-lucene-index");
+				if (f.renameTo(new File(fileManager.getAppDirectory() + File.separator + LuceneConstants.INDEX_DIR))) {
+					stringBuilder.append("<font color=\"green\"><b>").append(getResources().getString(R.string.ok)).append("</b></font>");
+				} else {
+					stringBuilder.append("<font color=\"red\"><b>").append(getResources().getString(R.string.error)).append("</b></font> (").append(getResources().getString(R.string.database_install_rename_fail)).append(")");
+				}
+			} else {
+				stringBuilder.append("<font color=\"red\"><b>").append(getResources().getString(R.string.error)).append("</b></font> (").append(getResources().getString(R.string.database_install_delete_fail)).append(")");
+			}
+		}
+
+		TextView textView = (TextView) findViewById(R.database.update_status);
+		textView.setText(Html.fromHtml(stringBuilder.toString()));
+	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -176,18 +213,27 @@ public class DatabaseActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.menu.search:
-			launchActivity("net.hunnor.dict.ACTIVITY_SEARCH");
-			return true;
+			try {
+				startActivity(new Intent("net.hunnor.dict.ACTIVITY_SEARCH"));
+				return true;
+			} catch (ActivityNotFoundException exception) {
+				return false;
+			}
 		default:
 			return super.onOptionsItemSelected(item);
 		}
 	}
 
-	protected void launchActivity(String activityName) {
-		try {
-			startActivity(new Intent(activityName));
-		} catch (ActivityNotFoundException e) {
-		}		
+	@Override
+	public void onClick(View view) {
+		switch (view.getId()) {
+		case R.database.update_check_button:
+			checkRemote();
+			break;
+		case R.database.update_download_button:
+			getRemote();
+			break;
+		}
 	}
 
 }
