@@ -6,46 +6,48 @@
 	<string name="ok">OK</string>
 	<string name="error">Error</string>
 
-	<string name="database_read_write">read/write</string>
-	<string name="database_read_only">read only</string>
-	<string name="database_not_ready">not ready</string>
-	<string name="database_storage_check">Checking extertal storage</string>
-	<string name="database_directory_check">Checking app directory</string>
-	<string name="database_directory_created">created</string>
-	<string name="database_directory_create_failed">failed to create</string>
-	<string name="database_index_directory_check">Checking index directory</string>
-	<string name="database_index_directory_empty">Index directory empty</string>
-	<string name="database_index_check">Checking index integrity</string>
-	<string name="database_last_modified">Last modified</string>
-	<string name="database_size">Size</string>
-	<string name="database_connectivity_check">Checking Internet connection</string>
-	<string name="database_connectivity_online">online</string>
-	<string name="database_connectivity_offline">offline</string>
-	<string name="database_index_corrupt">corrupt index</string>
-	<string name="database_update_check">Checking update URL</string>
-	<string name="database_update_malformed_url">malformed URL</string>
-	<string name="database_update_protocol_exception">protocol exception</string>
-	<string name="database_update_io_exception">io exception</string>
-	<string name="database_download_begin">Downloading</string>
-	<string name="database_download_fail">download failed</string>
-	<string name="database_extract_begin">Extracting</string>
-	<string name="database_extract_fail">extract failed</string>
-	<string name="database_install_begin">Installing</string>
-	<string name="database_install_delete_fail">delete failed</string>
-	<string name="database_install_rename_fail">rename failed</string>
-			
-	<string name="action_settings">Settings</string>
-	<string name="search_exception">SearchException</string>
-	<string name="search_hint">v27&#8230;</string>
-	<string name="search_button">Search!</string>
+	<string name="last_modified">Last modified</string>
+	<string name="size">Size</string>
 
-	<string name="database_alert_title">MyTitle</string>
-	<string name="database_alert_text">Must download database</string>
+	<string name="io_read_write">read/write</string>
+	<string name="io_read_only">read only</string>
+	<string name="io_not_ready">not ready</string>
+	<string name="io_create_ok">created</string>
+	<string name="io_create_error">failed to create</string>
+	<string name="io_exception">io exception</string>
+	<string name="io_delete_error">delete failed</string>
+	<string name="io_rename_error">rename failed</string>
+	<string name="io_extract_error">extract failed</string>
+
+	<string name="index_corrupt">corrupt index</string>
+
+	<string name="net_online">online</string>
+	<string name="net_offline">offline</string>
+	<string name="net_malformed_url">malformed URL</string>
+	<string name="net_protocol_exception">protocol exception</string>
+	<string name="net_download_error">download failed</string>
+
+	<string name="database_alert_title">Dictionary database not found</string>
+	<string name="database_alert_text">To use the application, you must first download the dictionary database. Proceedto the database settings page?</string>
+
+	<string name="database_check_external_storage">Checking extertal storage</string>
+	<string name="database_check_app_directory">Checking app directory</string>
+	<string name="database_check_index_directory">Checking index directory</string>
+	<string name="database_index_directory_empty">Index directory empty</string>
+	<string name="database_check_index_integrity">Checking index integrity</string>
+	<string name="database_check_internet_connection">Checking Internet connection</string>
+	<string name="database_check_update_url">Checking update URL</string>
+	<string name="database_download">Downloading</string>
+	<string name="database_extract">Extracting</string>
+	<string name="database_install">Installing</string>
+
+	<string name="database_button_check_for_updates">Check for updates</string>
+	<string name="database_button_download_updates">Download updates</string>
+
+	<string name="search_exception">Error during search</string>
+	<string name="search_button">Search</string>
+
 	<string name="menu_search">Search</string>
 	<string name="menu_database">Database</string>
 
-	<string name="database_info">This is the default content of the database Intent. If you see this, something went wrong in the application :)</string>
-	<string name="database_update_check_button_label">Check for updates</string>
-	<string name="database_update_download_button_label">Download updates</string>
-	
 </resources>
