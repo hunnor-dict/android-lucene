@@ -179,11 +179,20 @@ public class DatabaseActivity extends Activity implements View.OnClickListener {
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append(getResources().getString(R.string.database_download_begin)).append("... ");
 		FileManager fileManager = new FileManager();
-		if (fileManager.downloadFile(LuceneConstants.INDEX_URL, fileManager.getAppDirectory() + File.separator + LuceneConstants.INDEX_ZIP)) {
-			stringBuilder.append("<font color=\"green\"><b>").append(getResources().getString(R.string.ok)).append("</b></font>");
+		if (fileManager.deviceOnline(this)) {
+			stringBuilder.append("<font color=\"green\"><b>").append(getResources().getString(R.string.ok)).append("</b></font> (").append(getResources().getString(R.string.database_connectivity_online)).append(")");
 		} else {
-			stringBuilder.append("<font color=\"red\"><b>").append(getResources().getString(R.string.error)).append("</b></font> (").append(getResources().getString(R.string.database_download_fail)).append(")");
+			stringBuilder.append("<font color=\"red\"><b>").append(getResources().getString(R.string.error)).append("</b></font> (").append(getResources().getString(R.string.database_connectivity_offline)).append(")");
 			check = false;
+		}
+
+		if (check) {
+			if (fileManager.downloadFile(LuceneConstants.INDEX_URL, fileManager.getAppDirectory() + File.separator + LuceneConstants.INDEX_ZIP)) {
+				stringBuilder.append("<font color=\"green\"><b>").append(getResources().getString(R.string.ok)).append("</b></font>");
+			} else {
+				stringBuilder.append("<font color=\"red\"><b>").append(getResources().getString(R.string.error)).append("</b></font> (").append(getResources().getString(R.string.database_download_fail)).append(")");
+				check = false;
+			}
 		}
 
 		if (check) {
