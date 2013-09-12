@@ -26,13 +26,27 @@
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:text="@string/search_button"/>
-	</LinearLayout>
+		<Button
+				android:id="@+search/voice_no_button"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="@string/voice_no"/>
+		<Button
+				android:id="@+search/voice_hu_button"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="@string/voice_hu"/>
+		</LinearLayout>
 	<LinearLayout
 			android:id="@+search/searchResultContainer"
 			android:layout_height="wrap_content"
 			android:layout_width="fill_parent"
 			android:orientation="vertical">
-	    		<ListView
+		<TextView
+		    android:id="@+search/search_errors"
+		    android:layout_height="wrap_content"
+		    android:layout_width="fill_parent"/>
+	    <ListView
 				android:id="@+search/searchResults"
 				android:layout_width="fill_parent"
 				android:layout_height="fill_parent"/>
