@@ -5,6 +5,7 @@
 
 	<string name="ok">OK</string>
 	<string name="error">Error</string>
+	<string name="error_unknown">unknown error</string>
 
 	<string name="last_modified">Last modified</string>
 	<string name="size">Size</string>

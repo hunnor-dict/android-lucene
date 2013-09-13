@@ -2,12 +2,11 @@ package net.hunnor.dict;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import net.hunnor.dict.task.CheckUpdate;
+import net.hunnor.dict.task.GetUpdate;
 
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.store.Directory;
@@ -45,7 +44,6 @@ public class DatabaseActivity extends Activity implements View.OnClickListener {
 
 		boolean check = true;
 
-		// Check external storage state
 		StringBuilder stringBuilder = new StringBuilder();
 		FileManager fileManager = new FileManager();
 		stringBuilder.append(getResources().getString(R.string.database_check_external_storage)).append("... ");
@@ -58,7 +56,6 @@ public class DatabaseActivity extends Activity implements View.OnClickListener {
 			check = false;
 		}
 
-		// Check application directory
 		if (check) {
 			stringBuilder.append("<br>");
 			stringBuilder.append(getResources().getString(R.string.database_check_app_directory)).append("... ");
@@ -84,7 +81,6 @@ public class DatabaseActivity extends Activity implements View.OnClickListener {
 			}
 		}
 
-		// Check index directory
 		File indexDirectory = null;
 		if (check) {
 			stringBuilder.append("<br>");
@@ -125,7 +121,7 @@ public class DatabaseActivity extends Activity implements View.OnClickListener {
 					@SuppressWarnings("deprecation")
 					long lastMod = IndexReader.lastModified(directory);
 					Date date = new Date(lastMod);
-					SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-mm-dd");
+					SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 					listBuilder.append("<br>").append(getResources().getString(R.string.last_modified)).append(": ").append(simpleDateFormat.format(date));
 					stringBuilder.append(listBuilder);
 				} catch (IOException e) {
@@ -146,30 +142,26 @@ public class DatabaseActivity extends Activity implements View.OnClickListener {
 		stringBuilder.append(getResources().getString(R.string.database_check_internet_connection)).append("... ");
 		FileManager fileManager = new FileManager();
 		if (fileManager.deviceOnline(this)) {
-			stringBuilder.append("<font color=\"green\"><b>").append(getResources().getString(R.string.ok)).append("</b></font> (").append(getResources().getString(R.string.net_online)).append(")");
+			stringBuilder.append("<font color=\"green\"><b>").append(getResources().getString(R.string.ok)).append("</b></font> (").append(getResources().getString(R.string.net_online)).append(")");			
 		} else {
 			stringBuilder.append("<font color=\"red\"><b>").append(getResources().getString(R.string.error)).append("</b></font> (").append(getResources().getString(R.string.net_offline)).append(")");
 			check = false;
 		}
 
 		if (check) {
-			try {
-				stringBuilder.append("<br>");
-				stringBuilder.append(getResources().getString(R.string.database_check_update_url)).append("... ");
-				URL url = new URL(LuceneConstants.INDEX_URL);
-				HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-				connection.setRequestMethod("HEAD");
-				stringBuilder.append("<br>").append(getResources().getString(R.string.last_modified)).append(": ").append(connection.getHeaderField("Last-Modified"));
-				stringBuilder.append("<br>").append(getResources().getString(R.string.size)).append(": ").append(connection.getHeaderField("Content-Length"));
-			} catch (MalformedURLException exception) {
-				stringBuilder.append("<font color=\"red\"><b>").append(getResources().getString(R.string.error)).append("</b></font> (").append(getResources().getString(R.string.net_malformed_url)).append(")");
-			} catch (ProtocolException exception) {
-				stringBuilder.append("<font color=\"red\"><b>").append(getResources().getString(R.string.error)).append("</b></font> (").append(getResources().getString(R.string.net_protocol_exception)).append(")");
-			} catch (IOException exception) {
-				stringBuilder.append("<font color=\"red\"><b>").append(getResources().getString(R.string.error)).append("</b></font> (").append(getResources().getString(R.string.io_exception)).append(")");
-			}
+			stringBuilder.append("<br>");
+			stringBuilder.append(getResources().getString(R.string.database_check_update_url)).append("... ");
+			new CheckUpdate() {
+				@Override
+				public void onPostExecute(String result) {
+					StringBuilder stringBuilder = new StringBuilder();
+					stringBuilder.append(result);
+					TextView textView = (TextView) findViewById(R.database.update_status);
+					textView.append(Html.fromHtml(stringBuilder.toString()));
+				}
+			}.execute(LuceneConstants.INDEX_URL);
 		}
-		
+
 		TextView textView = (TextView) findViewById(R.database.update_status);
 		textView.setText(Html.fromHtml(stringBuilder.toString()));
 	}
@@ -191,38 +183,19 @@ public class DatabaseActivity extends Activity implements View.OnClickListener {
 		if (check) {
 			stringBuilder.append("<br>");
 			stringBuilder.append(getResources().getString(R.string.database_download)).append("... ");
-			if (fileManager.downloadFile(LuceneConstants.INDEX_URL, fileManager.getAppDirectory() + File.separator + LuceneConstants.INDEX_ZIP)) {
-				stringBuilder.append("<font color=\"green\"><b>").append(getResources().getString(R.string.ok)).append("</b></font>");
-			} else {
-				stringBuilder.append("<font color=\"red\"><b>").append(getResources().getString(R.string.error)).append("</b></font> (").append(getResources().getString(R.string.net_download_error)).append(")");
-				check = false;
-			}
-		}
-
-		if (check) {
-			stringBuilder.append("<br>");
-			stringBuilder.append(getResources().getString(R.string.database_extract)).append("... ");
-			if (fileManager.unZip(fileManager.getAppDirectory() + File.separator + LuceneConstants.INDEX_ZIP, fileManager.getAppDirectory())) {
-				stringBuilder.append("<font color=\"green\"><b>").append(getResources().getString(R.string.ok)).append("</b></font>");
-			} else {
-				stringBuilder.append("<font color=\"red\"><b>").append(getResources().getString(R.string.error)).append("</b></font> (").append(getResources().getString(R.string.io_extract_error)).append(")");
-				check = false;
-			}
-		}
-
-		if (check) {
-			stringBuilder.append("<br>");
-			stringBuilder.append(getResources().getString(R.string.database_install)).append("... ");
-			if (fileManager.deleteDirectory(fileManager.getAppDirectory() + File.separator + LuceneConstants.INDEX_DIR)) {
-				File f = new File(fileManager.getAppDirectory() + File.separator + "hunnor-lucene-index");
-				if (f.renameTo(new File(fileManager.getAppDirectory() + File.separator + LuceneConstants.INDEX_DIR))) {
-					stringBuilder.append("<font color=\"green\"><b>").append(getResources().getString(R.string.ok)).append("</b></font>");
-				} else {
-					stringBuilder.append("<font color=\"red\"><b>").append(getResources().getString(R.string.error)).append("</b></font> (").append(getResources().getString(R.string.io_rename_error)).append(")");
+			new GetUpdate() {
+				@Override
+				public void onPostExecute(String result) {
+					StringBuilder stringBuilder = new StringBuilder();
+					if ("OK".equals(result)) {
+						stringBuilder.append("<font color=\"green\"><b>").append(getResources().getString(R.string.ok)).append("</b></font>");
+					} else {
+						stringBuilder.append("<font color=\"red\"><b>").append(getResources().getString(R.string.error)).append("</b></font>");
+					}
+					TextView textView = (TextView) findViewById(R.database.update_status);
+					textView.append(Html.fromHtml(stringBuilder.toString()));
 				}
-			} else {
-				stringBuilder.append("<font color=\"red\"><b>").append(getResources().getString(R.string.error)).append("</b></font> (").append(getResources().getString(R.string.io_delete_error)).append(")");
-			}
+			}.execute(LuceneConstants.INDEX_URL);
 		}
 
 		TextView textView = (TextView) findViewById(R.database.update_status);

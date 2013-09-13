@@ -124,6 +124,7 @@ public class SearchActivity extends Activity implements View.OnClickListener {
 		ArrayAdapter<Spanned> arrayAdapter = new ArrayAdapter<Spanned>(this, android.R.layout.simple_list_item_1, resultArray);
 		ListView listView = (ListView) findViewById(R.search.searchResults);
 		listView.setAdapter(arrayAdapter);
+		clearSearchField();
 	}
 
 	private void startVoiceRecognition(String lang) {
@@ -142,11 +143,17 @@ public class SearchActivity extends Activity implements View.OnClickListener {
 		}
 	}
 
-	 @Override
-	 protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		 if (requestCode == VOICE_RECOGNITION_REQUEST_CODE && resultCode == RESULT_OK) {
-			 List<String> results = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-			 searchFor(results.get(0));
-		 }
-	 }
+	private void clearSearchField() {
+		EditText editText = (EditText) findViewById(R.search.searchInputField);
+		editText.setText("");
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (requestCode == VOICE_RECOGNITION_REQUEST_CODE && resultCode == RESULT_OK) {
+			List<String> results = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+			searchFor(results.get(0));
+		}
+	}
+
 }
