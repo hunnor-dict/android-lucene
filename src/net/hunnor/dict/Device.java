@@ -24,7 +24,7 @@ import android.os.Environment;
  * @author Ádám Z. Kövér
  *
  */
-public class FileManager {
+public class Device {
 
 	public static final String APP_DATA_DIR = "net.hunnor.dict.lucene";
 

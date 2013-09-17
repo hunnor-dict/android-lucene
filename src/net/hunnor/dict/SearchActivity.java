@@ -33,7 +33,7 @@ public class SearchActivity extends Activity implements View.OnClickListener {
 		setContentView(R.layout.activity_search);
 		Button button = (Button) findViewById(R.search.search_button);
 		button.setOnClickListener(this);
-		DictionaryProvider dictionaryProvider = new DictionaryProvider();
+		Dictionary dictionaryProvider = new Dictionary();
 		if (!dictionaryProvider.ready()) {
 			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 			alertDialogBuilder
@@ -111,7 +111,7 @@ public class SearchActivity extends Activity implements View.OnClickListener {
 	}
 
 	private void searchFor(String query) {
-		DictionaryProvider dictionaryProvider = new DictionaryProvider();
+		Dictionary dictionaryProvider = new Dictionary();
 		List<IndexObject> searchResults = dictionaryProvider.search(query);
 		if (searchResults == null) {
 			return;

@@ -26,7 +26,7 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.NIOFSDirectory;
 
 @SuppressWarnings("deprecation")
-public class DictionaryProvider implements LuceneConstants {
+public class Dictionary implements LuceneConstants {
 
 	private IndexReader indexReader = null;
 	private Analyzer analyzer = null;
@@ -40,7 +40,7 @@ public class DictionaryProvider implements LuceneConstants {
 	}
 
 	public boolean getData() {
-		FileManager fileManager = new FileManager();
+		Device fileManager = new Device();
 		boolean state = fileManager.downloadFile(INDEX_URL,
 				fileManager.getAppDirectory() + File.separator + INDEX_DIR + File.separator + INDEX_ZIP);
 		if (state) {
@@ -101,7 +101,7 @@ public class DictionaryProvider implements LuceneConstants {
 
 	private boolean constructIndexReader() {
 		try {
-			FileManager fileManager = new FileManager();
+			Device fileManager = new Device();
 			String separator = File.separator;
 			StringBuilder sb = new StringBuilder();
 			sb.append(fileManager.getAppDirectory());

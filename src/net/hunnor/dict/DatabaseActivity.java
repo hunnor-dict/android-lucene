@@ -45,7 +45,7 @@ public class DatabaseActivity extends Activity implements View.OnClickListener {
 		boolean check = true;
 
 		StringBuilder stringBuilder = new StringBuilder();
-		FileManager fileManager = new FileManager();
+		Device fileManager = new Device();
 		stringBuilder.append(getResources().getString(R.string.database_check_external_storage)).append("... ");
 		if (fileManager.storageWriteable()) {
 			stringBuilder.append("<font color=\"green\"><b>").append(getResources().getString(R.string.ok)).append("</b></font> (").append(getResources().getString(R.string.io_read_write)).append(")");
@@ -140,7 +140,7 @@ public class DatabaseActivity extends Activity implements View.OnClickListener {
 
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append(getResources().getString(R.string.database_check_internet_connection)).append("... ");
-		FileManager fileManager = new FileManager();
+		Device fileManager = new Device();
 		if (fileManager.deviceOnline(this)) {
 			stringBuilder.append("<font color=\"green\"><b>").append(getResources().getString(R.string.ok)).append("</b></font> (").append(getResources().getString(R.string.net_online)).append(")");			
 		} else {
@@ -172,7 +172,7 @@ public class DatabaseActivity extends Activity implements View.OnClickListener {
 
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append(getResources().getString(R.string.database_check_internet_connection)).append("... ");
-		FileManager fileManager = new FileManager();
+		Device fileManager = new Device();
 		if (fileManager.deviceOnline(this)) {
 			stringBuilder.append("<font color=\"green\"><b>").append(getResources().getString(R.string.ok)).append("</b></font> (").append(getResources().getString(R.string.net_online)).append(")");
 		} else {
