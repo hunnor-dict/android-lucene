@@ -1,4 +1,4 @@
-package net.hunnor.dict;
+package net.hunnor.dict.util;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -15,11 +15,10 @@ import org.apache.commons.io.FileUtils;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.Environment;
 
 /**
  *
- * Handles I/O operations and exposes Android's Environment to the application
+ * Handles the device's hardware and operating system
  *
  * @author Ádám Z. Kövér
  *
@@ -28,34 +27,24 @@ public class Device {
 
 	public static final String APP_DATA_DIR = "net.hunnor.dict.lucene";
 
-	/**
-	 *
-	 * <p>Returns if external storage is readable
-	 *
-	 * @return true if external storage is readable, false otherwise
-	 *
-	 */
-	public boolean storageReadable() {
-		String storageState = Environment.getExternalStorageState();
-		return (Environment.MEDIA_MOUNTED.equals(storageState) || Environment.MEDIA_MOUNTED_READ_ONLY.equals(storageState));
+	private Storage storage;
+
+	public Device() {
+		storage = new Storage();
+		if (storage.readable()) {
+			storage.setAppDirectory(APP_DATA_DIR);
+		}
 	}
 
-	public boolean deviceOnline(Context context) {
-		ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+	public Storage storage() {
+		return storage;
+	}
+
+	public boolean online(Context context) {
+		ConnectivityManager connectivityManager = (ConnectivityManager)
+				context.getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
 		return networkInfo != null && networkInfo.isConnected();
-	}
-
-	/**
-	 *
-	 * <p>Returns if external storage is writable
-	 *
-	 * @return true if external storage is writable, false otherwise
-	 *
-	 */
-	public boolean storageWriteable() {
-		String storageState = Environment.getExternalStorageState();
-		return (Environment.MEDIA_MOUNTED.equals(storageState));
 	}
 
 	/**
@@ -65,12 +54,7 @@ public class Device {
 	 * @return The absolute path of the data directory as String
 	 */
 	public String getAppDirectory() {
-		String separator = File.separator;
-		StringBuilder appDirectory = new StringBuilder();
-		appDirectory.append(Environment.getExternalStorageDirectory().getAbsolutePath());
-		appDirectory.append(separator).append("Android").append(separator).append("data");
-		appDirectory.append(separator).append(APP_DATA_DIR);
-		return appDirectory.toString();
+		return storage.appDirectory();
 	}
 
 	/**

@@ -7,6 +7,7 @@ import java.util.Date;
 
 import net.hunnor.dict.task.CheckUpdate;
 import net.hunnor.dict.task.GetUpdate;
+import net.hunnor.dict.util.Device;
 
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.store.Directory;
@@ -45,11 +46,11 @@ public class DatabaseActivity extends Activity implements View.OnClickListener {
 		boolean check = true;
 
 		StringBuilder stringBuilder = new StringBuilder();
-		Device fileManager = new Device();
+		Device device = new Device();
 		stringBuilder.append(getResources().getString(R.string.database_check_external_storage)).append("... ");
-		if (fileManager.storageWriteable()) {
+		if (device.storage().writable()) {
 			stringBuilder.append("<font color=\"green\"><b>").append(getResources().getString(R.string.ok)).append("</b></font> (").append(getResources().getString(R.string.io_read_write)).append(")");
-		} else if (fileManager.storageReadable()) {
+		} else if (device.storage().readable()) {
 			stringBuilder.append("<font color=\"yellow\"><b>").append(getResources().getString(R.string.ok)).append("</b></font> (").append(getResources().getString(R.string.io_read_only)).append(")");
 		} else {
 			stringBuilder.append("<font color=\"red\"><b>").append(getResources().getString(R.string.error)).append("</b></font> (").append(getResources().getString(R.string.io_not_ready)).append(")");
@@ -59,7 +60,7 @@ public class DatabaseActivity extends Activity implements View.OnClickListener {
 		if (check) {
 			stringBuilder.append("<br>");
 			stringBuilder.append(getResources().getString(R.string.database_check_app_directory)).append("... ");
-			File appDirectory = new File(fileManager.getAppDirectory());
+			File appDirectory = new File(device.getAppDirectory());
 			if (appDirectory.exists()) {
 				if (appDirectory.canRead()) {
 					if (appDirectory.canWrite()) {
@@ -85,7 +86,7 @@ public class DatabaseActivity extends Activity implements View.OnClickListener {
 		if (check) {
 			stringBuilder.append("<br>");
 			stringBuilder.append(getResources().getString(R.string.database_check_index_directory)).append("... ");
-			indexDirectory = new File(fileManager.getAppDirectory() + File.separator + LuceneConstants.INDEX_DIR);
+			indexDirectory = new File(device.getAppDirectory() + File.separator + LuceneConstants.INDEX_DIR);
 			if (indexDirectory.exists()) {
 				if (indexDirectory.canRead()) {
 					if (indexDirectory.canWrite()) {
@@ -141,7 +142,7 @@ public class DatabaseActivity extends Activity implements View.OnClickListener {
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append(getResources().getString(R.string.database_check_internet_connection)).append("... ");
 		Device fileManager = new Device();
-		if (fileManager.deviceOnline(this)) {
+		if (fileManager.online(this)) {
 			stringBuilder.append("<font color=\"green\"><b>").append(getResources().getString(R.string.ok)).append("</b></font> (").append(getResources().getString(R.string.net_online)).append(")");			
 		} else {
 			stringBuilder.append("<font color=\"red\"><b>").append(getResources().getString(R.string.error)).append("</b></font> (").append(getResources().getString(R.string.net_offline)).append(")");
@@ -173,7 +174,7 @@ public class DatabaseActivity extends Activity implements View.OnClickListener {
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append(getResources().getString(R.string.database_check_internet_connection)).append("... ");
 		Device fileManager = new Device();
-		if (fileManager.deviceOnline(this)) {
+		if (fileManager.online(this)) {
 			stringBuilder.append("<font color=\"green\"><b>").append(getResources().getString(R.string.ok)).append("</b></font> (").append(getResources().getString(R.string.net_online)).append(")");
 		} else {
 			stringBuilder.append("<font color=\"red\"><b>").append(getResources().getString(R.string.error)).append("</b></font> (").append(getResources().getString(R.string.net_offline)).append(")");

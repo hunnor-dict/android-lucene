@@ -2,8 +2,8 @@ package net.hunnor.dict.task;
 
 import java.io.File;
 
-import net.hunnor.dict.Device;
 import net.hunnor.dict.LuceneConstants;
+import net.hunnor.dict.util.Device;
 import android.os.AsyncTask;
 
 public class GetUpdate extends AsyncTask<String, Void, String> {
