@@ -10,12 +10,12 @@
 		android:paddingTop="@dimen/activity_vertical_margin"
 		tools:context=".SearchActivity">
 	<LinearLayout
-			android:id="@+search/searchInputs"
+			android:id="@+search/search_input_container"
 			android:layout_height="wrap_content"
 			android:layout_width="fill_parent"
 			android:orientation="horizontal">
 		<EditText
-				android:id="@+search/searchInputField"
+				android:id="@+search/search_input_field"
 				android:layout_height="wrap_content"
 				android:layout_width="0dip"
 				android:layout_weight="1"
@@ -38,7 +38,7 @@
 				android:text="@string/voice_hu"/>
 		</LinearLayout>
 	<LinearLayout
-			android:id="@+search/searchResultContainer"
+			android:id="@+search/search_result_container"
 			android:layout_height="wrap_content"
 			android:layout_width="fill_parent"
 			android:orientation="vertical">
@@ -47,7 +47,7 @@
 		    android:layout_height="wrap_content"
 		    android:layout_width="fill_parent"/>
 	    <ListView
-				android:id="@+search/searchResults"
+				android:id="@+search/search_result_list"
 				android:layout_width="fill_parent"
 				android:layout_height="fill_parent"/>
 	</LinearLayout>

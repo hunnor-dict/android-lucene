@@ -1,6 +1,6 @@
-package net.hunnor.dict;
+package net.hunnor.dict.data;
 
-public class IndexObject {
+public class Entry {
 
 	private String id;
 
@@ -8,11 +8,11 @@ public class IndexObject {
 
 	private String text;
 
-	public IndexObject () {
+	public Entry () {
 		super();
 	}
 
-	public IndexObject(String id, String lang, String text) {
+	public Entry(String id, String lang, String text) {
 		this.id = id;
 		this.lang = lang;
 		this.text = text;

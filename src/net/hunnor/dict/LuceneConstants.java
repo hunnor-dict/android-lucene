@@ -4,6 +4,9 @@ import org.apache.lucene.util.Version;
 
 public interface LuceneConstants {
 
+	public static String LANG_HU = "hu";
+	public static String LANG_NO = "no";
+
 	public static String INDEX_DIR = "index";
 	public static String INDEX_ZIP = "hunnor-lucene-3.6.zip";
 	public static String INDEX_URL = "http://dict.hunnor.net/port/lucene/hunnor-lucene-3.6.zip";

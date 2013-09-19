@@ -3,6 +3,8 @@ package net.hunnor.dict;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.hunnor.dict.data.Dictionary;
+import net.hunnor.dict.data.Entry;
 import net.hunnor.dict.util.Device;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -112,67 +114,81 @@ public class SearchActivity extends Activity implements View.OnClickListener {
 			search();
 			break;
 		case R.search.voice_hu_button:
-			startVoiceRecognition("hu");
+			startVoiceRecognition(LuceneConstants.LANG_HU);
 			break;
 		case R.search.voice_no_button:
-			startVoiceRecognition("no");
+			startVoiceRecognition(LuceneConstants.LANG_NO);
 			break;
 		}
 	}
 
-	private void searchError(String s) {
+	private void showMessage(String message) {
 		TextView tv = (TextView) findViewById(R.search.search_errors);
-		tv.setText(s);
+		tv.setText(message);
 	}
 
 	private void search() {
-		EditText editText = (EditText) findViewById(R.search.searchInputField);
+		EditText editText = (EditText) findViewById(R.search.search_input_field);
 		String query = editText.getText().toString();
-		searchFor(query);
+		search(query);
 	}
 
-	private void searchFor(String query) {
-		List<IndexObject> searchResults = dictionary.lookup(query);
+	private void search(String query) {
+		search(query, null);
+	}
+
+	private void search(String query, String lang) {
+		List<Entry> searchResults = dictionary.lookup(query, lang);
 		if (searchResults == null) {
 			return;
 		}
 		List<Spanned> results = new ArrayList<Spanned>();
-		for (IndexObject result: searchResults) {
+		for (Entry result: searchResults) {
 			results.add(Html.fromHtml(result.getText()));
 		}
 		Spanned[] resultArray = results.toArray(new Spanned[results.size()]);
-		ArrayAdapter<Spanned> arrayAdapter = new ArrayAdapter<Spanned>(this, android.R.layout.simple_list_item_1, resultArray);
-		ListView listView = (ListView) findViewById(R.search.searchResults);
+		ArrayAdapter<Spanned> arrayAdapter = new ArrayAdapter<Spanned>(
+				this, android.R.layout.simple_list_item_1, resultArray);
+		ListView listView = (ListView) findViewById(R.search.search_result_list);
 		listView.setAdapter(arrayAdapter);
-		clearSearchField();
+		EditText editText = (EditText) findViewById(R.search.search_input_field);
+		editText.setText("");
 	}
 
 	private void startVoiceRecognition(String lang) {
 		PackageManager packageManager = getPackageManager();
-		List<ResolveInfo> activities = packageManager.queryIntentActivities(new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH), 0);
+		List<ResolveInfo> activities = packageManager.queryIntentActivities(
+				new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH), 0);
 		if (activities.isEmpty()) {
-			searchError("No recognizer");
+			showMessage(getResources().getString(R.string.voice_not_available));
 		} else {
 			Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-			intent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, getClass().getPackage().getName());
-			intent.putExtra(RecognizerIntent.EXTRA_PROMPT, getResources().getString(R.string.voice_hint));
-			intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-			intent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1);
-			intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, lang);
+			intent.putExtra(
+					RecognizerIntent.EXTRA_CALLING_PACKAGE,
+					getClass().getPackage().getName());
+			intent.putExtra(
+					RecognizerIntent.EXTRA_PROMPT,
+					getResources().getString(R.string.voice_hint));
+			intent.putExtra(
+					RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+					RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+			intent.putExtra(
+					RecognizerIntent.EXTRA_MAX_RESULTS,
+					1);
+			intent.putExtra(
+					RecognizerIntent.EXTRA_LANGUAGE,
+					lang);
 			startActivityForResult(intent, VOICE_RECOGNITION_REQUEST_CODE);
 		}
 	}
 
-	private void clearSearchField() {
-		EditText editText = (EditText) findViewById(R.search.searchInputField);
-		editText.setText("");
-	}
-
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (requestCode == VOICE_RECOGNITION_REQUEST_CODE && resultCode == RESULT_OK) {
-			List<String> results = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-			searchFor(results.get(0));
+		if (requestCode == VOICE_RECOGNITION_REQUEST_CODE &&
+				resultCode == RESULT_OK) {
+			List<String> results =
+					data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+			search(results.get(0));
 		}
 	}
 

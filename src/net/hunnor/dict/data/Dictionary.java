@@ -1,4 +1,4 @@
-package net.hunnor.dict;
+package net.hunnor.dict.data;
 
 import java.io.File;
 import java.io.IOException;
@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import net.hunnor.dict.LuceneConstants;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.CharArraySet;
@@ -44,7 +46,7 @@ public class Dictionary implements LuceneConstants {
 		return constructIndexReader() && constructAnalyzer();
 	}
 
-	public List<IndexObject> lookup(String queryString) {
+	public List<Entry> lookup(String queryString, String lang) {
 		if (indexReader == null) {
 			if (!constructIndexReader()) {
 				return null;
@@ -56,7 +58,7 @@ public class Dictionary implements LuceneConstants {
 			}
 		}
 
-		List<IndexObject> results = new ArrayList<IndexObject>();
+		List<Entry> results = new ArrayList<Entry>();
 		IndexSearcher indexSearcher = null;
 		try {
 			indexSearcher = new IndexSearcher(indexReader);
@@ -72,11 +74,11 @@ public class Dictionary implements LuceneConstants {
 			int totalHits = topDocs.totalHits;
 			for (int i = 0; i < totalHits; i++) {
 				Document document = indexSearcher.doc(scoreDoc[i].doc);
-				IndexObject indexObject = new IndexObject(
+				Entry entry = new Entry(
 						document.get(LUCENE_FIELD_ID),
 						document.get(LUCENE_FIELD_LANG),
 						document.get(LUCENE_FIELD_TEXT));
-				results.add(indexObject);
+				results.add(entry);
 			}
 		} catch (ParseException e) {
 			return null;
