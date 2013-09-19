@@ -44,13 +44,12 @@ public class Dictionary implements LuceneConstants {
 		return constructIndexReader() && constructAnalyzer();
 	}
 
-	public List<IndexObject> search(String queryString) {
+	public List<IndexObject> lookup(String queryString) {
 		if (indexReader == null) {
 			if (!constructIndexReader()) {
 				return null;
 			}
 		}
-
 		if (analyzer == null) {
 			if (!constructAnalyzer()) {
 				return null;

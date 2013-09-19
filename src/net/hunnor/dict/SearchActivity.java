@@ -3,7 +3,6 @@ package net.hunnor.dict;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.hunnor.dict.task.DatabaseDialogYes;
 import net.hunnor.dict.util.Device;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -37,14 +36,6 @@ public class SearchActivity extends Activity implements View.OnClickListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_search);
 
-		// Set up UI
-		Button searchButton = (Button) findViewById(R.search.search_button);
-		searchButton.setOnClickListener(this);
-		Button huVoiceButton = (Button) findViewById(R.search.voice_hu_button);
-		huVoiceButton.setOnClickListener(this);
-		Button noVoiceButton = (Button) findViewById(R.search.voice_no_button);
-		noVoiceButton.setOnClickListener(this);
-
 		// Open Dictionary
 		if (device == null) {
 			device = new Device();
@@ -53,13 +44,27 @@ public class SearchActivity extends Activity implements View.OnClickListener {
 			dictionary = new Dictionary();
 		}
 		if (!dictionary.open()) {
-			if (!dictionary.open(device.storage().directory(LuceneConstants.INDEX_DIR))) {
-				AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+			if (!dictionary.open(
+					device.storage().directory(LuceneConstants.INDEX_DIR))) {
+				AlertDialog.Builder alertDialogBuilder =
+						new AlertDialog.Builder(this);
 				alertDialogBuilder
 						.setTitle(R.string.database_alert_title)
 						.setMessage(R.string.database_alert_text)
-						.setPositiveButton(getResources().getString(R.string.database_alert_option_yes), new DatabaseDialogYes())
-						.setNegativeButton(getResources().getString(R.string.database_alert_option_no), new DialogInterface.OnClickListener() {
+						.setPositiveButton(getResources().getString(
+								R.string.database_alert_option_yes),
+								new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								try {
+									startActivity(new Intent("net.hunnor.dict.ACTIVITY_DATABASE"));
+								} catch (ActivityNotFoundException e) {
+								}
+							}
+						})
+						.setNegativeButton(getResources().getString(
+								R.string.database_alert_option_no),
+								new DialogInterface.OnClickListener() {
 							@Override
 							public void onClick(DialogInterface dialog, int which) {
 								finish();
@@ -69,27 +74,20 @@ public class SearchActivity extends Activity implements View.OnClickListener {
 				alertDialog.show();
 			}
 		}
+
+		// Set up search UI
+		Button searchButton = (Button) findViewById(R.search.search_button);
+		searchButton.setOnClickListener(this);
+		Button huVoiceButton = (Button) findViewById(R.search.voice_hu_button);
+		huVoiceButton.setOnClickListener(this);
+		Button noVoiceButton = (Button) findViewById(R.search.voice_no_button);
+		noVoiceButton.setOnClickListener(this);
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.search_menu, menu);
 		return true;
-	}
-
-	@Override
-	public void onClick(View view) {
-		switch (view.getId()) {
-		case R.search.search_button:
-			search();
-			break;
-		case R.search.voice_hu_button:
-			startVoiceRecognition("hu");
-			break;
-		case R.search.voice_no_button:
-			startVoiceRecognition("no");
-			break;
-		}
 	}
 
 	@Override
@@ -107,6 +105,21 @@ public class SearchActivity extends Activity implements View.OnClickListener {
 		}
 	}
 
+	@Override
+	public void onClick(View view) {
+		switch (view.getId()) {
+		case R.search.search_button:
+			search();
+			break;
+		case R.search.voice_hu_button:
+			startVoiceRecognition("hu");
+			break;
+		case R.search.voice_no_button:
+			startVoiceRecognition("no");
+			break;
+		}
+	}
+
 	private void searchError(String s) {
 		TextView tv = (TextView) findViewById(R.search.search_errors);
 		tv.setText(s);
@@ -119,7 +132,7 @@ public class SearchActivity extends Activity implements View.OnClickListener {
 	}
 
 	private void searchFor(String query) {
-		List<IndexObject> searchResults = dictionary.search(query);
+		List<IndexObject> searchResults = dictionary.lookup(query);
 		if (searchResults == null) {
 			return;
 		}

@@ -9,7 +9,7 @@ package net.hunnor.dict.util;
  */
 public class Device {
 
-	public static final String appDirectory = "net.hunnor.dict.lucene";
+	public static final String appDirectory = "net.hunnor.dict";
 
 	private Storage storage;
 	private Network network;
