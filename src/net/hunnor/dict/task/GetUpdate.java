@@ -10,12 +10,11 @@ public class GetUpdate extends AsyncTask<String, Void, String> {
 
 	@Override
 	protected String doInBackground(String... params) {
-		Device fileManager = new Device();
-		if (fileManager.downloadFile(LuceneConstants.INDEX_URL, fileManager.getAppDirectory() + File.separator + LuceneConstants.INDEX_ZIP)) {
-			if (fileManager.unZip(fileManager.getAppDirectory() + File.separator + LuceneConstants.INDEX_ZIP, fileManager.getAppDirectory())) {
-				if (fileManager.deleteDirectory(fileManager.getAppDirectory() + File.separator + LuceneConstants.INDEX_DIR)) {
-					File f = new File(fileManager.getAppDirectory() + File.separator + "hunnor-lucene-index");
-					if (f.renameTo(new File(fileManager.getAppDirectory() + File.separator + LuceneConstants.INDEX_DIR))) {
+		Device device = new Device();
+		if (device.downloadFile(LuceneConstants.INDEX_URL, device.storage().appDirectory() + File.separator + LuceneConstants.INDEX_ZIP)) {
+			if (device.storage().unZip(LuceneConstants.INDEX_ZIP, "")) {
+				if (device.storage().deleteDirectory(LuceneConstants.INDEX_DIR)) {
+					if (device.storage().renameDirectory("hunnor-lucene-index", LuceneConstants.INDEX_DIR)) {
 						return "OK";
 					} else {
 						return "MV";
@@ -32,4 +31,3 @@ public class GetUpdate extends AsyncTask<String, Void, String> {
 	}
 
 }
-

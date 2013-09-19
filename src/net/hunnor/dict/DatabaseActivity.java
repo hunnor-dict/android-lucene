@@ -60,7 +60,7 @@ public class DatabaseActivity extends Activity implements View.OnClickListener {
 		if (check) {
 			stringBuilder.append("<br>");
 			stringBuilder.append(getResources().getString(R.string.database_check_app_directory)).append("... ");
-			File appDirectory = new File(device.getAppDirectory());
+			File appDirectory = device.storage().directory("");
 			if (appDirectory.exists()) {
 				if (appDirectory.canRead()) {
 					if (appDirectory.canWrite()) {
@@ -86,7 +86,7 @@ public class DatabaseActivity extends Activity implements View.OnClickListener {
 		if (check) {
 			stringBuilder.append("<br>");
 			stringBuilder.append(getResources().getString(R.string.database_check_index_directory)).append("... ");
-			indexDirectory = new File(device.getAppDirectory() + File.separator + LuceneConstants.INDEX_DIR);
+			indexDirectory = device.storage().directory(LuceneConstants.INDEX_DIR);
 			if (indexDirectory.exists()) {
 				if (indexDirectory.canRead()) {
 					if (indexDirectory.canWrite()) {

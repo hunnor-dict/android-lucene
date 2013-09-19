@@ -41,17 +41,6 @@ public class Dictionary implements LuceneConstants {
 		}
 	}
 
-	public boolean getData() {
-		Device fileManager = new Device();
-		boolean state = fileManager.downloadFile(INDEX_URL,
-				fileManager.getAppDirectory() + File.separator + INDEX_DIR + File.separator + INDEX_ZIP);
-		if (state) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
 	public List<IndexObject> search(String queryString) {
 		if (indexReader == null) {
 			if (!constructIndexReader()) {
@@ -103,12 +92,8 @@ public class Dictionary implements LuceneConstants {
 
 	private boolean constructIndexReader() {
 		try {
-			Device fileManager = new Device();
-			String separator = File.separator;
-			StringBuilder sb = new StringBuilder();
-			sb.append(fileManager.getAppDirectory());
-			sb.append(separator).append(INDEX_DIR);
-			File indexDir = new File(sb.toString());
+			Device device = new Device();
+			File indexDir = device.storage().directory(INDEX_DIR);			
 			Directory directory = new NIOFSDirectory(indexDir);
 			indexReader = IndexReader.open(directory);
 		} catch (CorruptIndexException exception) {
