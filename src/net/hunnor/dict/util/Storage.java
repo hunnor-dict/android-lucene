@@ -5,6 +5,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -28,14 +30,11 @@ public class Storage {
 
 	public void setAppDirectory(String appDirectory) {
 		StringBuilder sb = new StringBuilder();
-		sb.append(dataDirectory());
-		sb.append(File.separator);
-		sb.append(appDirectory);
+		sb.append(Environment.getExternalStorageDirectory().getAbsolutePath());
+		sb.append(File.separator).append(androidDirectory);
+		sb.append(File.separator).append(dataDirectory);
+		sb.append(File.separator).append(appDirectory);
 		this.appDirectory = sb.toString();
-	}
-
-	public String appDirectory() {
-		return this.appDirectory;
 	}
 
 	/**
@@ -73,22 +72,7 @@ public class Storage {
 	 *
 	 */
 	public File directory(String directory) {
-		return new File(appDirectory() + File.separator + directory);
-	}
-
-	/**
-	 *
-	 * <p>Returns the absolute path of the app's data directory
-	 *
-	 * @return the absolute path of the data directory as String
-	 *
-	 */
-	private String dataDirectory() {
-		StringBuilder sb = new StringBuilder();
-		sb.append(Environment.getExternalStorageDirectory().getAbsolutePath())
-				.append(File.separator).append(androidDirectory)
-				.append(File.separator).append(dataDirectory);
-		return sb.toString();
+		return new File(appDirectory + File.separator + directory);
 	}
 
 	/**
@@ -168,6 +152,28 @@ public class Storage {
 		} catch (FileNotFoundException exception) {
 			return false;
 		} catch (IOException e) {
+			return false;
+		}
+		return true;
+	}
+
+	/**
+	 *
+	 * <p>Download a file from a URL to the file system
+	 *
+	 * @param from The URL to download from
+	 * @param to The file to save to
+	 * @return true if file download was successful, false otherwise
+	 *
+	 */
+	public boolean downloadFile(String from, String to) {
+		try {
+			URL url = new URL(from);
+			File destination = new File(appDirectory + File.separator + to);
+			FileUtils.copyURLToFile(url, destination);
+		} catch (MalformedURLException exception) {
+			return false;
+		} catch (IOException exception) {
 			return false;
 		}
 		return true;

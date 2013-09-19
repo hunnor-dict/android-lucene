@@ -141,8 +141,8 @@ public class DatabaseActivity extends Activity implements View.OnClickListener {
 
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append(getResources().getString(R.string.database_check_internet_connection)).append("... ");
-		Device fileManager = new Device();
-		if (fileManager.online(this)) {
+		Device device = new Device();
+		if (device.network().online(this)) {
 			stringBuilder.append("<font color=\"green\"><b>").append(getResources().getString(R.string.ok)).append("</b></font> (").append(getResources().getString(R.string.net_online)).append(")");			
 		} else {
 			stringBuilder.append("<font color=\"red\"><b>").append(getResources().getString(R.string.error)).append("</b></font> (").append(getResources().getString(R.string.net_offline)).append(")");
@@ -174,7 +174,7 @@ public class DatabaseActivity extends Activity implements View.OnClickListener {
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append(getResources().getString(R.string.database_check_internet_connection)).append("... ");
 		Device fileManager = new Device();
-		if (fileManager.online(this)) {
+		if (fileManager.network().online(this)) {
 			stringBuilder.append("<font color=\"green\"><b>").append(getResources().getString(R.string.ok)).append("</b></font> (").append(getResources().getString(R.string.net_online)).append(")");
 		} else {
 			stringBuilder.append("<font color=\"red\"><b>").append(getResources().getString(R.string.error)).append("</b></font> (").append(getResources().getString(R.string.net_offline)).append(")");
