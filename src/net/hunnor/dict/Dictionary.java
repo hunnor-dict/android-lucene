@@ -7,8 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.hunnor.dict.util.Device;
-
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.CharArraySet;
 import org.apache.lucene.analysis.KeywordAnalyzer;
@@ -30,15 +28,20 @@ import org.apache.lucene.store.NIOFSDirectory;
 @SuppressWarnings("deprecation")
 public class Dictionary implements LuceneConstants {
 
+	private File indexDirectory = null;
 	private IndexReader indexReader = null;
 	private Analyzer analyzer = null;
 
-	public boolean ready() {
-		if (indexReader == null) {
-			return constructIndexReader();
-		} else {
-			return true;
-		}
+	public boolean open() {
+		return
+				indexDirectory != null &&
+				indexReader != null &&
+				analyzer != null;
+	}
+
+	public boolean open(File indexDirectory) {
+		this.indexDirectory = indexDirectory;
+		return constructIndexReader() && constructAnalyzer();
 	}
 
 	public List<IndexObject> search(String queryString) {
@@ -49,7 +52,9 @@ public class Dictionary implements LuceneConstants {
 		}
 
 		if (analyzer == null) {
-			analyzer = constructAnalyzer();
+			if (!constructAnalyzer()) {
+				return null;
+			}
 		}
 
 		List<IndexObject> results = new ArrayList<IndexObject>();
@@ -92,9 +97,7 @@ public class Dictionary implements LuceneConstants {
 
 	private boolean constructIndexReader() {
 		try {
-			Device device = new Device();
-			File indexDir = device.storage().directory(INDEX_DIR);			
-			Directory directory = new NIOFSDirectory(indexDir);
+			Directory directory = new NIOFSDirectory(indexDirectory);
 			indexReader = IndexReader.open(directory);
 		} catch (CorruptIndexException exception) {
 			return false;
@@ -104,25 +107,30 @@ public class Dictionary implements LuceneConstants {
 		return true;
 	}
 
-	private Analyzer constructAnalyzer() {
-		KeywordAnalyzer keywordAnalyzer = new KeywordAnalyzer();
-		StandardAnalyzer standardAnalyzer = new StandardAnalyzer(LUCENE_VERSION);
-		SnowballAnalyzer norwegianSnowballAnalyzer = new SnowballAnalyzer(LUCENE_VERSION, "Norwegian", CharArraySet.EMPTY_SET);
-		SnowballAnalyzer hungarianSnowballAnalyzer = new SnowballAnalyzer(LUCENE_VERSION, "Hungarian", CharArraySet.EMPTY_SET);
+	private boolean constructAnalyzer() {
+		try {
+			KeywordAnalyzer keywordAnalyzer = new KeywordAnalyzer();
+			StandardAnalyzer standardAnalyzer = new StandardAnalyzer(LUCENE_VERSION);
+			SnowballAnalyzer norwegianSnowballAnalyzer = new SnowballAnalyzer(LUCENE_VERSION, "Norwegian", CharArraySet.EMPTY_SET);
+			SnowballAnalyzer hungarianSnowballAnalyzer = new SnowballAnalyzer(LUCENE_VERSION, "Hungarian", CharArraySet.EMPTY_SET);
 
-		Map<String, Analyzer> mapping = new HashMap<String, Analyzer>();
-		mapping.put(LUCENE_FIELD_HU_ROOTS, standardAnalyzer);
-		mapping.put(LUCENE_FIELD_NO_ROOTS, standardAnalyzer);
-		mapping.put(LUCENE_FIELD_HU_FORMS, standardAnalyzer);
-		mapping.put(LUCENE_FIELD_NO_FORMS, standardAnalyzer);
-		mapping.put(LUCENE_FIELD_HU_TRANS, norwegianSnowballAnalyzer);
-		mapping.put(LUCENE_FIELD_NO_TRANS, hungarianSnowballAnalyzer);
-		mapping.put(LUCENE_FIELD_HU_QUOTE, hungarianSnowballAnalyzer );
-		mapping.put(LUCENE_FIELD_NO_QUOTE, norwegianSnowballAnalyzer );
-		mapping.put(LUCENE_FIELD_HU_QUOTETRANS, norwegianSnowballAnalyzer );
-		mapping.put(LUCENE_FIELD_NO_QUOTETRANS, hungarianSnowballAnalyzer );
+			Map<String, Analyzer> mapping = new HashMap<String, Analyzer>();
+			mapping.put(LUCENE_FIELD_HU_ROOTS, standardAnalyzer);
+			mapping.put(LUCENE_FIELD_NO_ROOTS, standardAnalyzer);
+			mapping.put(LUCENE_FIELD_HU_FORMS, standardAnalyzer);
+			mapping.put(LUCENE_FIELD_NO_FORMS, standardAnalyzer);
+			mapping.put(LUCENE_FIELD_HU_TRANS, norwegianSnowballAnalyzer);
+			mapping.put(LUCENE_FIELD_NO_TRANS, hungarianSnowballAnalyzer);
+			mapping.put(LUCENE_FIELD_HU_QUOTE, hungarianSnowballAnalyzer );
+			mapping.put(LUCENE_FIELD_NO_QUOTE, norwegianSnowballAnalyzer );
+			mapping.put(LUCENE_FIELD_HU_QUOTETRANS, norwegianSnowballAnalyzer );
+			mapping.put(LUCENE_FIELD_NO_QUOTETRANS, hungarianSnowballAnalyzer );
 
-		return new PerFieldAnalyzerWrapper(keywordAnalyzer, mapping);
+			analyzer = new PerFieldAnalyzerWrapper(keywordAnalyzer, mapping);
+		} catch (Exception exception) {
+			return false;
+		}
+		return true;
 	}
 
 }

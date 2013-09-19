@@ -3,6 +3,8 @@ package net.hunnor.dict;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.hunnor.dict.task.DatabaseDialogYes;
+import net.hunnor.dict.util.Device;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
@@ -27,40 +29,46 @@ public class SearchActivity extends Activity implements View.OnClickListener {
 
 	private static final int VOICE_RECOGNITION_REQUEST_CODE = 1234;
 
+	private Device device;
+	private Dictionary dictionary;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_search);
-		Button button = (Button) findViewById(R.search.search_button);
-		button.setOnClickListener(this);
-		Dictionary dictionaryProvider = new Dictionary();
-		if (!dictionaryProvider.ready()) {
-			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-			alertDialogBuilder
-					.setTitle(R.string.database_alert_title)
-					.setMessage(R.string.database_alert_text)
-					.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							try {
-								startActivity(new Intent("net.hunnor.dict.ACTIVITY_DATABASE"));
-							} catch (ActivityNotFoundException e) {
-							}		
-						}
-					})
-					.setNegativeButton("No", new DialogInterface.OnClickListener() {
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							finish();
-						}
-					});
-			AlertDialog alertDialog = alertDialogBuilder.create();
-			alertDialog.show();
-		}
+
+		// Set up UI
+		Button searchButton = (Button) findViewById(R.search.search_button);
+		searchButton.setOnClickListener(this);
 		Button huVoiceButton = (Button) findViewById(R.search.voice_hu_button);
 		huVoiceButton.setOnClickListener(this);
 		Button noVoiceButton = (Button) findViewById(R.search.voice_no_button);
 		noVoiceButton.setOnClickListener(this);
+
+		// Open Dictionary
+		if (device == null) {
+			device = new Device();
+		}
+		if (dictionary == null) {
+			dictionary = new Dictionary();
+		}
+		if (!dictionary.open()) {
+			if (!dictionary.open(device.storage().directory(LuceneConstants.INDEX_DIR))) {
+				AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+				alertDialogBuilder
+						.setTitle(R.string.database_alert_title)
+						.setMessage(R.string.database_alert_text)
+						.setPositiveButton(getResources().getString(R.string.database_alert_option_yes), new DatabaseDialogYes())
+						.setNegativeButton(getResources().getString(R.string.database_alert_option_no), new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								finish();
+							}
+						});
+				AlertDialog alertDialog = alertDialogBuilder.create();
+				alertDialog.show();
+			}
+		}
 	}
 
 	@Override
@@ -111,8 +119,7 @@ public class SearchActivity extends Activity implements View.OnClickListener {
 	}
 
 	private void searchFor(String query) {
-		Dictionary dictionaryProvider = new Dictionary();
-		List<IndexObject> searchResults = dictionaryProvider.search(query);
+		List<IndexObject> searchResults = dictionary.search(query);
 		if (searchResults == null) {
 			return;
 		}
