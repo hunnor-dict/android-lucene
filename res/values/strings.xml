@@ -47,6 +47,9 @@
 	<string name="database_button_check_for_updates">Check for updates</string>
 	<string name="database_button_download_updates">Download updates</string>
 
+	<string name="search_no_results">No results</string>
+	<string name="search_num_result">result</string>
+	<string name="search_num_results">results</string>
 	<string name="search_exception">Error during search</string>
 	<string name="search_button">Search</string>
 

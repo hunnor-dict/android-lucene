@@ -124,7 +124,7 @@ public class SearchActivity extends Activity implements View.OnClickListener {
 
 	private void showMessage(String message) {
 		TextView tv = (TextView) findViewById(R.search.search_errors);
-		tv.setText(message);
+		tv.setText(Html.fromHtml(message));
 	}
 
 	private void search() {
@@ -149,6 +149,20 @@ public class SearchActivity extends Activity implements View.OnClickListener {
 		Spanned[] resultArray = results.toArray(new Spanned[results.size()]);
 		ArrayAdapter<Spanned> arrayAdapter = new ArrayAdapter<Spanned>(
 				this, android.R.layout.simple_list_item_1, resultArray);
+		StringBuilder sb = new StringBuilder();
+		if (results.isEmpty()) {
+			sb.append(getResources().getString(R.string.search_no_results));
+		} else {
+			sb.append("<b>");
+			sb.append(results.size());
+			sb.append("</b> ");
+			if (results.size() == 1) {
+				sb.append(getResources().getString(R.string.search_num_result));
+			} else {
+				sb.append(getResources().getString(R.string.search_num_results));
+			}
+		}
+		showMessage(sb.toString());
 		ListView listView = (ListView) findViewById(R.search.search_result_list);
 		listView.setAdapter(arrayAdapter);
 		EditText editText = (EditText) findViewById(R.search.search_input_field);
