@@ -2,11 +2,16 @@ package net.hunnor.dict;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
-import net.hunnor.dict.task.CheckUpdate;
 import net.hunnor.dict.task.GetUpdate;
 import net.hunnor.dict.util.Device;
 
@@ -17,6 +22,7 @@ import org.apache.lucene.store.NIOFSDirectory;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Html;
 import android.view.Menu;
@@ -152,13 +158,44 @@ public class DatabaseActivity extends Activity implements View.OnClickListener {
 		if (check) {
 			sb.append("<br>");
 			sb.append(getResources().getString(R.string.database_check_update_url)).append("... ");
-			new CheckUpdate() {
+			new AsyncTask<String, Void, Map<String, List<String>>>() {
 				@Override
-				public void onPostExecute(String result) {
-					StringBuilder stringBuilder = new StringBuilder();
-					stringBuilder.append(result);
+				protected Map<String, List<String>> doInBackground(String... urls) {
+					HttpURLConnection connection = null;
+					try {
+						URL url = new URL(urls[0]);
+						connection = (HttpURLConnection) url.openConnection();
+						connection.setRequestMethod("HEAD");
+					} catch (MalformedURLException exception) {
+					} catch (IOException exception) {
+					}
+					return connection.getHeaderFields();
+				}
+				@Override
+				public void onPostExecute(Map<String, List<String>> result) {
+					StringBuilder sb = new StringBuilder();
+					List<String> dateList = result.get("Last-Modified");
+					sb.append("<br>");
+					sb.append(getResources().getString(R.string.last_modified)).append(": ");
+					for (String date: dateList) {
+						SimpleDateFormat parseFormat =
+								new SimpleDateFormat("EEE, dd MMM yyyy H:m:s zzz", Locale.US);
+						SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+						try {
+							Date d = parseFormat.parse(date);							
+							sb.append(simpleDateFormat.format(d));
+						} catch (ParseException exception) {
+						}
+					}
+					sb.append("<br>");
+					sb.append(getResources().getString(R.string.size)).append(": ");
+					List<String> sizeList = result.get("Content-Length");
+					for (String size: sizeList) {
+						// TODO Make human-readable (in Storage)
+						sb.append(size);
+					}
 					TextView textView = (TextView) findViewById(R.database.update_status);
-					textView.append(Html.fromHtml(stringBuilder.toString()));
+					textView.append(Html.fromHtml(sb.toString()));
 				}
 			}.execute(LuceneConstants.INDEX_URL);
 		}
