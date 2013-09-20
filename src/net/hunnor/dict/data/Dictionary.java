@@ -58,27 +58,35 @@ public class Dictionary implements LuceneConstants {
 			}
 		}
 
+		List<List<String>> runs = getRuns(lang);
+
 		List<Entry> results = new ArrayList<Entry>();
 		IndexSearcher indexSearcher = null;
 		try {
 			indexSearcher = new IndexSearcher(indexReader);
-			StringBuilder sb = new StringBuilder();
-			String[] fields = {LUCENE_FIELD_HU_ROOTS, LUCENE_FIELD_HU_FORMS, LUCENE_FIELD_HU_TRANS, LUCENE_FIELD_NO_ROOTS, LUCENE_FIELD_NO_FORMS, LUCENE_FIELD_NO_TRANS};
-			for (String field: fields) {
-				sb.append(field).append(":").append(queryString).append(" ");
-			}
-			QueryParser queryParser = new QueryParser(LUCENE_VERSION, LUCENE_FIELD_ID, analyzer);
-			Query query = queryParser.parse(sb.toString());
-			TopDocs topDocs = indexSearcher.search(query, indexReader.maxDoc());
-			ScoreDoc[] scoreDoc = topDocs.scoreDocs;
-			int totalHits = topDocs.totalHits;
-			for (int i = 0; i < totalHits; i++) {
-				Document document = indexSearcher.doc(scoreDoc[i].doc);
-				Entry entry = new Entry(
-						document.get(LUCENE_FIELD_ID),
-						document.get(LUCENE_FIELD_LANG),
-						document.get(LUCENE_FIELD_TEXT));
-				results.add(entry);
+			QueryParser queryParser =
+					new QueryParser(LUCENE_VERSION, LUCENE_FIELD_ID, analyzer);
+			StringBuilder sb = null;
+			for (List<String> run: runs) {
+				sb = new StringBuilder();
+				for (String field: run) {
+					sb.append(field).append(":").append(queryString).append(" ");					
+				}
+				Query query = queryParser.parse(sb.toString());
+				TopDocs topDocs = indexSearcher.search(query, indexReader.maxDoc());
+				ScoreDoc[] scoreDoc = topDocs.scoreDocs;
+				int totalHits = topDocs.totalHits;
+				for (int i = 0; i < totalHits; i++) {
+					Document document = indexSearcher.doc(scoreDoc[i].doc);
+					Entry entry = new Entry(
+							document.get(LUCENE_FIELD_ID),
+							document.get(LUCENE_FIELD_LANG),
+							document.get(LUCENE_FIELD_TEXT));
+					results.add(entry);
+				}
+				if (totalHits > 0) {
+					break;
+				}
 			}
 		} catch (ParseException e) {
 			return null;
@@ -94,6 +102,41 @@ public class Dictionary implements LuceneConstants {
 			}
 		}
 		return results;
+	}
+
+	private List<List<String>> getRuns(String lang) {
+		List<List<String>> runs = new ArrayList<List<String>>();
+		List<String> run1 = new ArrayList<String>();
+		List<String> run2 = new ArrayList<String>();
+		List<String> run3 = new ArrayList<String>();
+		if (LANG_HU.equals(lang)) {
+			run1.add(LUCENE_FIELD_HU_ROOTS);
+			run1.add(LUCENE_FIELD_HU_FORMS);
+			run2.add(LUCENE_FIELD_NO_TRANS);
+			run3.add(LUCENE_FIELD_HU_QUOTE);
+			run3.add(LUCENE_FIELD_NO_QUOTETRANS);
+		} else if (LANG_NO.equals(lang)) {
+			run1.add(LUCENE_FIELD_NO_ROOTS);
+			run1.add(LUCENE_FIELD_NO_FORMS);
+			run2.add(LUCENE_FIELD_HU_TRANS);
+			run3.add(LUCENE_FIELD_NO_QUOTE);
+			run3.add(LUCENE_FIELD_HU_QUOTETRANS);
+		} else {
+			run1.add(LUCENE_FIELD_HU_ROOTS);
+			run1.add(LUCENE_FIELD_HU_FORMS);
+			run1.add(LUCENE_FIELD_NO_ROOTS);
+			run1.add(LUCENE_FIELD_NO_FORMS);
+			run2.add(LUCENE_FIELD_HU_TRANS);
+			run2.add(LUCENE_FIELD_NO_TRANS);
+			run3.add(LUCENE_FIELD_HU_QUOTE);
+			run3.add(LUCENE_FIELD_NO_QUOTE);
+			run3.add(LUCENE_FIELD_HU_QUOTETRANS);
+			run3.add(LUCENE_FIELD_NO_QUOTETRANS);
+		}
+		runs.add(run1);
+		runs.add(run2);
+		runs.add(run3);
+		return runs;
 	}
 
 	private boolean constructIndexReader() {
