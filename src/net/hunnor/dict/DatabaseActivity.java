@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 import net.hunnor.dict.task.CheckUpdate;
 import net.hunnor.dict.task.GetUpdate;
@@ -13,7 +14,6 @@ import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.NIOFSDirectory;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
@@ -32,15 +32,16 @@ public class DatabaseActivity extends Activity implements View.OnClickListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_database);
 
-		Button button1 = (Button) findViewById(R.database.update_download_button);
+		Button button1 = (Button)
+				findViewById(R.database.update_download_button);
 		button1.setOnClickListener(this);
-		Button button2 = (Button) findViewById(R.database.update_check_button);
+		Button button2 = (Button)
+				findViewById(R.database.update_check_button);
 		button2.setOnClickListener(this);
 
 		checkLocals();
 	}
 
-	@SuppressLint("SimpleDateFormat")
 	private void checkLocals() {
 
 		boolean check = true;
@@ -119,10 +120,9 @@ public class DatabaseActivity extends Activity implements View.OnClickListener {
 					StringBuilder listBuilder = new StringBuilder();
 					Directory directory;
 					directory = new NIOFSDirectory(indexDirectory);
-					@SuppressWarnings("deprecation")
 					long lastMod = IndexReader.lastModified(directory);
 					Date date = new Date(lastMod);
-					SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+					SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
 					listBuilder.append("<br>").append(getResources().getString(R.string.last_modified)).append(": ").append(simpleDateFormat.format(date));
 					stringBuilder.append(listBuilder);
 				} catch (IOException e) {
@@ -139,19 +139,19 @@ public class DatabaseActivity extends Activity implements View.OnClickListener {
 
 		boolean check = true;
 
-		StringBuilder stringBuilder = new StringBuilder();
-		stringBuilder.append(getResources().getString(R.string.database_check_internet_connection)).append("... ");
+		StringBuilder sb = new StringBuilder();
+		sb.append(getResources().getString(R.string.database_check_internet_connection)).append("... ");
 		Device device = new Device();
 		if (device.network().online(this)) {
-			stringBuilder.append("<font color=\"green\"><b>").append(getResources().getString(R.string.ok)).append("</b></font> (").append(getResources().getString(R.string.net_online)).append(")");			
+			sb.append("<font color=\"green\"><b>").append(getResources().getString(R.string.ok)).append("</b></font> (").append(getResources().getString(R.string.net_online)).append(")");			
 		} else {
-			stringBuilder.append("<font color=\"red\"><b>").append(getResources().getString(R.string.error)).append("</b></font> (").append(getResources().getString(R.string.net_offline)).append(")");
+			sb.append("<font color=\"red\"><b>").append(getResources().getString(R.string.error)).append("</b></font> (").append(getResources().getString(R.string.net_offline)).append(")");
 			check = false;
 		}
 
 		if (check) {
-			stringBuilder.append("<br>");
-			stringBuilder.append(getResources().getString(R.string.database_check_update_url)).append("... ");
+			sb.append("<br>");
+			sb.append(getResources().getString(R.string.database_check_update_url)).append("... ");
 			new CheckUpdate() {
 				@Override
 				public void onPostExecute(String result) {
@@ -164,7 +164,7 @@ public class DatabaseActivity extends Activity implements View.OnClickListener {
 		}
 
 		TextView textView = (TextView) findViewById(R.database.update_status);
-		textView.setText(Html.fromHtml(stringBuilder.toString()));
+		textView.setText(Html.fromHtml(sb.toString()));
 	}
 
 	private void getRemote() {

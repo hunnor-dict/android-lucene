@@ -38,7 +38,6 @@ public class SearchActivity extends Activity implements View.OnClickListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_search);
 
-		// Open Dictionary
 		if (device == null) {
 			device = new Device();
 		}
@@ -77,7 +76,6 @@ public class SearchActivity extends Activity implements View.OnClickListener {
 			}
 		}
 
-		// Set up search UI
 		Button searchButton = (Button) findViewById(R.search.search_button);
 		searchButton.setOnClickListener(this);
 		Button huVoiceButton = (Button) findViewById(R.search.voice_hu_button);
