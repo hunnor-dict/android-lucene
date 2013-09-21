@@ -13,6 +13,7 @@ import java.util.zip.ZipInputStream;
 import org.apache.commons.io.FileUtils;
 
 import android.os.Environment;
+import android.os.StatFs;
 
 /**
  *
@@ -61,6 +62,20 @@ public class Storage {
 	public boolean writable() {
 		String storageState = Environment.getExternalStorageState();
 		return Environment.MEDIA_MOUNTED.equals(storageState);
+	}
+
+	/**
+	 *
+	 * <p>Returns the amount of free space in Bytes
+	 *
+	 * @return the number of free Bytes
+	 *
+	 */
+	public double freeSpace() {
+		double free = 0;
+		StatFs statFs = new StatFs(Environment.getExternalStorageDirectory().getAbsolutePath());
+		free = statFs.getBlockSize() * statFs.getAvailableBlocks();
+		return free;
 	}
 
 	/**

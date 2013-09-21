@@ -12,8 +12,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import net.hunnor.dict.task.GetUpdate;
 import net.hunnor.dict.util.Device;
+import net.hunnor.dict.util.Formatter;
 
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.store.Directory;
@@ -192,7 +192,7 @@ public class DatabaseActivity extends Activity implements View.OnClickListener {
 					List<String> sizeList = result.get("Content-Length");
 					for (String size: sizeList) {
 						// TODO Make human-readable (in Storage)
-						sb.append(size);
+						sb.append(Formatter.humanReadableBytes(Double.parseDouble(size)));
 					}
 					TextView textView = (TextView) findViewById(R.database.update_status);
 					textView.append(Html.fromHtml(sb.toString()));
@@ -221,7 +221,28 @@ public class DatabaseActivity extends Activity implements View.OnClickListener {
 		if (check) {
 			stringBuilder.append("<br>");
 			stringBuilder.append(getResources().getString(R.string.database_download)).append("... ");
-			new GetUpdate() {
+			new AsyncTask<String, Void, String>() {
+				@Override
+				protected String doInBackground(String... params) {
+					Device device = new Device();
+					if (device.storage().downloadFile(LuceneConstants.INDEX_URL, LuceneConstants.INDEX_ZIP)) {
+						if (device.storage().unZip(LuceneConstants.INDEX_ZIP, "")) {
+							if (device.storage().deleteDirectory(LuceneConstants.INDEX_DIR)) {
+								if (device.storage().renameDirectory("hunnor-lucene-index", LuceneConstants.INDEX_DIR)) {
+									return "OK";
+								} else {
+									return "MV";
+								}
+							} else {
+								return "DEL";
+							}
+						} else {
+							return "ZP";
+						}
+					} else {
+						return "DL";
+					}
+				}
 				@Override
 				public void onPostExecute(String result) {
 					StringBuilder stringBuilder = new StringBuilder();
