@@ -145,8 +145,8 @@ public class SearchActivity extends Activity implements View.OnClickListener {
 			results.add(Html.fromHtml(result.getText()));
 		}
 		Spanned[] resultArray = results.toArray(new Spanned[results.size()]);
-		ArrayAdapter<Spanned> arrayAdapter = new ArrayAdapter<Spanned>(
-				this, android.R.layout.simple_list_item_1, resultArray);
+		ArrayAdapter<Spanned> arrayAdapter = new SearchArrayAdapter(
+				this, R.layout.search_result, resultArray);
 		StringBuilder sb = new StringBuilder();
 		if (results.isEmpty()) {
 			sb.append(getResources().getString(R.string.search_no_results));

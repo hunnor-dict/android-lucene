@@ -52,6 +52,7 @@
 	<string name="search_num_results">results</string>
 	<string name="search_exception">Error during search</string>
 	<string name="search_button">Search</string>
+	<string name="search_result_flag_descr">Flag</string>
 
 	<string name="voice_not_available">Voice recognition not available</string>
 	<string name="voice_hint">Voice recognition launched for HunNor Lucene</string>

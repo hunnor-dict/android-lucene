@@ -191,7 +191,6 @@ public class DatabaseActivity extends Activity implements View.OnClickListener {
 					sb.append(getResources().getString(R.string.size)).append(": ");
 					List<String> sizeList = result.get("Content-Length");
 					for (String size: sizeList) {
-						// TODO Make human-readable (in Storage)
 						sb.append(Formatter.humanReadableBytes(Double.parseDouble(size)));
 					}
 					TextView textView = (TextView) findViewById(R.database.update_status);
