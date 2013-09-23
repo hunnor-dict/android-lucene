@@ -3,9 +3,10 @@ package net.hunnor.dict;
 import java.io.IOException;
 import java.io.InputStream;
 
+import net.hunnor.dict.data.Entry;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.text.Spanned;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,13 +14,16 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class SearchArrayAdapter extends ArrayAdapter<Spanned> {
+public class SearchArrayAdapter extends ArrayAdapter<Entry> {
 
 	private final Context context;
 	private final int resourceId;
-	private final Spanned[] resultArray;
+	private final Entry[] resultArray;
 
-	public SearchArrayAdapter(Context context, int resourceId, Spanned[] resultArray) {
+	public SearchArrayAdapter(
+			Context context,
+			int resourceId,
+			Entry[] resultArray) {
 		super(context, resourceId, resultArray);
 		this.context = context;
 		this.resourceId = resourceId;
@@ -30,11 +34,11 @@ public class SearchArrayAdapter extends ArrayAdapter<Spanned> {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		View rowView = inflater.inflate(resourceId, parent, false);
-		Spanned result = resultArray[position];
+		Entry result = resultArray[position];
 		ImageView imageView = (ImageView) rowView.findViewById(R.search.search_result_flag);
 		TextView textView = (TextView) rowView.findViewById(R.search.search_result_text);
-		textView.setText(result);
-		String lang = "hu";
+		textView.setText(Html.fromHtml(result.getText()));
+		String lang = result.getLang();
 		InputStream inputStream = null;
 		try {
 			inputStream = context.getAssets().open("flag_" + lang + ".png");
@@ -44,4 +48,5 @@ public class SearchArrayAdapter extends ArrayAdapter<Spanned> {
 		imageView.setImageDrawable(drawable);
 		return rowView;
 	}
+
 }

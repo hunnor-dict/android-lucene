@@ -144,8 +144,8 @@ public class SearchActivity extends Activity implements View.OnClickListener {
 		for (Entry result: searchResults) {
 			results.add(Html.fromHtml(result.getText()));
 		}
-		Spanned[] resultArray = results.toArray(new Spanned[results.size()]);
-		ArrayAdapter<Spanned> arrayAdapter = new SearchArrayAdapter(
+		Entry[] resultArray = searchResults.toArray(new Entry[searchResults.size()]);
+		ArrayAdapter<Entry> arrayAdapter = new SearchArrayAdapter(
 				this, R.layout.search_result, resultArray);
 		StringBuilder sb = new StringBuilder();
 		if (results.isEmpty()) {
