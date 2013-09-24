@@ -21,8 +21,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -76,11 +76,11 @@ public class SearchActivity extends Activity implements View.OnClickListener {
 			}
 		}
 
-		Button searchButton = (Button) findViewById(R.search.search_button);
+		ImageButton searchButton = (ImageButton) findViewById(R.id.search_button);
 		searchButton.setOnClickListener(this);
-		Button huVoiceButton = (Button) findViewById(R.search.voice_hu_button);
+		ImageButton huVoiceButton = (ImageButton) findViewById(R.id.voice_hu_button);
 		huVoiceButton.setOnClickListener(this);
-		Button noVoiceButton = (Button) findViewById(R.search.voice_no_button);
+		ImageButton noVoiceButton = (ImageButton) findViewById(R.id.voice_no_button);
 		noVoiceButton.setOnClickListener(this);
 	}
 
@@ -108,25 +108,25 @@ public class SearchActivity extends Activity implements View.OnClickListener {
 	@Override
 	public void onClick(View view) {
 		switch (view.getId()) {
-		case R.search.search_button:
+		case R.id.search_button:
 			search();
 			break;
-		case R.search.voice_hu_button:
+		case R.id.voice_hu_button:
 			startVoiceRecognition(LuceneConstants.LANG_HU);
 			break;
-		case R.search.voice_no_button:
+		case R.id.voice_no_button:
 			startVoiceRecognition(LuceneConstants.LANG_NO);
 			break;
 		}
 	}
 
 	private void showMessage(String message) {
-		TextView tv = (TextView) findViewById(R.search.search_errors);
+		TextView tv = (TextView) findViewById(R.id.search_errors);
 		tv.setText(Html.fromHtml(message));
 	}
 
 	private void search() {
-		EditText editText = (EditText) findViewById(R.search.search_input_field);
+		EditText editText = (EditText) findViewById(R.id.search_input);
 		String query = editText.getText().toString();
 		search(query);
 	}
@@ -161,9 +161,9 @@ public class SearchActivity extends Activity implements View.OnClickListener {
 			}
 		}
 		showMessage(sb.toString());
-		ListView listView = (ListView) findViewById(R.search.search_result_list);
+		ListView listView = (ListView) findViewById(R.id.search_result_list);
 		listView.setAdapter(arrayAdapter);
-		EditText editText = (EditText) findViewById(R.search.search_input_field);
+		EditText editText = (EditText) findViewById(R.id.search_input);
 		editText.setText("");
 	}
 

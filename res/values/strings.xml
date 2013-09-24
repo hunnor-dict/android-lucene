@@ -52,6 +52,8 @@
 	<string name="search_num_results">results</string>
 	<string name="search_exception">Error during search</string>
 	<string name="search_button">Search</string>
+	<string name="search_recognize_hu_descr">Recognize HU</string>
+	<string name="search_recognize_no_descr">Recognize NO</string>
 	<string name="search_result_flag_descr">Flag</string>
 
 	<string name="voice_not_available">Voice recognition not available</string>
