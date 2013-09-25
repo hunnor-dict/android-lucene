@@ -39,10 +39,10 @@ public class DatabaseActivity extends Activity implements View.OnClickListener {
 		setContentView(R.layout.activity_database);
 
 		Button button1 = (Button)
-				findViewById(R.database.update_download_button);
+				findViewById(R.id.update_download_button);
 		button1.setOnClickListener(this);
 		Button button2 = (Button)
-				findViewById(R.database.update_check_button);
+				findViewById(R.id.update_check_button);
 		button2.setOnClickListener(this);
 
 		checkLocals();
@@ -137,7 +137,7 @@ public class DatabaseActivity extends Activity implements View.OnClickListener {
 			}
 		}
 
-		TextView textView = (TextView) findViewById(R.database.databaseInfo);
+		TextView textView = (TextView) findViewById(R.id.database_info);
 		textView.setText(Html.fromHtml(stringBuilder.toString()));
 	}
 
@@ -193,13 +193,13 @@ public class DatabaseActivity extends Activity implements View.OnClickListener {
 					for (String size: sizeList) {
 						sb.append(Formatter.humanReadableBytes(Double.parseDouble(size)));
 					}
-					TextView textView = (TextView) findViewById(R.database.update_status);
+					TextView textView = (TextView) findViewById(R.id.update_status);
 					textView.append(Html.fromHtml(sb.toString()));
 				}
 			}.execute(LuceneConstants.INDEX_URL);
 		}
 
-		TextView textView = (TextView) findViewById(R.database.update_status);
+		TextView textView = (TextView) findViewById(R.id.update_status);
 		textView.setText(Html.fromHtml(sb.toString()));
 	}
 
@@ -250,13 +250,13 @@ public class DatabaseActivity extends Activity implements View.OnClickListener {
 					} else {
 						stringBuilder.append("<font color=\"red\"><b>").append(getResources().getString(R.string.error)).append("</b></font>");
 					}
-					TextView textView = (TextView) findViewById(R.database.update_status);
+					TextView textView = (TextView) findViewById(R.id.update_status);
 					textView.append(Html.fromHtml(stringBuilder.toString()));
 				}
 			}.execute(LuceneConstants.INDEX_URL);
 		}
 
-		TextView textView = (TextView) findViewById(R.database.update_status);
+		TextView textView = (TextView) findViewById(R.id.update_status);
 		textView.setText(Html.fromHtml(stringBuilder.toString()));
 	}
 
@@ -284,10 +284,10 @@ public class DatabaseActivity extends Activity implements View.OnClickListener {
 	@Override
 	public void onClick(View view) {
 		switch (view.getId()) {
-		case R.database.update_check_button:
+		case R.id.update_check_button:
 			checkRemote();
 			break;
-		case R.database.update_download_button:
+		case R.id.update_download_button:
 			getRemote();
 			break;
 		}

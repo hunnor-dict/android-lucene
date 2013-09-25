@@ -151,9 +151,8 @@ public class SearchActivity extends Activity implements View.OnClickListener {
 		if (results.isEmpty()) {
 			sb.append(getResources().getString(R.string.search_no_results));
 		} else {
-			sb.append("<b>");
 			sb.append(results.size());
-			sb.append("</b> ");
+			sb.append(" ");
 			if (results.size() == 1) {
 				sb.append(getResources().getString(R.string.search_num_result));
 			} else {

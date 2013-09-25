@@ -1,17 +1,15 @@
 package net.hunnor.dict;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import net.hunnor.dict.data.Entry;
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.text.Html;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.style.ImageSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 public class SearchArrayAdapter extends ArrayAdapter<Entry> {
@@ -32,20 +30,24 @@ public class SearchArrayAdapter extends ArrayAdapter<Entry> {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		LayoutInflater inflater = (LayoutInflater)
+				context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		View rowView = inflater.inflate(resourceId, parent, false);
 		Entry result = resultArray[position];
-		ImageView imageView = (ImageView) rowView.findViewById(R.search.search_result_flag);
-		TextView textView = (TextView) rowView.findViewById(R.search.search_result_text);
+		TextView textView = (TextView) rowView.findViewById(R.id.search_result_text);
 		textView.setText(Html.fromHtml(result.getText()));
-		String lang = result.getLang();
-		InputStream inputStream = null;
-		try {
-			inputStream = context.getAssets().open("flag_" + lang + ".png");
-		} catch (IOException exception) {
+		ImageSpan flag = null;
+		if (LuceneConstants.LANG_HU.equals(result.getLang())) {
+			flag = new ImageSpan(this.context, R.drawable.flag_hu);
+		} else if (LuceneConstants.LANG_NO.equals(result.getLang())) {
+			flag = new ImageSpan(this.context, R.drawable.flag_no);
 		}
-		Drawable drawable = Drawable.createFromStream(inputStream, null);
-		imageView.setImageDrawable(drawable);
+		SpannableString s1 = new SpannableString(".");
+		SpannableString s2 = new SpannableString(Html.fromHtml(result.getText()));
+		s1.setSpan(flag, 0, 0, 0);
+		SpannableStringBuilder sb = new SpannableStringBuilder();
+		sb.append(s1).append(" ").append(s2);
+		textView.setText(sb);
 		return rowView;
 	}
 
