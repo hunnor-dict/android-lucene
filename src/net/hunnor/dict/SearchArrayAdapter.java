@@ -38,15 +38,15 @@ public class SearchArrayAdapter extends ArrayAdapter<Entry> {
 		textView.setText(Html.fromHtml(result.getText()));
 		ImageSpan flag = null;
 		if (LuceneConstants.LANG_HU.equals(result.getLang())) {
-			flag = new ImageSpan(this.context, R.drawable.flag_hu);
+			flag = new ImageSpan(this.context, R.drawable.flag_hu, ImageSpan.ALIGN_BASELINE);
 		} else if (LuceneConstants.LANG_NO.equals(result.getLang())) {
-			flag = new ImageSpan(this.context, R.drawable.flag_no);
+			flag = new ImageSpan(this.context, R.drawable.flag_no, ImageSpan.ALIGN_BASELINE);
 		}
 		SpannableString s1 = new SpannableString(".");
-		SpannableString s2 = new SpannableString(Html.fromHtml(result.getText()));
+		SpannableString s3 = new SpannableString(Html.fromHtml(result.getText()));
 		s1.setSpan(flag, 0, 0, 0);
 		SpannableStringBuilder sb = new SpannableStringBuilder();
-		sb.append(s1).append(" ").append(s2);
+		sb.append(s1).append(s3);
 		textView.setText(sb);
 		return rowView;
 	}
