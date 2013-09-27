@@ -1,53 +1,95 @@
 <LinearLayout
 		xmlns:android="http://schemas.android.com/apk/res/android"
-		android:layout_width="match_parent"
 		android:layout_height="match_parent"
+		android:layout_width="match_parent"
 		android:orientation="vertical">
 	<LinearLayout
-			android:id="@+id/database_head_container"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:paddingTop="4dp"
-			android:paddingRight="4dp"
-			android:paddingLeft="4dp"
-			android:orientation="horizontal"
 			android:background="#d3d3d3"
-			android:gravity="center">
+			android:gravity="center"
+			android:id="@+id/database_head"
+			android:layout_height="wrap_content"
+			android:layout_width="match_parent"
+			android:orientation="horizontal"
+			android:paddingLeft="4dp"
+			android:paddingRight="4dp"
+			android:paddingTop="4dp">
 		<TextView
-		    	android:id="@+id/database_head_text"
-				android:layout_width="0dp"
+				android:id="@+id/database_head_title"
 				android:layout_height="wrap_content"
 				android:layout_weight="1"
-				android:text="@string/database_breadcrumb"
-				android:textSize="12sp">
-		</TextView>
+				android:layout_width="0dp"
+				android:text="@string/database_head_title"
+				android:textSize="12sp"/>
 		<ImageButton
-		    	android:id="@+id/database_back_to_search_button"
-				android:layout_width="wrap_content"
+				android:background="@android:color/transparent"
+				android:contentDescription="@string/database_head_button_back"
+				android:id="@+id/database_head_button_back"
 				android:layout_height="wrap_content"
-				android:src="@drawable/search"
-				android:contentDescription="@string/database_back_to_search_button_descr"
-				android:background="@android:color/transparent"/>
+				android:layout_width="wrap_content"
+				android:src="@drawable/search"/>
+	</LinearLayout>
+	<LinearLayout
+	    	android:baselineAligned="false"
+			android:id="@+id/database_controls"
+			android:layout_height="wrap_content"
+			android:layout_width="match_parent"
+			android:orientation="horizontal"
+			android:paddingTop="24dp">
+		<LinearLayout
+		    	android:gravity="center"
+		    	android:id="@+id/database_controls_left"
+				android:layout_height="match_parent"
+				android:layout_weight="1"
+				android:layout_width="0dp"
+				android:orientation="vertical">
+			<ImageButton
+					android:background="@android:color/transparent"
+					android:contentDescription="@string/database_button_check_for_updates"
+					android:id="@+id/database_button_check_for_updates"
+					android:layout_height="wrap_content"
+					android:layout_width="wrap_content"
+					android:src="@drawable/web"/>
+			<TextView
+					android:id="@+id/database_hint_check_for_updates"
+					android:layout_height="wrap_content"
+					android:layout_width="wrap_content"
+					android:text="@string/database_button_check_for_updates"
+					android:textSize="12sp"/>
+		</LinearLayout>
+		<LinearLayout
+		    	android:gravity="center"
+		    	android:id="@+id/database_controls_right"
+				android:layout_height="match_parent"
+				android:layout_weight="1"
+				android:layout_width="0dp"
+				android:orientation="vertical">
+			<ImageButton
+					android:background="@android:color/transparent"
+					android:contentDescription="@string/database_button_download_updates"
+					android:id="@+id/database_button_download_updates"
+					android:layout_height="wrap_content"
+					android:layout_width="wrap_content"
+					android:src="@drawable/download"/>
+			<TextView
+					android:id="@+id/database_hint_download_updates"
+					android:layout_height="wrap_content"
+					android:layout_width="wrap_content"
+					android:text="@string/database_button_download_updates"
+					android:textSize="12sp"/>
+		</LinearLayout>
 	</LinearLayout>
 	<TextView
-			android:id="@+id/database_info"
+			android:id="@+id/database_text_local"
 			android:layout_width="fill_parent"
 			android:layout_height="wrap_content"
-			android:paddingTop="4dp"
 			android:paddingRight="4dp"
-			android:paddingLeft="4dp"/>
-	<Button
-			android:id="@+id/update_check_button"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="@string/database_button_check_for_updates"/>
-	<Button
-			android:id="@+id/update_download_button"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="@string/database_button_download_updates"/>
+			android:paddingLeft="4dp"
+			android:paddingTop="24dp"/>
 	<TextView
-			android:id="@+id/update_status"
+			android:id="@+id/database_text_remote"
 			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"/>
+			android:layout_height="wrap_content"
+			android:paddingRight="4dp"
+			android:paddingLeft="4dp"
+			android:paddingTop="24dp"/>
 </LinearLayout>

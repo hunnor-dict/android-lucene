@@ -28,7 +28,7 @@ import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 public class DatabaseActivity extends Activity implements View.OnClickListener {
@@ -38,12 +38,17 @@ public class DatabaseActivity extends Activity implements View.OnClickListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_database);
 
-		Button button1 = (Button)
-				findViewById(R.id.update_download_button);
-		button1.setOnClickListener(this);
-		Button button2 = (Button)
-				findViewById(R.id.update_check_button);
-		button2.setOnClickListener(this);
+		ImageButton searchButton = (ImageButton)
+				findViewById(R.id.database_head_button_back);
+		searchButton.setOnClickListener(this);
+
+		ImageButton checkUpdateButton = (ImageButton)
+				findViewById(R.id.database_button_check_for_updates);
+		checkUpdateButton.setOnClickListener(this);
+
+		ImageButton downloadUpdateButton = (ImageButton)
+				findViewById(R.id.database_button_download_updates);
+		downloadUpdateButton.setOnClickListener(this);
 
 		checkLocals();
 	}
@@ -54,6 +59,8 @@ public class DatabaseActivity extends Activity implements View.OnClickListener {
 
 		StringBuilder stringBuilder = new StringBuilder();
 		Device device = new Device();
+		stringBuilder.append("<b>Checking local storage:</b><br>");
+		stringBuilder.append("<small>");
 		stringBuilder.append(getResources().getString(R.string.database_check_external_storage)).append("... ");
 		if (device.storage().writable()) {
 			stringBuilder.append("<font color=\"green\"><b>").append(getResources().getString(R.string.ok)).append("</b></font> (").append(getResources().getString(R.string.io_read_write)).append(")");
@@ -115,6 +122,7 @@ public class DatabaseActivity extends Activity implements View.OnClickListener {
 			}
 		}
 
+		stringBuilder.append("</small>");
 		if (check) {
 			stringBuilder.append("<br>");
 			String[] files = indexDirectory.list();
@@ -137,7 +145,7 @@ public class DatabaseActivity extends Activity implements View.OnClickListener {
 			}
 		}
 
-		TextView textView = (TextView) findViewById(R.id.database_info);
+		TextView textView = (TextView) findViewById(R.id.database_text_local);
 		textView.setText(Html.fromHtml(stringBuilder.toString()));
 	}
 
@@ -193,13 +201,13 @@ public class DatabaseActivity extends Activity implements View.OnClickListener {
 					for (String size: sizeList) {
 						sb.append(Formatter.humanReadableBytes(Double.parseDouble(size)));
 					}
-					TextView textView = (TextView) findViewById(R.id.update_status);
+					TextView textView = (TextView) findViewById(R.id.database_text_remote);
 					textView.append(Html.fromHtml(sb.toString()));
 				}
 			}.execute(LuceneConstants.INDEX_URL);
 		}
 
-		TextView textView = (TextView) findViewById(R.id.update_status);
+		TextView textView = (TextView) findViewById(R.id.database_text_remote);
 		textView.setText(Html.fromHtml(sb.toString()));
 	}
 
@@ -250,13 +258,13 @@ public class DatabaseActivity extends Activity implements View.OnClickListener {
 					} else {
 						stringBuilder.append("<font color=\"red\"><b>").append(getResources().getString(R.string.error)).append("</b></font>");
 					}
-					TextView textView = (TextView) findViewById(R.id.update_status);
+					TextView textView = (TextView) findViewById(R.id.database_text_remote);
 					textView.append(Html.fromHtml(stringBuilder.toString()));
 				}
 			}.execute(LuceneConstants.INDEX_URL);
 		}
 
-		TextView textView = (TextView) findViewById(R.id.update_status);
+		TextView textView = (TextView) findViewById(R.id.database_text_remote);
 		textView.setText(Html.fromHtml(stringBuilder.toString()));
 	}
 
@@ -281,13 +289,26 @@ public class DatabaseActivity extends Activity implements View.OnClickListener {
 		}
 	}
 
+	private boolean startActivity(String activity) {
+		try {
+			Intent intent = new Intent(activity);
+			startActivity(intent);
+		} catch (ActivityNotFoundException exception) {
+			return false;
+		}
+		return true;
+	}
+
 	@Override
 	public void onClick(View view) {
 		switch (view.getId()) {
-		case R.id.update_check_button:
+		case R.id.database_head_button_back:
+			startActivity("net.hunnor.dict.ACTIVITY_SEARCH");
+			break;
+		case R.id.database_button_check_for_updates:
 			checkRemote();
 			break;
-		case R.id.update_download_button:
+		case R.id.database_button_download_updates:
 			getRemote();
 			break;
 		}
