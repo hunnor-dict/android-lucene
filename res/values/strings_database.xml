@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
 
-	<string name="database_head_title">HunNor Lucene: Database</string>
 	<string name="database_head_button_back">Back to Search</string>
+	<string name="database_button_check_for_updates">Check for updates</string>
+	<string name="database_button_download_updates">Download updates</string>
+
+	<string name="database_local_title"><![CDATA[<b>Installed dictionary:</b>]]></string>
+
+	<string name="database_head_title">HunNor Lucene: Database</string>
 	<string name="database_check_external_storage">Checking extertal storage</string>
 	<string name="database_check_app_directory">Checking app directory</string>
 	<string name="database_check_index_directory">Checking index directory</string>
@@ -13,8 +18,5 @@
 	<string name="database_download">Downloading</string>
 	<string name="database_extract">Extracting</string>
 	<string name="database_install">Installing</string>
-
-	<string name="database_button_check_for_updates">Check for updates</string>
-	<string name="database_button_download_updates">Download updates</string>
 
 </resources>

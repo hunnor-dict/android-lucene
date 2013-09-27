@@ -5,11 +5,7 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import net.hunnor.dict.util.Device;
@@ -25,13 +21,18 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Html;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 public class DatabaseActivity extends Activity implements View.OnClickListener {
+
+	private Device device;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -54,108 +55,86 @@ public class DatabaseActivity extends Activity implements View.OnClickListener {
 	}
 
 	private void checkLocals() {
-
-		boolean check = true;
-
-		StringBuilder stringBuilder = new StringBuilder();
-		Device device = new Device();
-		stringBuilder.append("<b>Checking local storage:</b><br>");
-		stringBuilder.append("<small>");
-		stringBuilder.append(getResources().getString(R.string.database_check_external_storage)).append("... ");
-		if (device.storage().writable()) {
-			stringBuilder.append("<font color=\"green\"><b>").append(getResources().getString(R.string.ok)).append("</b></font> (").append(getResources().getString(R.string.io_read_write)).append(")");
-		} else if (device.storage().readable()) {
-			stringBuilder.append("<font color=\"yellow\"><b>").append(getResources().getString(R.string.ok)).append("</b></font> (").append(getResources().getString(R.string.io_read_only)).append(")");
-		} else {
-			stringBuilder.append("<font color=\"red\"><b>").append(getResources().getString(R.string.error)).append("</b></font> (").append(getResources().getString(R.string.io_not_ready)).append(")");
-			check = false;
+		if (device == null) {
+			device = new Device();
 		}
 
-		if (check) {
-			stringBuilder.append("<br>");
-			stringBuilder.append(getResources().getString(R.string.database_check_app_directory)).append("... ");
-			File appDirectory = device.storage().directory("");
-			if (appDirectory.exists()) {
-				if (appDirectory.canRead()) {
-					if (appDirectory.canWrite()) {
-						stringBuilder.append("<font color=\"green\"><b>").append(getResources().getString(R.string.ok)).append("</b></font> (").append(getResources().getString(R.string.io_read_write)).append(")");
-					} else {
-						stringBuilder.append("<font color=\"yellow\"><b>").append(getResources().getString(R.string.ok)).append("</b></font> (").append(getResources().getString(R.string.io_read_only)).append(")");
-					}
-				} else {
-					stringBuilder.append("<font color=\"red\"><b>").append(getResources().getString(R.string.error)).append("</b></font> (").append(getResources().getString(R.string.io_not_ready)).append(")");
-					check = false;
-				}
-			} else {
-				if (appDirectory.mkdirs()) {
-					stringBuilder.append("<font color=\"green\"><b>").append(getResources().getString(R.string.ok)).append("</b></font> (").append(getResources().getString(R.string.io_create_ok)).append(")");
-				} else {
-					stringBuilder.append("<font color=\"red\"><b>").append(getResources().getString(R.string.error)).append("</b></font> (").append(getResources().getString(R.string.io_create_error)).append(")");
-					check = false;
-				}
-			}
-		}
-
-		File indexDirectory = null;
-		if (check) {
-			stringBuilder.append("<br>");
-			stringBuilder.append(getResources().getString(R.string.database_check_index_directory)).append("... ");
-			indexDirectory = device.storage().directory(LuceneConstants.INDEX_DIR);
-			if (indexDirectory.exists()) {
-				if (indexDirectory.canRead()) {
-					if (indexDirectory.canWrite()) {
-						stringBuilder.append("<font color=\"green\"><b>").append(getResources().getString(R.string.ok)).append("</b></font> (").append(getResources().getString(R.string.io_read_write)).append(")");
-					} else {
-						stringBuilder.append("<font color=\"yellow\"><b>").append(getResources().getString(R.string.ok)).append("</b></font> (").append(getResources().getString(R.string.io_read_only)).append(")");
-					}
-				} else {
-					stringBuilder.append("<font color=\"red\"><b>").append(getResources().getString(R.string.error)).append("</b></font> (").append(getResources().getString(R.string.io_not_ready)).append(")");
-					check = false;
-				}
-			} else {
-				if (indexDirectory.mkdirs()) {
-					stringBuilder.append("<font color=\"green\"><b>").append(getResources().getString(R.string.ok)).append("</b></font> (").append(getResources().getString(R.string.io_create_ok)).append(")");
-				} else {
-					stringBuilder.append("<font color=\"red\"><b>").append(getResources().getString(R.string.error)).append("</b></font> (").append(getResources().getString(R.string.io_create_error)).append(")");
-					check = false;
-				}
-			}
-		}
-
-		stringBuilder.append("</small>");
-		if (check) {
-			stringBuilder.append("<br>");
-			String[] files = indexDirectory.list();
-			if (files.length == 0) {
-				stringBuilder.append(getResources().getString(R.string.database_index_directory_empty));
-			} else {
-				stringBuilder.append(getResources().getString(R.string.database_check_index_integrity)).append("... ");
-				try {
-					StringBuilder listBuilder = new StringBuilder();
-					Directory directory;
-					directory = new NIOFSDirectory(indexDirectory);
-					long lastMod = IndexReader.lastModified(directory);
-					Date date = new Date(lastMod);
-					SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-					listBuilder.append("<br>").append(getResources().getString(R.string.last_modified)).append(": ").append(simpleDateFormat.format(date));
-					stringBuilder.append(listBuilder);
-				} catch (IOException e) {
-					stringBuilder.append("<font color=\"red\"><b>").append(getResources().getString(R.string.error)).append("</b></font> (").append(getResources().getString(R.string.index_corrupt)).append(")");
-				}
-			}
-		}
+		StringBuilder result = new StringBuilder();
+		result.append(getResources().getString(R.string.database_local_title));
+		result.append(checkLocal());
 
 		TextView textView = (TextView) findViewById(R.id.database_text_local);
-		textView.setText(Html.fromHtml(stringBuilder.toString()));
+		textView.setText(Html.fromHtml(result.toString()));
 	}
 
-	private void checkRemote() {
+	private StringBuilder checkLocal() {
+
+		StringBuilder sb = new StringBuilder();
+
+		if (device.storage().readable()) {
+			sb.append("<br>");
+			File indexDirectory = null;
+			indexDirectory = device.storage().directory(LuceneConstants.INDEX_DIR);
+			if (indexDirectory.exists() && indexDirectory.canRead()) {
+				String[] files = indexDirectory.list();
+				if (files.length > 0) {
+					try {
+						Directory directory;
+						directory = new NIOFSDirectory(indexDirectory);
+						@SuppressWarnings("deprecation")
+						long lastMod = IndexReader.lastModified(directory);
+						sb.append(getResources().getString(R.string.last_modified));
+						sb.append(": ").append(Formatter.date(lastMod));
+					} catch (IOException exception) {
+						sb.append("<font color=\"red\"><b>");
+						sb.append(getResources().getString(R.string.error));
+						sb.append("</b></font>: ");
+						sb.append(getResources().getString(R.string.index_corrupt));
+					}
+				} else {
+					sb.append("<font color=\"red\"><b>");
+					sb.append(getResources().getString(R.string.error));
+					sb.append("</b></font>: ");
+					sb.append(getResources().getString(R.string.database_index_directory_empty));
+				}
+			} else {
+				sb.append("<font color=\"red\"><b>");
+				sb.append(getResources().getString(R.string.error));
+				sb.append("</b></font>: ");
+				sb.append(getResources().getString(R.string.io_not_ready));
+			}
+		} else {
+			sb.append("<font color=\"red\"><b>");
+			sb.append(getResources().getString(R.string.error));
+			sb.append("</b></font>: ");
+			sb.append(getResources().getString(R.string.io_not_ready));
+		}
+		return sb;
+	}
+
+	private void checkRemotes() {
+		if (device == null) {
+			device = new Device();
+		}
+		
+		StringBuilder sb = checkRemote();
+
+		TextView textView = (TextView) findViewById(R.id.database_text_remote);
+		textView.setText(Html.fromHtml(sb.toString()));
+	}
+
+	private StringBuilder checkRemote() {
+
+
+		LinearLayout root = (LinearLayout) findViewById(R.id.database_root);
+		LayoutInflater inflater = getLayoutInflater();
+		ProgressBar progressBar = (ProgressBar ) inflater.inflate(R.layout.progressbar_undefined, null);
+		root.addView(progressBar);
 
 		boolean check = true;
 
 		StringBuilder sb = new StringBuilder();
 		sb.append(getResources().getString(R.string.database_check_internet_connection)).append("... ");
-		Device device = new Device();
 		if (device.network().online(this)) {
 			sb.append("<font color=\"green\"><b>").append(getResources().getString(R.string.ok)).append("</b></font> (").append(getResources().getString(R.string.net_online)).append(")");			
 		} else {
@@ -186,14 +165,7 @@ public class DatabaseActivity extends Activity implements View.OnClickListener {
 					sb.append("<br>");
 					sb.append(getResources().getString(R.string.last_modified)).append(": ");
 					for (String date: dateList) {
-						SimpleDateFormat parseFormat =
-								new SimpleDateFormat("EEE, dd MMM yyyy H:m:s zzz", Locale.US);
-						SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-						try {
-							Date d = parseFormat.parse(date);							
-							sb.append(simpleDateFormat.format(d));
-						} catch (ParseException exception) {
-						}
+						sb.append(Formatter.date(date, "EEE, dd MMM yyyy H:m:s zzz"));
 					}
 					sb.append("<br>");
 					sb.append(getResources().getString(R.string.size)).append(": ");
@@ -207,8 +179,7 @@ public class DatabaseActivity extends Activity implements View.OnClickListener {
 			}.execute(LuceneConstants.INDEX_URL);
 		}
 
-		TextView textView = (TextView) findViewById(R.id.database_text_remote);
-		textView.setText(Html.fromHtml(sb.toString()));
+		return sb;
 	}
 
 	private void getRemote() {
@@ -217,8 +188,7 @@ public class DatabaseActivity extends Activity implements View.OnClickListener {
 
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append(getResources().getString(R.string.database_check_internet_connection)).append("... ");
-		Device fileManager = new Device();
-		if (fileManager.network().online(this)) {
+		if (device.network().online(this)) {
 			stringBuilder.append("<font color=\"green\"><b>").append(getResources().getString(R.string.ok)).append("</b></font> (").append(getResources().getString(R.string.net_online)).append(")");
 		} else {
 			stringBuilder.append("<font color=\"red\"><b>").append(getResources().getString(R.string.error)).append("</b></font> (").append(getResources().getString(R.string.net_offline)).append(")");
@@ -306,7 +276,7 @@ public class DatabaseActivity extends Activity implements View.OnClickListener {
 			startActivity("net.hunnor.dict.ACTIVITY_SEARCH");
 			break;
 		case R.id.database_button_check_for_updates:
-			checkRemote();
+			checkRemotes();
 			break;
 		case R.id.database_button_download_updates:
 			getRemote();
