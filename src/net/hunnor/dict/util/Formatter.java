@@ -36,9 +36,9 @@ public class Formatter {
 
 	public static String date(String date, String inputPattern, String outputPattern) {
 		SimpleDateFormat inputFormat =
-				new SimpleDateFormat("EEE, dd MMM yyyy H:m:s zzz", Locale.US);
-		SimpleDateFormat outputFormat =
 				new SimpleDateFormat(inputPattern, Locale.US);
+		SimpleDateFormat outputFormat =
+				new SimpleDateFormat(outputPattern, Locale.US);
 		try {
 			Date parsedDate = inputFormat.parse(date);
 			return outputFormat.format(parsedDate);

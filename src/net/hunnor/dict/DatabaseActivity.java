@@ -2,11 +2,6 @@ package net.hunnor.dict;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.List;
-import java.util.Map;
 
 import net.hunnor.dict.util.Device;
 import net.hunnor.dict.util.Formatter;
@@ -18,16 +13,12 @@ import org.apache.lucene.store.NIOFSDirectory;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Html;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 public class DatabaseActivity extends Activity implements View.OnClickListener {
@@ -72,7 +63,6 @@ public class DatabaseActivity extends Activity implements View.OnClickListener {
 		StringBuilder sb = new StringBuilder();
 
 		if (device.storage().readable()) {
-			sb.append("<br>");
 			File indexDirectory = null;
 			indexDirectory = device.storage().directory(LuceneConstants.INDEX_DIR);
 			if (indexDirectory.exists() && indexDirectory.canRead()) {
@@ -125,12 +115,6 @@ public class DatabaseActivity extends Activity implements View.OnClickListener {
 
 	private StringBuilder checkRemote() {
 
-
-		LinearLayout root = (LinearLayout) findViewById(R.id.database_root);
-		LayoutInflater inflater = getLayoutInflater();
-		ProgressBar progressBar = (ProgressBar ) inflater.inflate(R.layout.progressbar_undefined, null);
-		root.addView(progressBar);
-
 		boolean check = true;
 
 		StringBuilder sb = new StringBuilder();
@@ -144,39 +128,8 @@ public class DatabaseActivity extends Activity implements View.OnClickListener {
 
 		if (check) {
 			sb.append("<br>");
-			sb.append(getResources().getString(R.string.database_check_update_url)).append("... ");
-			new AsyncTask<String, Void, Map<String, List<String>>>() {
-				@Override
-				protected Map<String, List<String>> doInBackground(String... urls) {
-					HttpURLConnection connection = null;
-					try {
-						URL url = new URL(urls[0]);
-						connection = (HttpURLConnection) url.openConnection();
-						connection.setRequestMethod("HEAD");
-					} catch (MalformedURLException exception) {
-					} catch (IOException exception) {
-					}
-					return connection.getHeaderFields();
-				}
-				@Override
-				public void onPostExecute(Map<String, List<String>> result) {
-					StringBuilder sb = new StringBuilder();
-					List<String> dateList = result.get("Last-Modified");
-					sb.append("<br>");
-					sb.append(getResources().getString(R.string.last_modified)).append(": ");
-					for (String date: dateList) {
-						sb.append(Formatter.date(date, "EEE, dd MMM yyyy H:m:s zzz"));
-					}
-					sb.append("<br>");
-					sb.append(getResources().getString(R.string.size)).append(": ");
-					List<String> sizeList = result.get("Content-Length");
-					for (String size: sizeList) {
-						sb.append(Formatter.humanReadableBytes(Double.parseDouble(size)));
-					}
-					TextView textView = (TextView) findViewById(R.id.database_text_remote);
-					textView.append(Html.fromHtml(sb.toString()));
-				}
-			}.execute(LuceneConstants.INDEX_URL);
+			new UpdateCheckTask(this, findViewById(R.id.database_text_remote))
+					.execute(LuceneConstants.INDEX_URL);
 		}
 
 		return sb;
@@ -198,39 +151,7 @@ public class DatabaseActivity extends Activity implements View.OnClickListener {
 		if (check) {
 			stringBuilder.append("<br>");
 			stringBuilder.append(getResources().getString(R.string.database_download)).append("... ");
-			new AsyncTask<String, Void, String>() {
-				@Override
-				protected String doInBackground(String... params) {
-					Device device = new Device();
-					if (device.storage().downloadFile(LuceneConstants.INDEX_URL, LuceneConstants.INDEX_ZIP)) {
-						if (device.storage().unZip(LuceneConstants.INDEX_ZIP, "")) {
-							if (device.storage().deleteDirectory(LuceneConstants.INDEX_DIR)) {
-								if (device.storage().renameDirectory("hunnor-lucene-index", LuceneConstants.INDEX_DIR)) {
-									return "OK";
-								} else {
-									return "MV";
-								}
-							} else {
-								return "DEL";
-							}
-						} else {
-							return "ZP";
-						}
-					} else {
-						return "DL";
-					}
-				}
-				@Override
-				public void onPostExecute(String result) {
-					StringBuilder stringBuilder = new StringBuilder();
-					if ("OK".equals(result)) {
-						stringBuilder.append("<font color=\"green\"><b>").append(getResources().getString(R.string.ok)).append("</b></font>");
-					} else {
-						stringBuilder.append("<font color=\"red\"><b>").append(getResources().getString(R.string.error)).append("</b></font>");
-					}
-					TextView textView = (TextView) findViewById(R.id.database_text_remote);
-					textView.append(Html.fromHtml(stringBuilder.toString()));
-				}
+			new UpdateDownloadTask(this, findViewById(R.id.database_text_remote)) {
 			}.execute(LuceneConstants.INDEX_URL);
 		}
 
