@@ -31,7 +31,8 @@ public class UpdateDownloadTask extends AsyncTask<String, Void, String> {
 	public void onPreExecute() {
 		progressDialog = new ProgressDialog(context);
 		progressDialog.setCancelable(true);
-		progressDialog.setMessage(context.getResources().getString(R.string.database_check_update));
+		progressDialog.setMessage(
+				context.getResources().getString(R.string.database_download));
 		progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 		progressDialog.setProgress(0);
 		progressDialog.setMax(100);
@@ -73,7 +74,7 @@ public class UpdateDownloadTask extends AsyncTask<String, Void, String> {
 		}
 		if (device.storage().unZip(LuceneConstants.INDEX_ZIP, "")) {
 			if (device.storage().deleteDirectory(LuceneConstants.INDEX_DIR)) {
-				if (device.storage().renameDirectory("hunnor-lucene-index", LuceneConstants.INDEX_DIR)) {
+				if (device.storage().renameDirectory(LuceneConstants.INDEX_ZIP_DIR, LuceneConstants.INDEX_DIR)) {
 					return "OK";
 				} else {
 					return "MV";
