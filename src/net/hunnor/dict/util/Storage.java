@@ -5,8 +5,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -167,28 +165,6 @@ public class Storage {
 		} catch (FileNotFoundException exception) {
 			return false;
 		} catch (IOException e) {
-			return false;
-		}
-		return true;
-	}
-
-	/**
-	 *
-	 * <p>Download a file from a URL to the file system
-	 *
-	 * @param from The URL to download from
-	 * @param to The file to save to
-	 * @return true if file download was successful, false otherwise
-	 *
-	 */
-	public boolean downloadFile(String from, String to) {
-		try {
-			URL url = new URL(from);
-			File destination = new File(appDirectory + File.separator + to);
-			FileUtils.copyURLToFile(url, destination);
-		} catch (MalformedURLException exception) {
-			return false;
-		} catch (IOException exception) {
 			return false;
 		}
 		return true;
