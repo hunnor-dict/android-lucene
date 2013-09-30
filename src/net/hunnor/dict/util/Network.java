@@ -1,5 +1,12 @@
 package net.hunnor.dict.util;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.List;
+import java.util.Map;
+
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -27,6 +34,30 @@ public class Network {
 				context.getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
 		return networkInfo != null && networkInfo.isConnected();
+	}
+
+	/**
+	 *
+	 * <p>Returns HTTP headers for a URL
+	 *
+	 * @param url
+	 *
+	 * @return a Map of HTTP header fields
+	 *
+	 */
+	public Map<String, List<String>> getHttpHeaderFromUrl(String resource) {
+		HttpURLConnection connection = null;
+		try {
+			URL url = new URL(resource);
+			connection = (HttpURLConnection) url.openConnection();
+			connection.setRequestMethod("HEAD");
+		} catch (MalformedURLException exception) {
+		} catch (IOException exception) {
+		}
+		if (connection != null) {
+			return connection.getHeaderFields();			
+		}
+		return null;
 	}
 
 }

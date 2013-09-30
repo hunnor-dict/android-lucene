@@ -1,12 +1,9 @@
 package net.hunnor.dict;
 
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.List;
 import java.util.Map;
 
+import net.hunnor.dict.util.Device;
 import net.hunnor.dict.util.Formatter;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -37,15 +34,8 @@ public class UpdateCheckTask extends AsyncTask<String, Void, Map<String, List<St
 
 	@Override
 	protected Map<String, List<String>> doInBackground(String... urls) {
-		HttpURLConnection connection = null;
-		try {
-			URL url = new URL(urls[0]);
-			connection = (HttpURLConnection) url.openConnection();
-			connection.setRequestMethod("HEAD");
-		} catch (MalformedURLException exception) {
-		} catch (IOException exception) {
-		}
-		return connection.getHeaderFields();
+		Device device = new Device();
+		return device.network().getHttpHeaderFromUrl(urls[0]);
 	}
 
 	@Override
