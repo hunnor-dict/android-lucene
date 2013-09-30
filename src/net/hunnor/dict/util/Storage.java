@@ -241,8 +241,10 @@ public class Storage {
 			int size = Integer.parseInt(sizeAsString);
 			progressDialog.setMax(size);
 			inputStream = connection.getInputStream();
-			outputStream = new FileOutputStream(
-					directory(LuceneConstants.INDEX_ZIP));
+			File outputFile = directory(LuceneConstants.INDEX_ZIP);
+			File outputDirectory = outputFile.getParentFile();
+			outputDirectory.mkdirs();
+			outputStream = new FileOutputStream(outputFile);
 			int part;
 			int total = 0;
 			while ((part = inputStream.read(buffer, 0, 10240)) != -1) {
