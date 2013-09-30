@@ -1,22 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
 
-	<string name="database_head_button_back">Back to Search</string>
+	<string name="database_head_title">HunNor Lucene: Database</string>
+    <string name="database_head_button_back">Back to Search</string>
 	<string name="database_button_check_for_updates">Check for updates</string>
 	<string name="database_button_download_updates">Download updates</string>
 
-	<string name="database_local_title"><![CDATA[<b>Dictionary:</b>]]></string>
+	<string name="database_local_title">Installed database</string>
+	<string name="database_local_index_directory_empty">Index directory empty</string>
+	
+	<string name="database_download_preparing">Preparing</string>
+	<string name="database_download_downloading">Downloading</string>
+	<string name="database_download_extracting">Extracting</string>
+	<string name="database_download_installing">Installing</string>
+	<string name="database_download_title">Updating</string>
 
-	<string name="database_head_title">HunNor Lucene: Database</string>
-	<string name="database_check_external_storage">Checking extertal storage</string>
-	<string name="database_check_app_directory">Checking app directory</string>
-	<string name="database_check_index_directory">Checking index directory</string>
-	<string name="database_index_directory_empty">Index directory empty</string>
-	<string name="database_check_index_integrity">Checking index integrity</string>
-	<string name="database_check_internet_connection">Checking Internet connection</string>
+	<string name="database_check_title">Checking</string>
 	<string name="database_check_update">Checking for updates</string>
-	<string name="database_download">Downloading&#8230;</string>
-	<string name="database_extract">Extracting</string>
-	<string name="database_install">Installing</string>
 
 </resources>

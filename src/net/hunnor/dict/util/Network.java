@@ -55,7 +55,9 @@ public class Network {
 		} catch (IOException exception) {
 		}
 		if (connection != null) {
-			return connection.getHeaderFields();			
+			Map<String, List<String>> result = connection.getHeaderFields();
+			connection.disconnect();
+			return result;
 		}
 		return null;
 	}

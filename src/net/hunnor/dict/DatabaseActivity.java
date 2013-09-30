@@ -11,6 +11,7 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.NIOFSDirectory;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.os.Bundle;
@@ -52,6 +53,7 @@ public class DatabaseActivity extends Activity implements View.OnClickListener {
 
 		StringBuilder result = new StringBuilder();
 		result.append(getResources().getString(R.string.database_local_title));
+		result.append(": ");
 		result.append(checkLocal());
 
 		TextView textView = (TextView) findViewById(R.id.database_text_local);
@@ -85,7 +87,7 @@ public class DatabaseActivity extends Activity implements View.OnClickListener {
 					sb.append("<font color=\"red\"><b>");
 					sb.append(getResources().getString(R.string.error));
 					sb.append("</b></font>: ");
-					sb.append(getResources().getString(R.string.database_index_directory_empty));
+					sb.append(getResources().getString(R.string.database_local_index_directory_empty));
 				}
 			} else {
 				sb.append("<font color=\"red\"><b>");
@@ -107,56 +109,72 @@ public class DatabaseActivity extends Activity implements View.OnClickListener {
 			device = new Device();
 		}
 		
-		StringBuilder sb = checkRemote();
+		StringBuilder result = new StringBuilder();
+		result.append(getResources().getString(R.string.database_check_title));
+		result.append("... ");
+		result.append(checkRemote());
 
 		TextView textView = (TextView) findViewById(R.id.database_text_remote);
-		textView.setText(Html.fromHtml(sb.toString()));
+		textView.setText(Html.fromHtml(result.toString()));
 	}
 
 	private StringBuilder checkRemote() {
-
-		boolean check = true;
-
 		StringBuilder sb = new StringBuilder();
-		sb.append(getResources().getString(R.string.database_check_internet_connection)).append("... ");
-		if (device.network().online(this)) {
-			sb.append("<font color=\"green\"><b>").append(getResources().getString(R.string.ok)).append("</b></font> (").append(getResources().getString(R.string.net_online)).append(")");			
-		} else {
-			sb.append("<font color=\"red\"><b>").append(getResources().getString(R.string.error)).append("</b></font> (").append(getResources().getString(R.string.net_offline)).append(")");
-			check = false;
+		if (!device.network().online(this)) {
+			sb.append("<font color=\"red\"><b>");
+			sb.append(getResources().getString(R.string.error));
+			sb.append("</b></font>");
+			sb.append("<br><small>");
+			sb.append(getResources().getString(R.string.net_offline));
+			sb.append("</small>");
+			return sb;
 		}
 
-		if (check) {
-			sb.append("<br>");
-			new UpdateCheckTask(this, findViewById(R.id.database_text_remote))
-					.execute(LuceneConstants.INDEX_URL);
-		}
+		new DatabaseCheckTask(this, findViewById(R.id.database_text_remote))
+				.execute(LuceneConstants.INDEX_URL);
 
 		return sb;
 	}
 
-	private void getRemote() {
-
-		boolean check = true;
-
-		StringBuilder stringBuilder = new StringBuilder();
-		stringBuilder.append(getResources().getString(R.string.database_check_internet_connection)).append("... ");
-		if (device.network().online(this)) {
-			stringBuilder.append("<font color=\"green\"><b>").append(getResources().getString(R.string.ok)).append("</b></font> (").append(getResources().getString(R.string.net_online)).append(")");
-		} else {
-			stringBuilder.append("<font color=\"red\"><b>").append(getResources().getString(R.string.error)).append("</b></font> (").append(getResources().getString(R.string.net_offline)).append(")");
-			check = false;
+	private void getRemotes() {
+		if (device == null) {
+			device = new Device();
 		}
 
-		if (check) {
-			stringBuilder.append("<br>");
-			stringBuilder.append(getResources().getString(R.string.database_download)).append("... ");
-			new UpdateDownloadTask(this, findViewById(R.id.database_text_remote)) {
-			}.execute(LuceneConstants.INDEX_URL);
-		}
+		StringBuilder result = new StringBuilder();
+		result.append(getResources().getString(R.string.database_download_title));
+		result.append("... ");
+		result.append(getRemote());
 
 		TextView textView = (TextView) findViewById(R.id.database_text_remote);
-		textView.setText(Html.fromHtml(stringBuilder.toString()));
+		textView.setText(Html.fromHtml(result.toString()));
+	}
+
+	private StringBuilder getRemote() {
+		StringBuilder sb = new StringBuilder();
+		if (!device.network().online(this)) {
+			sb.append("<font color=\"red\"><b>");
+			sb.append(getResources().getString(R.string.error));
+			sb.append("</b></font>");
+			sb.append("<br><small>");
+			sb.append(getResources().getString(R.string.net_offline));
+			sb.append("</small>");
+			return sb;
+		}
+
+		new DatabaseDownloadTask(this, findViewById(R.id.database_text_remote)) {
+			@Override
+			public void setMessage(final ProgressDialog progressDialog, final String message) {
+				runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						progressDialog.setMessage(message);
+					}
+				});
+			}
+		}.execute(LuceneConstants.INDEX_URL);
+
+		return sb;
 	}
 
 	@Override
@@ -180,16 +198,6 @@ public class DatabaseActivity extends Activity implements View.OnClickListener {
 		}
 	}
 
-	private boolean startActivity(String activity) {
-		try {
-			Intent intent = new Intent(activity);
-			startActivity(intent);
-		} catch (ActivityNotFoundException exception) {
-			return false;
-		}
-		return true;
-	}
-
 	@Override
 	public void onClick(View view) {
 		switch (view.getId()) {
@@ -200,9 +208,19 @@ public class DatabaseActivity extends Activity implements View.OnClickListener {
 			checkRemotes();
 			break;
 		case R.id.database_button_download_updates:
-			getRemote();
+			getRemotes();
 			break;
 		}
+	}
+
+	private boolean startActivity(String activity) {
+		try {
+			Intent intent = new Intent(activity);
+			startActivity(intent);
+		} catch (ActivityNotFoundException exception) {
+			return false;
+		}
+		return true;
 	}
 
 }

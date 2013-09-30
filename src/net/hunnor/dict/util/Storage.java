@@ -5,11 +5,19 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import net.hunnor.dict.LuceneConstants;
+
 import org.apache.commons.io.FileUtils;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.Environment;
 import android.os.StatFs;
 
@@ -71,7 +79,8 @@ public class Storage {
 	 */
 	public double freeSpace() {
 		double free = 0;
-		StatFs statFs = new StatFs(Environment.getExternalStorageDirectory().getAbsolutePath());
+		StatFs statFs = new StatFs(
+				Environment.getExternalStorageDirectory().getAbsolutePath());
 		free = statFs.getBlockSize() * statFs.getAvailableBlocks();
 		return free;
 	}
@@ -139,25 +148,57 @@ public class Storage {
 	 *
 	 * @param from the file to extract
 	 * @param to the directory to extract into
+	 * @param progressDialog the ProgressDialog to update during extraction
+	 * @param context the application context
 	 * @return true or false
 	 *
 	 */
-	public boolean unZip(String from, String to) {
+	public boolean extractWithReporting(
+			String from,
+			String to,
+			ProgressDialog progressDialog,
+			Context context) {
+
+		long total = 0;
+		try {
+			ZipInputStream zipInputStream = new ZipInputStream(
+					new FileInputStream(appDirectory + File.separator + from));
+			ZipEntry zipEntry = zipInputStream.getNextEntry();
+			while (zipEntry != null) {
+				total = total + zipEntry.getSize();
+				zipEntry = zipInputStream.getNextEntry();
+			}
+			zipInputStream.close();
+		} catch (FileNotFoundException exception) {
+			return false;
+		} catch (IOException e) {
+			return false;
+		}
+		progressDialog.setProgress(0);
+		int zipSize = (int) total;
+		progressDialog.setMax(zipSize);
+
 		try {
 			byte[] buffer = new byte[256 * 1024];
+			int extracted = 0;
 			ZipInputStream zipInputStream = new ZipInputStream(
 					new FileInputStream(appDirectory + File.separator + from));
 			ZipEntry zipEntry = zipInputStream.getNextEntry();
 			while (zipEntry != null) {
 				String fileName = zipEntry.getName();
-				File newFile = new File(appDirectory + File.separator + to + File.separator + fileName);
+				File newFile = new File(
+						appDirectory + File.separator
+						+ to + File.separator + fileName);
 				new File(newFile.getParent()).mkdirs();
-				FileOutputStream fileOutputStream = new FileOutputStream(newFile); 
+				FileOutputStream fileOutputStream =
+						new FileOutputStream(newFile);
 				int length;
 				while ((length = zipInputStream.read(buffer)) > 0) {
 					fileOutputStream.write(buffer, 0, length);
 				}
 				fileOutputStream.close();
+				extracted = extracted + (int) zipEntry.getSize();
+				progressDialog.setProgress(extracted);
 				zipEntry = zipInputStream.getNextEntry();
 			}
 			zipInputStream.closeEntry();
@@ -166,6 +207,61 @@ public class Storage {
 			return false;
 		} catch (IOException e) {
 			return false;
+		}
+		return true;
+	}
+
+	/**
+	 *
+	 * <p>Downloads a file to the specified directory
+	 *
+	 * @param resource the remote resource to download
+	 * @param progressDialog the ProgressDialog to update during download
+	 * @param context the application context
+	 * @return true or false
+	 *
+	 */
+	public boolean downloadFileWithReporting(
+			String resource,
+			ProgressDialog progressDialog,
+			Context context) {
+
+		progressDialog.setProgress(0);
+		progressDialog.setMax(100);
+
+		HttpURLConnection connection = null;
+		InputStream inputStream = null;
+		FileOutputStream outputStream = null;
+		byte[] buffer = new byte[10240];
+
+		try {
+			URL url = new URL(resource);
+			connection = (HttpURLConnection) url.openConnection();
+			String sizeAsString = connection.getHeaderField("Content-Length");
+			int size = Integer.parseInt(sizeAsString);
+			progressDialog.setMax(size);
+			inputStream = connection.getInputStream();
+			outputStream = new FileOutputStream(
+					directory(LuceneConstants.INDEX_ZIP));
+			int part;
+			int total = 0;
+			while ((part = inputStream.read(buffer, 0, 10240)) != -1) {
+				total = total + part;
+				outputStream.write(buffer, 0, part);
+				progressDialog.setProgress(total);
+			}
+		} catch (MalformedURLException exception) {
+			return false;
+		} catch (IOException exception) {
+			return false;
+		} finally {
+			if (outputStream != null) {
+				try {
+					outputStream.close();
+				} catch (IOException exception) {
+					return false;
+				}
+			}
 		}
 		return true;
 	}

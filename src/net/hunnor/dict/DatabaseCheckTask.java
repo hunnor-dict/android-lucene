@@ -12,13 +12,13 @@ import android.text.Html;
 import android.view.View;
 import android.widget.TextView;
 
-public class UpdateCheckTask extends AsyncTask<String, Void, Map<String, List<String>>> {
+public class DatabaseCheckTask extends AsyncTask<String, Void, Map<String, List<String>>> {
 
 	private Context context;
 	private View view;
 	private ProgressDialog progressDialog;
 
-	public UpdateCheckTask(Context context, View view) {
+	public DatabaseCheckTask(Context context, View view) {
 		this.context = context;
 		this.view = view;
 	}
