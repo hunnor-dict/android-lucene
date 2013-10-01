@@ -17,9 +17,11 @@ import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.text.Html;
 import android.text.Spanned;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -82,6 +84,18 @@ public class SearchActivity extends Activity implements View.OnClickListener {
 		huVoiceButton.setOnClickListener(this);
 		ImageButton noVoiceButton = (ImageButton) findViewById(R.id.voice_no_button);
 		noVoiceButton.setOnClickListener(this);
+
+		EditText editText = (EditText) findViewById(R.id.search_input);
+		editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+			@Override
+			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+				if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+					search();
+					return true;
+				}
+				return false;
+			}
+		});
 	}
 
 	@Override
