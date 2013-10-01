@@ -194,6 +194,8 @@ public class Storage {
 						new FileOutputStream(newFile);
 				int length;
 				while ((length = zipInputStream.read(buffer)) > 0) {
+					// Incrementing progressDialog here would give smoother
+					// progress bar, but would also slow down extraction
 					fileOutputStream.write(buffer, 0, length);
 				}
 				fileOutputStream.close();
