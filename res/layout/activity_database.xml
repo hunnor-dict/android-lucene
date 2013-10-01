@@ -81,16 +81,16 @@
 	</LinearLayout>
 	<TextView
 			android:id="@+id/database_text_local"
-			android:layout_width="fill_parent"
 			android:layout_height="wrap_content"
-			android:paddingRight="4dp"
+			android:layout_width="fill_parent"
 			android:paddingLeft="4dp"
+			android:paddingRight="4dp"
 			android:paddingTop="24dp"/>
 	<TextView
 			android:id="@+id/database_text_remote"
-			android:layout_width="fill_parent"
 			android:layout_height="wrap_content"
-			android:paddingRight="4dp"
+			android:layout_width="fill_parent"
 			android:paddingLeft="4dp"
+			android:paddingRight="4dp"
 			android:paddingTop="24dp"/>
 </LinearLayout>

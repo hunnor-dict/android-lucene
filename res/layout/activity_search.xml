@@ -1,60 +1,60 @@
 <LinearLayout
 		xmlns:android="http://schemas.android.com/apk/res/android"
-		android:layout_width="match_parent"
 		android:layout_height="match_parent"
+		android:layout_width="match_parent"
 		android:orientation="vertical">
 	<LinearLayout
+	    	android:gravity="center"
 			android:id="@+id/search_controls"
-			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:paddingTop="4dp"
-			android:paddingRight="4dp"
+			android:layout_width="match_parent"
 			android:paddingLeft="4dp"
-			android:orientation="horizontal"
-			android:gravity="center">
+			android:paddingRight="4dp"
+			android:paddingTop="4dp"
+			android:orientation="horizontal">
 		<EditText
 				android:id="@+id/search_input"
 				android:layout_height="wrap_content"
+				android:layout_weight="1"
 				android:layout_width="0dp"
-				android:singleLine="true"
-				android:inputType="text"
 				android:imeOptions="actionSearch"
-				android:layout_weight="1"/>
+				android:inputType="text"
+				android:singleLine="true"/>
 		<ImageButton
-				android:id="@+id/search_button"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:src="@drawable/search"
+				android:background="@android:color/transparent"
 				android:contentDescription="@string/search_button"
-				android:background="@android:color/transparent"/>
-		<ImageButton
-				android:id="@+id/voice_hu_button"
-				android:layout_width="wrap_content"
+				android:id="@+id/search_button"
 				android:layout_height="wrap_content"
-				android:src="@drawable/recognize"
+				android:layout_width="wrap_content"
+				android:src="@drawable/search"/>
+		<ImageButton
+				android:background="@android:color/transparent"
 				android:contentDescription="@string/search_recognize_hu_descr"
-				android:background="@android:color/transparent"/>
-		<ImageButton
-				android:id="@+id/voice_no_button"
-				android:layout_width="wrap_content"
+				android:id="@+id/voice_hu_button"
 				android:layout_height="wrap_content"
-				android:src="@drawable/recognize"
+				android:layout_width="wrap_content"
+				android:src="@drawable/recognize"/>
+		<ImageButton
+				android:background="@android:color/transparent"
 				android:contentDescription="@string/search_recognize_no_descr"
-				android:background="@android:color/transparent"/>
+				android:id="@+id/voice_no_button"
+				android:layout_height="wrap_content"
+				android:layout_width="wrap_content"
+				android:src="@drawable/recognize"/>
 	</LinearLayout>
 	<TextView
 			android:id="@+id/search_errors"
 			android:layout_height="wrap_content"
 			android:layout_width="fill_parent"
-			android:paddingTop="4dp"
-			android:paddingRight="4dp"
 			android:paddingBottom="4dp"
 			android:paddingLeft="4dp"
+			android:paddingRight="4dp"
+			android:paddingTop="4dp"
 			android:textColor="@android:color/secondary_text_light"
 			android:textSize="12sp"
 			android:textStyle="italic"/>
 	<ListView
 			android:id="@+id/search_result_list"
-			android:layout_width="match_parent"
-			android:layout_height="match_parent"/>
+			android:layout_height="match_parent"
+			android:layout_width="match_parent"/>
 </LinearLayout>
