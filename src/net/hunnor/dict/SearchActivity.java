@@ -21,6 +21,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -28,9 +29,12 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class SearchActivity extends Activity implements View.OnClickListener {
+public class SearchActivity extends Activity {
 
 	private static final int VOICE_RECOGNITION_REQUEST_CODE = 1234;
+
+	private static final String ACTIVITY_DATABASE =
+			"net.hunnor.dict.ACTIVITY_DATABASE";
 
 	private Device device;
 	private Dictionary dictionary;
@@ -46,6 +50,7 @@ public class SearchActivity extends Activity implements View.OnClickListener {
 		if (dictionary == null) {
 			dictionary = new Dictionary();
 		}
+
 		if (!dictionary.open()) {
 			if (!dictionary.open(
 					device.storage().directory(LuceneConstants.INDEX_DIR))) {
@@ -60,7 +65,7 @@ public class SearchActivity extends Activity implements View.OnClickListener {
 							@Override
 							public void onClick(DialogInterface dialog, int which) {
 								try {
-									startActivity(new Intent("net.hunnor.dict.ACTIVITY_DATABASE"));
+									startActivity(new Intent(ACTIVITY_DATABASE));
 								} catch (ActivityNotFoundException e) {
 								}
 							}
@@ -79,11 +84,29 @@ public class SearchActivity extends Activity implements View.OnClickListener {
 		}
 
 		ImageButton searchButton = (ImageButton) findViewById(R.id.search_button);
-		searchButton.setOnClickListener(this);
+		searchButton.setOnClickListener(
+				new OnClickListener() {
+					@Override
+					public void onClick(View view) {
+						search();
+					}
+				});
 		ImageButton huVoiceButton = (ImageButton) findViewById(R.id.voice_hu_button);
-		huVoiceButton.setOnClickListener(this);
+		huVoiceButton.setOnClickListener(
+				new OnClickListener() {
+					@Override
+					public void onClick(View view) {
+						startVoiceRecognition(LuceneConstants.LANG_HU);
+					}
+				});
 		ImageButton noVoiceButton = (ImageButton) findViewById(R.id.voice_no_button);
-		noVoiceButton.setOnClickListener(this);
+		noVoiceButton.setOnClickListener(
+				new OnClickListener() {
+					@Override
+					public void onClick(View view) {
+						startVoiceRecognition(LuceneConstants.LANG_HU);
+					}
+				});
 
 		EditText editText = (EditText) findViewById(R.id.search_input);
 		editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -109,7 +132,7 @@ public class SearchActivity extends Activity implements View.OnClickListener {
 		switch (item.getItemId()) {
 		case R.menu.database:
 			try {
-				startActivity(new Intent("net.hunnor.dict.ACTIVITY_DATABASE"));
+				startActivity(new Intent(ACTIVITY_DATABASE));
 			} catch (ActivityNotFoundException e) {
 				return false;
 			}
@@ -120,64 +143,14 @@ public class SearchActivity extends Activity implements View.OnClickListener {
 	}
 
 	@Override
-	public void onClick(View view) {
-		switch (view.getId()) {
-		case R.id.search_button:
-			search();
-			break;
-		case R.id.voice_hu_button:
-			startVoiceRecognition(LuceneConstants.LANG_HU);
-			break;
-		case R.id.voice_no_button:
-			startVoiceRecognition(LuceneConstants.LANG_NO);
-			break;
+	protected void onActivityResult(
+			int requestCode, int resultCode, Intent intent) {
+		if (requestCode == VOICE_RECOGNITION_REQUEST_CODE &&
+				resultCode == RESULT_OK) {
+			List<String> results =
+					intent.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+			search(results.get(0));
 		}
-	}
-
-	private void showMessage(String message) {
-		TextView tv = (TextView) findViewById(R.id.search_errors);
-		tv.setText(Html.fromHtml(message));
-	}
-
-	private void search() {
-		EditText editText = (EditText) findViewById(R.id.search_input);
-		String query = editText.getText().toString();
-		search(query);
-	}
-
-	private void search(String query) {
-		search(query, null);
-	}
-
-	private void search(String query, String lang) {
-		List<Entry> searchResults = dictionary.lookup(query, lang);
-		if (searchResults == null) {
-			return;
-		}
-		List<Spanned> results = new ArrayList<Spanned>();
-		for (Entry result: searchResults) {
-			results.add(Html.fromHtml(result.getText()));
-		}
-		Entry[] resultArray = searchResults.toArray(new Entry[searchResults.size()]);
-		ArrayAdapter<Entry> arrayAdapter = new SearchArrayAdapter(
-				this, R.layout.search_result, resultArray);
-		StringBuilder sb = new StringBuilder();
-		if (results.isEmpty()) {
-			sb.append(getResources().getString(R.string.search_no_results));
-		} else {
-			sb.append(results.size());
-			sb.append(" ");
-			if (results.size() == 1) {
-				sb.append(getResources().getString(R.string.search_num_result));
-			} else {
-				sb.append(getResources().getString(R.string.search_num_results));
-			}
-		}
-		showMessage(sb.toString());
-		ListView listView = (ListView) findViewById(R.id.search_result_list);
-		listView.setAdapter(arrayAdapter);
-		EditText editText = (EditText) findViewById(R.id.search_input);
-		editText.setText("");
 	}
 
 	private void startVoiceRecognition(String lang) {
@@ -207,14 +180,51 @@ public class SearchActivity extends Activity implements View.OnClickListener {
 		}
 	}
 
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (requestCode == VOICE_RECOGNITION_REQUEST_CODE &&
-				resultCode == RESULT_OK) {
-			List<String> results =
-					data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-			search(results.get(0));
+	private void search() {
+		EditText editText = (EditText) findViewById(R.id.search_input);
+		String query = editText.getText().toString();
+		search(query);
+	}
+
+	private void search(String query) {
+		search(query, null);
+	}
+
+	private void search(String query, String lang) {
+		List<Entry> searchResults = dictionary.lookup(query, lang);
+		if (searchResults == null) {
+			return;
 		}
+		List<Spanned> results = new ArrayList<Spanned>();
+		for (Entry result: searchResults) {
+			results.add(Html.fromHtml(result.getText()));
+		}
+		Entry[] resultArray =
+				searchResults.toArray(new Entry[searchResults.size()]);
+		ArrayAdapter<Entry> arrayAdapter = new SearchArrayAdapter(
+				this, R.layout.search_result, resultArray);
+		StringBuilder sb = new StringBuilder();
+		if (results.isEmpty()) {
+			sb.append(getResources().getString(R.string.search_no_results));
+		} else {
+			sb.append(results.size());
+			sb.append(" ");
+			if (results.size() == 1) {
+				sb.append(getResources().getString(R.string.search_num_result));
+			} else {
+				sb.append(getResources().getString(R.string.search_num_results));
+			}
+		}
+		showMessage(sb.toString());
+		ListView listView = (ListView) findViewById(R.id.search_result_list);
+		listView.setAdapter(arrayAdapter);
+		EditText editText = (EditText) findViewById(R.id.search_input);
+		editText.setText("");
+	}
+
+	private void showMessage(String message) {
+		TextView textView = (TextView) findViewById(R.id.search_errors);
+		textView.setText(Html.fromHtml(message));
 	}
 
 }

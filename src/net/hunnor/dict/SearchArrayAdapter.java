@@ -34,19 +34,22 @@ public class SearchArrayAdapter extends ArrayAdapter<Entry> {
 				context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		View rowView = inflater.inflate(resourceId, parent, false);
 		Entry result = resultArray[position];
-		TextView textView = (TextView) rowView.findViewById(R.id.search_result_text);
+		TextView textView = (TextView)
+				rowView.findViewById(R.id.search_result_text);
 		textView.setText(Html.fromHtml(result.getText()));
 		ImageSpan flag = null;
 		if (LuceneConstants.LANG_HU.equals(result.getLang())) {
-			flag = new ImageSpan(this.context, R.drawable.flag_hu, ImageSpan.ALIGN_BASELINE);
+			flag = new ImageSpan(this.context,
+					R.drawable.flag_hu, ImageSpan.ALIGN_BASELINE);
 		} else if (LuceneConstants.LANG_NO.equals(result.getLang())) {
-			flag = new ImageSpan(this.context, R.drawable.flag_no, ImageSpan.ALIGN_BASELINE);
+			flag = new ImageSpan(this.context,
+					R.drawable.flag_no, ImageSpan.ALIGN_BASELINE);
 		}
 		SpannableString s1 = new SpannableString(".");
-		SpannableString s3 = new SpannableString(Html.fromHtml(result.getText()));
+		SpannableString s2 = new SpannableString(Html.fromHtml(result.getText()));
 		s1.setSpan(flag, 0, 0, 0);
 		SpannableStringBuilder sb = new SpannableStringBuilder();
-		sb.append(s1).append(s3);
+		sb.append(s1).append(s2);
 		textView.setText(sb);
 		return rowView;
 	}

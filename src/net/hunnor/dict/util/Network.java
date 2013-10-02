@@ -43,7 +43,11 @@ public class Network {
 	 * @return a Map of HTTP header fields
 	 *
 	 */
-	public Map<String, List<String>> getHttpHeaderFromUrl(String resource) {
+	public Map<String, List<String>> getHttpHeaderFromUrl(
+			Context context, String resource) {
+		if (!online(context)) {
+			return null;
+		}
 		HttpURLConnection connection = null;
 		try {
 			URL url = new URL(resource);

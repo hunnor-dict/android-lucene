@@ -24,6 +24,9 @@ import android.widget.TextView;
 
 public class DatabaseActivity extends Activity implements View.OnClickListener {
 
+	private static final String ACTIVITY_SEARCH =
+			"net.hunnor.dict.ACTIVITY_SEARCH";
+
 	private Device device;
 
 	@Override
@@ -46,137 +49,6 @@ public class DatabaseActivity extends Activity implements View.OnClickListener {
 		checkLocals();
 	}
 
-	private void checkLocals() {
-		if (device == null) {
-			device = new Device();
-		}
-
-		StringBuilder result = new StringBuilder();
-		result.append(getResources().getString(R.string.database_local_title));
-		result.append(": ");
-		result.append(checkLocal());
-
-		TextView textView = (TextView) findViewById(R.id.database_text_local);
-		textView.setText(Html.fromHtml(result.toString()));
-	}
-
-	private StringBuilder checkLocal() {
-
-		StringBuilder sb = new StringBuilder();
-
-		if (device.storage().readable()) {
-			File indexDirectory = null;
-			indexDirectory = device.storage().directory(LuceneConstants.INDEX_DIR);
-			if (indexDirectory.exists() && indexDirectory.canRead()) {
-				String[] files = indexDirectory.list();
-				if (files.length > 0) {
-					try {
-						Directory directory;
-						directory = new NIOFSDirectory(indexDirectory);
-						@SuppressWarnings("deprecation")
-						long lastMod = IndexReader.lastModified(directory);
-						sb.append(getResources().getString(R.string.last_modified));
-						sb.append(": ").append(Formatter.date(lastMod));
-					} catch (IOException exception) {
-						sb.append("<font color=\"red\"><b>");
-						sb.append(getResources().getString(R.string.error));
-						sb.append("</b></font>: ");
-						sb.append(getResources().getString(R.string.index_corrupt));
-					}
-				} else {
-					sb.append("<font color=\"red\"><b>");
-					sb.append(getResources().getString(R.string.error));
-					sb.append("</b></font>: ");
-					sb.append(getResources().getString(R.string.database_local_index_directory_empty));
-				}
-			} else {
-				sb.append("<font color=\"red\"><b>");
-				sb.append(getResources().getString(R.string.error));
-				sb.append("</b></font>: ");
-				sb.append(getResources().getString(R.string.io_not_ready));
-			}
-		} else {
-			sb.append("<font color=\"red\"><b>");
-			sb.append(getResources().getString(R.string.error));
-			sb.append("</b></font>: ");
-			sb.append(getResources().getString(R.string.io_not_ready));
-		}
-		return sb;
-	}
-
-	private void checkRemotes() {
-		if (device == null) {
-			device = new Device();
-		}
-		
-		StringBuilder result = new StringBuilder();
-		result.append(getResources().getString(R.string.database_check_title));
-		result.append("... ");
-		result.append(checkRemote());
-
-		TextView textView = (TextView) findViewById(R.id.database_text_remote);
-		textView.setText(Html.fromHtml(result.toString()));
-	}
-
-	private StringBuilder checkRemote() {
-		StringBuilder sb = new StringBuilder();
-		if (!device.network().online(this)) {
-			sb.append("<font color=\"red\"><b>");
-			sb.append(getResources().getString(R.string.error));
-			sb.append("</b></font>");
-			sb.append("<br><small>");
-			sb.append(getResources().getString(R.string.net_offline));
-			sb.append("</small>");
-			return sb;
-		}
-
-		new DatabaseCheckTask(this, findViewById(R.id.database_text_remote))
-				.execute(LuceneConstants.INDEX_URL);
-
-		return sb;
-	}
-
-	private void getRemotes() {
-		if (device == null) {
-			device = new Device();
-		}
-
-		StringBuilder result = new StringBuilder();
-		result.append(getResources().getString(R.string.database_download_title));
-		result.append("... ");
-		result.append(getRemote());
-
-		TextView textView = (TextView) findViewById(R.id.database_text_remote);
-		textView.setText(Html.fromHtml(result.toString()));
-	}
-
-	private StringBuilder getRemote() {
-		StringBuilder sb = new StringBuilder();
-		if (!device.network().online(this)) {
-			sb.append("<font color=\"red\"><b>");
-			sb.append(getResources().getString(R.string.error));
-			sb.append("</b></font>");
-			sb.append("<br><small>");
-			sb.append(getResources().getString(R.string.net_offline));
-			sb.append("</small>");
-			return sb;
-		}
-
-		new DatabaseDownloadTask(this, findViewById(R.id.database_text_remote)) {
-			@Override
-			public void setMessage(final ProgressDialog progressDialog, final String message) {
-				runOnUiThread(new Runnable() {
-					@Override
-					public void run() {
-						progressDialog.setMessage(message);
-					}
-				});
-			}
-		}.execute(LuceneConstants.INDEX_URL);
-
-		return sb;
-	}
-
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.database_menu, menu);
@@ -188,7 +60,7 @@ public class DatabaseActivity extends Activity implements View.OnClickListener {
 		switch (item.getItemId()) {
 		case R.menu.search:
 			try {
-				startActivity(new Intent("net.hunnor.dict.ACTIVITY_SEARCH"));
+				startActivity(new Intent(ACTIVITY_SEARCH));
 				return true;
 			} catch (ActivityNotFoundException exception) {
 				return false;
@@ -198,11 +70,132 @@ public class DatabaseActivity extends Activity implements View.OnClickListener {
 		}
 	}
 
+	private void checkLocals() {
+		if (device == null) {
+			device = new Device();
+		}
+
+		TextView textView = (TextView) findViewById(R.id.database_text_local);
+		StringBuilder result = new StringBuilder();
+
+		result.append(getResources().getString(R.string.database_local_begin));
+		result.append("...");
+		textView.setText(Html.fromHtml(result.toString()));
+
+		result = checkLocal();
+		textView.setText(Html.fromHtml(result.toString()));
+	}
+
+	private StringBuilder checkLocal() {
+
+		StringBuilder sb = new StringBuilder();
+
+		if (!device.storage().readable()) {
+			sb.append("<font color=\"red\"><b>");
+			sb.append(getResources().getString(R.string.error));
+			sb.append("</b></font>: ");
+			sb.append(getResources().getString(R.string.database_local_storage_not_ready));
+			return sb;
+		}
+
+		File indexDirectory = null;
+		indexDirectory = device.storage().directory(LuceneConstants.INDEX_DIR);
+		if (!indexDirectory.exists()) {
+			sb.append("<font color=\"red\"><b>");
+			sb.append(getResources().getString(R.string.error));
+			sb.append("</b></font>: ");
+			sb.append(getResources().getString(R.string.database_local_dir_missing));
+			return sb;
+		}
+
+		if (!indexDirectory.canRead()) {
+			sb.append("<font color=\"red\"><b>");
+			sb.append(getResources().getString(R.string.error));
+			sb.append("</b></font>: ");
+			sb.append(getResources().getString(R.string.database_local_dir_missing));
+			return sb;
+		}
+
+		String[] files = indexDirectory.list();
+		if (files == null || files.length == 0) {
+			sb.append("<font color=\"red\"><b>");
+			sb.append(getResources().getString(R.string.error));
+			sb.append("</b></font>: ");
+			sb.append(getResources().getString(R.string.database_local_dir_empty));
+			return sb;
+		}
+
+		try {
+			Directory directory;
+			directory = new NIOFSDirectory(indexDirectory);
+			@SuppressWarnings("deprecation")
+			long lastMod = IndexReader.lastModified(directory);
+			sb.append(getResources().getString(R.string.last_modified));
+			sb.append(": ").append(Formatter.date(lastMod));
+		} catch (IOException exception) {
+			sb.append("<font color=\"red\"><b>");
+			sb.append(getResources().getString(R.string.error));
+			sb.append("</b></font>: ");
+			sb.append(getResources().getString(R.string.index_corrupt));
+		}
+		return sb;
+	}
+
+	private void checkRemotes() {
+		if (device == null) {
+			device = new Device();
+		}
+
+		TextView textView = (TextView) findViewById(R.id.database_text_remote);
+		StringBuilder result = new StringBuilder();
+
+		result.append(getResources().getString(R.string.database_check_begin));
+		result.append("... ");
+		textView.setText(Html.fromHtml(result.toString()));
+
+		checkRemote();
+	}
+
+	private void checkRemote() {
+		new DatabaseCheckTask(this, findViewById(R.id.database_text_remote))
+				.execute(LuceneConstants.INDEX_URL);
+	}
+
+	private void getRemotes() {
+		if (device == null) {
+			device = new Device();
+		}
+
+		TextView textView = (TextView) findViewById(R.id.database_text_remote);
+		StringBuilder result = new StringBuilder();
+
+		result.append(getResources().getString(R.string.database_download_begin));
+		result.append("... ");
+		textView.setText(Html.fromHtml(result.toString()));
+
+		getRemote();
+	}
+
+	private void getRemote() {
+		new DatabaseDownloadTask(this, findViewById(R.id.database_text_remote)) {
+			@Override
+			public void setMessage(
+					final ProgressDialog progressDialog, final String message) {
+				runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						progressDialog.setMessage(message);
+					}
+				});
+			}
+		}.execute(LuceneConstants.INDEX_URL);
+	}
+
 	@Override
 	public void onClick(View view) {
 		switch (view.getId()) {
 		case R.id.database_head_button_back:
-			startActivity("net.hunnor.dict.ACTIVITY_SEARCH");
+			startActivity(ACTIVITY_SEARCH);
 			break;
 		case R.id.database_button_check_for_updates:
 			checkRemotes();
