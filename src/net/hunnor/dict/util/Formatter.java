@@ -6,6 +6,13 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+/**
+*
+* Helper methods for printing file sizes and dates in a specific format
+*
+* @author Ádám Z. Kövér
+*
+*/
 public class Formatter {
 
 	public static String humanReadableBytes(double bytes) {
@@ -26,7 +33,8 @@ public class Formatter {
 
 	public static String date(long timestamp, String pattern) {
 		Date date = new Date(timestamp);
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern, Locale.US);
+		SimpleDateFormat simpleDateFormat =
+				new SimpleDateFormat(pattern, Locale.US);
 		return simpleDateFormat.format(date);
 	}
 

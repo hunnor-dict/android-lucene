@@ -25,7 +25,6 @@ public class Network {
 	 * <p>Returns if Internet connection is available
 	 *
 	 * @param context
-	 *
 	 * @return true or false
 	 *
 	 */
@@ -41,7 +40,6 @@ public class Network {
 	 * <p>Returns HTTP headers for a URL
 	 *
 	 * @param url
-	 *
 	 * @return a Map of HTTP header fields
 	 *
 	 */
