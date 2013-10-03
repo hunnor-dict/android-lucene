@@ -1,4 +1,6 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		style="@style/AppBaseTheme">
 	<item
 			android:icon="@android:drawable/ic_menu_search"
 	    	android:id="@+menu/search"

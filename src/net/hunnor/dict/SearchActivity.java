@@ -104,7 +104,7 @@ public class SearchActivity extends Activity {
 				new OnClickListener() {
 					@Override
 					public void onClick(View view) {
-						startVoiceRecognition(LuceneConstants.LANG_HU);
+						startVoiceRecognition(LuceneConstants.LANG_NO);
 					}
 				});
 
