@@ -21,24 +21,27 @@
 				android:inputType="text"
 				android:singleLine="true"/>
 		<ImageButton
-				android:background="@android:color/transparent"
+				android:background="@drawable/buttonbg"
 				android:contentDescription="@string/search_button"
 				android:id="@+id/search_button"
 				android:layout_height="wrap_content"
+				android:layout_margin="4dp"
 				android:layout_width="wrap_content"
 				android:src="@drawable/search"/>
 		<ImageButton
-				android:background="@android:color/transparent"
+				android:background="@drawable/buttonbg"
 				android:contentDescription="@string/search_recognize_hu_descr"
 				android:id="@+id/voice_hu_button"
 				android:layout_height="wrap_content"
+				android:layout_margin="4dp"
 				android:layout_width="wrap_content"
 				android:src="@drawable/recognize"/>
 		<ImageButton
-				android:background="@android:color/transparent"
+				android:background="@drawable/buttonbg"
 				android:contentDescription="@string/search_recognize_no_descr"
 				android:id="@+id/voice_no_button"
 				android:layout_height="wrap_content"
+				android:layout_margin="4dp"
 				android:layout_width="wrap_content"
 				android:src="@drawable/recognize"/>
 	</LinearLayout>

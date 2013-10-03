@@ -26,8 +26,9 @@
 				android:contentDescription="@string/database_head_button_back"
 				android:id="@+id/database_head_button_back"
 				android:layout_height="wrap_content"
+				android:layout_margin="4dp"
 				android:layout_width="wrap_content"
-				android:src="@drawable/search"/>
+				android:src="@drawable/undo"/>
 	</LinearLayout>
 	<LinearLayout
 	    	android:baselineAligned="false"
@@ -44,10 +45,11 @@
 				android:layout_width="0dp"
 				android:orientation="vertical">
 			<ImageButton
-					android:background="@android:color/transparent"
+					android:background="@drawable/buttonbg"
 					android:contentDescription="@string/database_button_check_for_updates"
 					android:id="@+id/database_button_check_for_updates"
 					android:layout_height="wrap_content"
+					android:layout_margin="4dp"
 					android:layout_width="wrap_content"
 					android:src="@drawable/web"/>
 			<TextView
@@ -65,7 +67,7 @@
 				android:layout_width="0dp"
 				android:orientation="vertical">
 			<ImageButton
-					android:background="@android:color/transparent"
+					android:background="@drawable/buttonbg"
 					android:contentDescription="@string/database_button_download_updates"
 					android:id="@+id/database_button_download_updates"
 					android:layout_height="wrap_content"
