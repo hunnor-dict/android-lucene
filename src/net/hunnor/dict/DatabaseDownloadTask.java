@@ -41,9 +41,14 @@ public class DatabaseDownloadTask extends AsyncTask<String, Void, String> {
 	protected String doInBackground(String... params) {
 		Device device = new Device();
 
-		// Download
+		// Connection
 		setMessage(progressDialog, context.getResources().getString(
 				R.string.database_download_downloading) + "...");
+		if (!device.network().online(context)) {
+			return ERROR_DOWNLOAD;
+		}
+
+		// Download
 		if (!device.storage()
 				.downloadFileWithReporting(params[0], progressDialog, context)) {
 			return ERROR_DOWNLOAD;
