@@ -30,6 +30,7 @@ public class DatabaseDownloadTask extends AsyncTask<String, Void, String> {
 		progressDialog = new ProgressDialog(context);
 		progressDialog.setCancelable(true);
 		progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+		// Requires API 11
 		// progressDialog.setProgressNumberFormat(null);
 		progressDialog.setMessage(context.getResources().getString(
 				R.string.database_download_preparing));
@@ -76,18 +77,28 @@ public class DatabaseDownloadTask extends AsyncTask<String, Void, String> {
 		progressDialog.dismiss();
 		StringBuilder sb = new StringBuilder();
 		if (OK.equals(result)) {
-			sb.append("<font color=\"green\"><b>");
-			sb.append(context.getResources().getString(R.string.ok));
-			sb.append("</b></font>");
+			sb.append(context.getResources().getString(
+					R.string.database_download_finished));
 		} else {
 			sb.append("<font color=\"red\"><b>");
 			sb.append(context.getResources().getString(R.string.error));
-			sb.append("</b></font>");
-			sb.append("<small>");
-			sb.append("</small>");
+			sb.append("</b></font>: ");
+			if (ERROR_DOWNLOAD.equals(result)) {
+				sb.append(context.getResources().getString(
+						R.string.database_download_error_download));
+			} else if (ERROR_EXTRACT.equals(result)) {
+				sb.append(context.getResources().getString(
+						R.string.database_download_error_extract));
+			} else if (ERROR_DELETE.equals(result)) {
+				sb.append(context.getResources().getString(
+						R.string.database_download_error_delete));
+			} else if (ERROR_MOVE.equals(result)) {
+				sb.append(context.getResources().getString(
+						R.string.database_download_error_move));
+			}
 		}
 		TextView textView = (TextView) view;
-		textView.append(Html.fromHtml(sb.toString()));
+		textView.setText(Html.fromHtml(sb.toString()));
 	}
 
 	protected void setMessage(ProgressDialog progressDialog, String message) {

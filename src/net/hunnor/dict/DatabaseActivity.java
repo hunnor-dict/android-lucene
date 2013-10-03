@@ -22,7 +22,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-public class DatabaseActivity extends Activity implements View.OnClickListener {
+public class DatabaseActivity extends Activity {
 
 	private static final String ACTIVITY_SEARCH =
 			"net.hunnor.dict.ACTIVITY_SEARCH";
@@ -36,15 +36,30 @@ public class DatabaseActivity extends Activity implements View.OnClickListener {
 
 		ImageButton searchButton = (ImageButton)
 				findViewById(R.id.database_head_button_back);
-		searchButton.setOnClickListener(this);
+		searchButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				startActivity(ACTIVITY_SEARCH);
+			}
+		});
 
 		ImageButton checkUpdateButton = (ImageButton)
 				findViewById(R.id.database_button_check_for_updates);
-		checkUpdateButton.setOnClickListener(this);
+		checkUpdateButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				checkRemotes();
+			}
+		});
 
 		ImageButton downloadUpdateButton = (ImageButton)
 				findViewById(R.id.database_button_download_updates);
-		downloadUpdateButton.setOnClickListener(this);
+		downloadUpdateButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				getRemotes();
+			}
+		});
 
 		checkLocals();
 	}
@@ -136,7 +151,8 @@ public class DatabaseActivity extends Activity implements View.OnClickListener {
 			sb.append("<font color=\"red\"><b>");
 			sb.append(getResources().getString(R.string.error));
 			sb.append("</b></font>: ");
-			sb.append(getResources().getString(R.string.index_corrupt));
+			sb.append(getResources().getString(
+					R.string.database_local_index_corrupt));
 		}
 		return sb;
 	}
@@ -189,21 +205,6 @@ public class DatabaseActivity extends Activity implements View.OnClickListener {
 				});
 			}
 		}.execute(LuceneConstants.INDEX_URL);
-	}
-
-	@Override
-	public void onClick(View view) {
-		switch (view.getId()) {
-		case R.id.database_head_button_back:
-			startActivity(ACTIVITY_SEARCH);
-			break;
-		case R.id.database_button_check_for_updates:
-			checkRemotes();
-			break;
-		case R.id.database_button_download_updates:
-			getRemotes();
-			break;
-		}
 	}
 
 	private boolean startActivity(String activity) {
