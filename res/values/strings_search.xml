@@ -1,13 +1,13 @@
 <resources>
 
-	<string name="search_no_results">No results</string>
-	<string name="search_num_result">result</string>
-	<string name="search_num_results">results</string>
-	<string name="search_button">Search</string>
-	<string name="search_recognize_hu_descr">Recognize HU</string>
-	<string name="search_recognize_no_descr">Recognize NO</string>
+	<string name="search_no_results">Nincs találat</string>
+	<string name="search_num_result">találat</string>
+	<string name="search_num_results">találat</string>
+	<string name="search_button">Keresés</string>
+	<string name="search_recognize_hu_descr">Hangfelismerés (magyar)</string>
+	<string name="search_recognize_no_descr">Hangfelismerés (norvég)</string>
 
-	<string name="voice_not_available">Voice recognition not available</string>
-	<string name="voice_hint">Voice recognition launched for HunNor Lucene</string>
+	<string name="voice_not_available">A hangfelismerés nem érhető el</string>
+	<string name="voice_hint">Hangfelismerés a HunNor szótárhoz</string>
 
 </resources>

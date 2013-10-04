@@ -1,34 +1,34 @@
 <resources>
 
-	<string name="database_alert_title">Dictionary database not found</string>
-	<string name="database_alert_text">To use the application, you must first download the dictionary database. Proceedto the database settings page?</string>
-	<string name="database_alert_option_no">No</string>
-	<string name="database_alert_option_yes">Yes</string>
+	<string name="database_alert_title">A szótár nincs telepítve</string>
+	<string name="database_alert_text">Az alkalmazás használatához le kell töltened a szótárat. A következő ablakban ellenőrizheted és letöltheted az elérhető frissítést.</string>
+	<string name="database_alert_option_no">Kilépés</string>
+	<string name="database_alert_option_yes">Tovább</string>
 
-	<string name="database_head_title">HunNor Lucene: Database</string>
-	<string name="database_head_button_back">Back to Search</string>
-	<string name="database_button_check_for_updates">Check for updates</string>
-	<string name="database_button_download_updates">Download updates</string>
+	<string name="database_head_title">HunNor Lucene: Adatbázis</string>
+	<string name="database_head_button_back">Vissza a kereséshez</string>
+	<string name="database_button_check_for_updates">Frissítés keresése</string>
+	<string name="database_button_download_updates">Frissítés letöltése</string>
 
-	<string name="database_local_begin">Checking dictionary</string>
-	<string name="database_local_storage_not_ready">Storage not ready</string>
-	<string name="database_local_dir_missing">Index directory missing</string>
-	<string name="database_local_dir_empty">Index directory empty</string>
-	<string name="database_local_index_corrupt">The installed index is corrupt</string>
+	<string name="database_local_begin">Szótár ellenőrzése</string>
+	<string name="database_local_storage_not_ready">A tárhely nem elérhető</string>
+	<string name="database_local_dir_missing">Az alkalmazás mappája hiányzik</string>
+	<string name="database_local_dir_empty">Az alkalmazás mappája üres</string>
+	<string name="database_local_index_corrupt">A telepített szótár nem nyitható meg</string>
 
-	<string name="database_check_begin">Checking</string>
-	<string name="database_check_dialog">Checking for updates</string>
-	<string name="database_check_network_error">Network error. Check internet connection.</string>
+	<string name="database_check_begin">Frissítés keresése</string>
+	<string name="database_check_dialog">Frissítés keresése</string>
+	<string name="database_check_network_error">Hálózati hiba. Ellenőrizd, hogy az eszköz kapcsolódik-e az Internethez, és próbáld újra.</string>
 
-	<string name="database_download_begin">Updating</string>
-	<string name="database_download_preparing">Preparing</string>
-	<string name="database_download_downloading">Downloading</string>
-	<string name="database_download_extracting">Extracting</string>
-	<string name="database_download_installing">Installing</string>
-	<string name="database_download_finished">Update finished</string>
-	<string name="database_download_error_download">Failed to download new index</string>
-	<string name="database_download_error_extract">Failed to extract new index</string>
-	<string name="database_download_error_delete">Failed to delete old index</string>
-	<string name="database_download_error_move">Failed to install new index</string>
+	<string name="database_download_begin">Frissítés letöltése</string>
+	<string name="database_download_preparing">Előkészítés</string>
+	<string name="database_download_downloading">Letöltés</string>
+	<string name="database_download_extracting">Kitömörítés</string>
+	<string name="database_download_installing">Telepítés</string>
+	<string name="database_download_finished">A frissítés sikeresen befejeződött</string>
+	<string name="database_download_error_download">Hiba a letöltés során</string>
+	<string name="database_download_error_extract">Hiba a szótár kitömörítése során</string>
+	<string name="database_download_error_delete">Hiba a régi szótár telepítése során</string>
+	<string name="database_download_error_move">Hiba a szótár telepítése során</string>
 
 </resources>

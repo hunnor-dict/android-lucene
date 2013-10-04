@@ -2,12 +2,12 @@
 
 	<string name="app_name">HunNor Lucene</string>
 
-	<string name="error">Error</string>
+	<string name="error">Hiba</string>
 
-	<string name="last_modified">Last modified</string>
-	<string name="size">Size</string>
+	<string name="last_modified">Módosítva</string>
+	<string name="size">Méret</string>
 
-	<string name="menu_search">Search</string>
-	<string name="menu_database">Database</string>
+	<string name="menu_search">Keresés</string>
+	<string name="menu_database">Adatbázis</string>
 
 </resources>
