@@ -77,6 +77,7 @@ public class Storage {
 	 * @return the number of free Bytes
 	 *
 	 */
+	@SuppressWarnings("deprecation")
 	public double freeSpace() {
 		double free = 0;
 		StatFs statFs = new StatFs(
