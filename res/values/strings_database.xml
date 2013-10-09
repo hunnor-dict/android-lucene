@@ -26,6 +26,7 @@
 	<string name="database_download_extracting">Kitömörítés</string>
 	<string name="database_download_installing">Telepítés</string>
 	<string name="database_download_finished">A frissítés sikeresen befejeződött</string>
+	<string name="database_download_error_offline">Offline</string>
 	<string name="database_download_error_download">Hiba a letöltés során</string>
 	<string name="database_download_error_extract">Hiba a szótár kitömörítése során</string>
 	<string name="database_download_error_delete">Hiba a régi szótár telepítése során</string>

@@ -39,7 +39,7 @@ public class DatabaseActivity extends Activity {
 		searchButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				startActivity(ACTIVITY_SEARCH);
+				finish();
 			}
 		});
 
@@ -205,16 +205,6 @@ public class DatabaseActivity extends Activity {
 				});
 			}
 		}.execute(LuceneConstants.INDEX_URL);
-	}
-
-	private boolean startActivity(String activity) {
-		try {
-			Intent intent = new Intent(activity);
-			startActivity(intent);
-		} catch (ActivityNotFoundException exception) {
-			return false;
-		}
-		return true;
 	}
 
 }

@@ -5,7 +5,7 @@ import android.content.Context;
 import android.text.Html;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
-import android.text.style.ImageSpan;
+// import android.text.style.ImageSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,6 +37,7 @@ public class SearchArrayAdapter extends ArrayAdapter<Entry> {
 		TextView textView = (TextView)
 				rowView.findViewById(R.id.search_result_text);
 		textView.setText(Html.fromHtml(result.getText()));
+		// TODO Fix flag for higher API levels
 		/*
 		ImageSpan flag = null;
 		if (LuceneConstants.LANG_HU.equals(result.getLang())) {
@@ -46,11 +47,10 @@ public class SearchArrayAdapter extends ArrayAdapter<Entry> {
 			flag = new ImageSpan(this.context,
 					R.drawable.flag_no, ImageSpan.ALIGN_BASELINE);
 		}
+		SpannableString s1 = new SpannableString(".");
+		s1.setSpan(flag, 0, 0, 0);
 		*/
-		// TODO Fix flag for higher API levels
-		// SpannableString s1 = new SpannableString(".");
 		SpannableString s2 = new SpannableString(Html.fromHtml(result.getText()));
-		// s1.setSpan(flag, 0, 0, 0);
 		SpannableStringBuilder sb = new SpannableStringBuilder();
 		// sb.append(s1).append(s2);
 		sb.append(s2);

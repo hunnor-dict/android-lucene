@@ -16,8 +16,9 @@ public class DatabaseCheckTask extends
 		AsyncTask<String, Void, Map<String, List<String>>> {
 
 	private Context context;
-	private View view;
+	private Device device;
 	private ProgressDialog progressDialog;
+	private View view;
 
 	public DatabaseCheckTask(Context context, View view) {
 		this.context = context;
@@ -26,6 +27,10 @@ public class DatabaseCheckTask extends
 
 	@Override
 	public void onPreExecute() {
+		device = new Device();
+		if (!device.network().online(context)) {
+			return;
+		}
 		progressDialog = new ProgressDialog(context);
 		progressDialog.setCancelable(true);
 		progressDialog.setMessage(context.getResources().getString(
@@ -36,12 +41,15 @@ public class DatabaseCheckTask extends
 
 	@Override
 	protected Map<String, List<String>> doInBackground(String... urls) {
-		Device device = new Device();
 		return device.network().getHttpHeaderFromUrl(context, urls[0]);
 	}
 
 	@Override
 	public void onPostExecute(Map<String, List<String>> result) {
+		if (progressDialog != null) {
+			progressDialog.dismiss();
+		}
+
 		TextView textView = (TextView) view;
 		StringBuilder sb = new StringBuilder();
 
@@ -68,7 +76,6 @@ public class DatabaseCheckTask extends
 			}
 		}
 		textView.setText(Html.fromHtml(sb.toString()));
-		progressDialog.dismiss();
 	}
 
 }

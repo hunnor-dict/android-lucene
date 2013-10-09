@@ -11,10 +11,12 @@ import android.widget.TextView;
 public class DatabaseDownloadTask extends AsyncTask<String, Void, String> {
 
 	private Context context;
-	private View view;
+	private Device device;
 	private ProgressDialog progressDialog;
+	private View view;
 
 	private static final String OK = "OK";
+	private static final String ERROR_OFFLINE = "OFF";
 	private static final String ERROR_DOWNLOAD = "DL";
 	private static final String ERROR_EXTRACT = "EX";
 	private static final String ERROR_DELETE = "RM";
@@ -27,6 +29,10 @@ public class DatabaseDownloadTask extends AsyncTask<String, Void, String> {
 
 	@Override
 	public void onPreExecute() {
+		device = new Device();
+		if (!device.network().online(context)) {
+			return;
+		}
 		progressDialog = new ProgressDialog(context);
 		progressDialog.setCancelable(true);
 		progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
@@ -39,7 +45,11 @@ public class DatabaseDownloadTask extends AsyncTask<String, Void, String> {
 
 	@Override
 	protected String doInBackground(String... params) {
-		Device device = new Device();
+
+		// Networking
+		if (!device.network().online(context)) {
+			return ERROR_OFFLINE;
+		}
 
 		// Connection
 		setMessage(progressDialog, context.getResources().getString(
@@ -79,7 +89,9 @@ public class DatabaseDownloadTask extends AsyncTask<String, Void, String> {
 
 	@Override
 	public void onPostExecute(String result) {
-		progressDialog.dismiss();
+		if (progressDialog != null) {
+			progressDialog.dismiss();
+		}
 		StringBuilder sb = new StringBuilder();
 		if (OK.equals(result)) {
 			sb.append(context.getResources().getString(
@@ -88,7 +100,10 @@ public class DatabaseDownloadTask extends AsyncTask<String, Void, String> {
 			sb.append("<font color=\"red\"><b>");
 			sb.append(context.getResources().getString(R.string.error));
 			sb.append("</b></font>: ");
-			if (ERROR_DOWNLOAD.equals(result)) {
+			if (ERROR_OFFLINE.equals(result)) {
+				sb.append(context.getResources().getString(
+						R.string.database_download_error_download));
+			} else if (ERROR_DOWNLOAD.equals(result)) {
 				sb.append(context.getResources().getString(
 						R.string.database_download_error_download));
 			} else if (ERROR_EXTRACT.equals(result)) {
