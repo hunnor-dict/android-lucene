@@ -3,6 +3,7 @@ package net.hunnor.dict.util;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
@@ -54,6 +55,7 @@ public class Network {
 			connection = (HttpURLConnection) url.openConnection();
 			connection.setRequestMethod("HEAD");
 		} catch (MalformedURLException exception) {
+		} catch (ProtocolException exception) {
 		} catch (IOException exception) {
 		}
 		if (connection != null) {
