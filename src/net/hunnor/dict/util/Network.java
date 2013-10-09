@@ -46,24 +46,22 @@ public class Network {
 	 */
 	public Map<String, List<String>> getHttpHeaderFromUrl(
 			Context context, String resource) {
-		if (!online(context)) {
-			return null;
+		Map<String, List<String>> result = null;
+		if (online(context)) {
+			try {
+				URL url = new URL(resource);
+				HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+				if (connection != null) {
+					connection.setRequestMethod("HEAD");
+					result = connection.getHeaderFields();
+					connection.disconnect();
+				}
+			} catch (MalformedURLException exception) {
+			} catch (ProtocolException exception) {
+			} catch (IOException exception) {
+			}
 		}
-		HttpURLConnection connection = null;
-		try {
-			URL url = new URL(resource);
-			connection = (HttpURLConnection) url.openConnection();
-			connection.setRequestMethod("HEAD");
-		} catch (MalformedURLException exception) {
-		} catch (ProtocolException exception) {
-		} catch (IOException exception) {
-		}
-		if (connection != null) {
-			Map<String, List<String>> result = connection.getHeaderFields();
-			connection.disconnect();
-			return result;
-		}
-		return null;
+		return result;
 	}
 
 }
