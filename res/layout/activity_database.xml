@@ -20,7 +20,7 @@
 				android:layout_weight="1"
 				android:layout_width="0dp"
 				android:text="@string/database_head_title"
-				android:textSize="12sp"/>
+				android:textSize="14sp"/>
 		<ImageButton
 				android:background="@android:color/transparent"
 				android:contentDescription="@string/database_head_button_back"
@@ -57,7 +57,7 @@
 					android:layout_height="wrap_content"
 					android:layout_width="wrap_content"
 					android:text="@string/database_button_check_for_updates"
-					android:textSize="12sp"/>
+					android:textSize="14sp"/>
 		</LinearLayout>
 		<LinearLayout
 		    	android:gravity="center"
@@ -78,7 +78,7 @@
 					android:layout_height="wrap_content"
 					android:layout_width="wrap_content"
 					android:text="@string/database_button_download_updates"
-					android:textSize="12sp"/>
+					android:textSize="14sp"/>
 		</LinearLayout>
 	</LinearLayout>
 	<TextView
@@ -87,12 +87,14 @@
 			android:layout_width="fill_parent"
 			android:paddingLeft="4dp"
 			android:paddingRight="4dp"
-			android:paddingTop="24dp"/>
+			android:paddingTop="24dp"
+			android:textSize="18sp"/>
 	<TextView
 			android:id="@+id/database_text_remote"
 			android:layout_height="wrap_content"
 			android:layout_width="fill_parent"
 			android:paddingLeft="4dp"
 			android:paddingRight="4dp"
-			android:paddingTop="24dp"/>
+			android:paddingTop="24dp"
+			android:textSize="18sp"/>
 </LinearLayout>
