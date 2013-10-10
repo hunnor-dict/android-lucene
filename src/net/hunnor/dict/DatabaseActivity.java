@@ -106,37 +106,42 @@ public class DatabaseActivity extends Activity {
 		StringBuilder sb = new StringBuilder();
 
 		if (!device.storage().readable()) {
-			sb.append("<font color=\"red\"><b>");
-			sb.append(getResources().getString(R.string.error));
-			sb.append("</b></font>: ");
-			sb.append(getResources().getString(R.string.database_local_storage_not_ready));
+			sb.append(getResources().getString(
+					R.string.database_local_storage_not_ready));
+			sb.append("<small>");
+			sb.append(getResources().getString(
+					R.string.database_local_storage_not_ready_hint));
+			sb.append("</small>");
 			return sb;
 		}
 
 		File indexDirectory = null;
 		indexDirectory = device.storage().directory(LuceneConstants.INDEX_DIR);
 		if (!indexDirectory.exists()) {
-			sb.append("<font color=\"red\"><b>");
-			sb.append(getResources().getString(R.string.error));
-			sb.append("</b></font>: ");
 			sb.append(getResources().getString(R.string.database_local_dir_missing));
+			sb.append("<small>");
+			sb.append(getResources().getString(
+					R.string.database_local_dir_missing_hint));
+			sb.append("</small>");
 			return sb;
 		}
 
 		if (!indexDirectory.canRead()) {
-			sb.append("<font color=\"red\"><b>");
-			sb.append(getResources().getString(R.string.error));
-			sb.append("</b></font>: ");
 			sb.append(getResources().getString(R.string.database_local_dir_missing));
+			sb.append("<small>");
+			sb.append(getResources().getString(
+					R.string.database_local_dir_missing_hint));
+			sb.append("</small>");
 			return sb;
 		}
 
 		String[] files = indexDirectory.list();
 		if (files == null || files.length == 0) {
-			sb.append("<font color=\"red\"><b>");
-			sb.append(getResources().getString(R.string.error));
-			sb.append("</b></font>: ");
 			sb.append(getResources().getString(R.string.database_local_dir_empty));
+			sb.append("<small>");
+			sb.append(getResources().getString(
+					R.string.database_local_dir_empty_hint));
+			sb.append("</small>");
 			return sb;
 		}
 
@@ -148,11 +153,12 @@ public class DatabaseActivity extends Activity {
 			sb.append(getResources().getString(R.string.last_modified));
 			sb.append(": ").append(Formatter.date(lastMod));
 		} catch (IOException exception) {
-			sb.append("<font color=\"red\"><b>");
-			sb.append(getResources().getString(R.string.error));
-			sb.append("</b></font>: ");
 			sb.append(getResources().getString(
 					R.string.database_local_index_corrupt));
+			sb.append("<small>");
+			sb.append(getResources().getString(
+					R.string.database_local_index_corrupt_hint));
+			sb.append("</small>");
 		}
 		return sb;
 	}
