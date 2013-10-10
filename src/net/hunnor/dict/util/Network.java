@@ -44,23 +44,34 @@ public class Network {
 	 * @return a Map of HTTP header fields
 	 *
 	 */
-	public Map<String, List<String>> getHttpHeaderFromUrl(
+	public Request getHttpHeaderFromUrl(
 			Context context, String resource) {
-		Map<String, List<String>> result = null;
+		Request result = new Request();
+		Map<String, List<String>> response = null;
+		RequestStatus status = null;
+
 		if (online(context)) {
 			try {
 				URL url = new URL(resource);
 				HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 				if (connection != null) {
 					connection.setRequestMethod("HEAD");
-					result = connection.getHeaderFields();
+					response = connection.getHeaderFields();
 					connection.disconnect();
+					status = RequestStatus.OK;
 				}
 			} catch (MalformedURLException exception) {
+				status = RequestStatus.MALFORMED_URL_EXCEPTION;
 			} catch (ProtocolException exception) {
+				status = RequestStatus.PROTOCOL_EXCEPTION;
 			} catch (IOException exception) {
+				status = RequestStatus.IO_EXCEPTION_NETWORK;
 			}
+		} else {
+			status = RequestStatus.NET_NOT_READY;
 		}
+		result.setResponse(response);
+		result.setStatus(status);
 		return result;
 	}
 

@@ -97,9 +97,6 @@ public class DatabaseDownloadTask extends AsyncTask<String, Void, String> {
 			sb.append(context.getResources().getString(
 					R.string.database_download_finished));
 		} else {
-			sb.append("<font color=\"red\"><b>");
-			sb.append(context.getResources().getString(R.string.error));
-			sb.append("</b></font>: ");
 			if (ERROR_OFFLINE.equals(result)) {
 				sb.append(context.getResources().getString(
 						R.string.database_download_error_download));

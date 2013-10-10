@@ -108,7 +108,7 @@ public class DatabaseActivity extends Activity {
 		if (!device.storage().readable()) {
 			sb.append(getResources().getString(
 					R.string.database_local_storage_not_ready));
-			sb.append("<small>");
+			sb.append("<br><small>");
 			sb.append(getResources().getString(
 					R.string.database_local_storage_not_ready_hint));
 			sb.append("</small>");
@@ -119,7 +119,7 @@ public class DatabaseActivity extends Activity {
 		indexDirectory = device.storage().directory(LuceneConstants.INDEX_DIR);
 		if (!indexDirectory.exists()) {
 			sb.append(getResources().getString(R.string.database_local_dir_missing));
-			sb.append("<small>");
+			sb.append("<br><small>");
 			sb.append(getResources().getString(
 					R.string.database_local_dir_missing_hint));
 			sb.append("</small>");
@@ -128,7 +128,7 @@ public class DatabaseActivity extends Activity {
 
 		if (!indexDirectory.canRead()) {
 			sb.append(getResources().getString(R.string.database_local_dir_missing));
-			sb.append("<small>");
+			sb.append("<br><small>");
 			sb.append(getResources().getString(
 					R.string.database_local_dir_missing_hint));
 			sb.append("</small>");
@@ -138,7 +138,7 @@ public class DatabaseActivity extends Activity {
 		String[] files = indexDirectory.list();
 		if (files == null || files.length == 0) {
 			sb.append(getResources().getString(R.string.database_local_dir_empty));
-			sb.append("<small>");
+			sb.append("<br><small>");
 			sb.append(getResources().getString(
 					R.string.database_local_dir_empty_hint));
 			sb.append("</small>");
@@ -155,7 +155,7 @@ public class DatabaseActivity extends Activity {
 		} catch (IOException exception) {
 			sb.append(getResources().getString(
 					R.string.database_local_index_corrupt));
-			sb.append("<small>");
+			sb.append("<br><small>");
 			sb.append(getResources().getString(
 					R.string.database_local_index_corrupt_hint));
 			sb.append("</small>");
@@ -196,6 +196,8 @@ public class DatabaseActivity extends Activity {
 		textView.setText(Html.fromHtml(result.toString()));
 
 		getRemote();
+
+		checkLocals();
 	}
 
 	private void getRemote() {
