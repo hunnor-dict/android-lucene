@@ -23,7 +23,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -108,8 +111,10 @@ public class SearchActivity extends Activity {
 					}
 				});
 
-		EditText editText = (EditText) findViewById(R.id.search_input);
-		editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+		AutoCompleteTextView autoCompleteTextView = (AutoCompleteTextView)
+				findViewById(R.id.autocomplete);
+		autoCompleteTextView.setOnEditorActionListener(
+				new TextView.OnEditorActionListener() {
 			@Override
 			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 				if (actionId == EditorInfo.IME_ACTION_SEARCH) {
@@ -117,6 +122,19 @@ public class SearchActivity extends Activity {
 					return true;
 				}
 				return false;
+			}
+		});
+		autoCompleteTextView.setAdapter(
+				new SuggestionArrayAdapter(this, R.layout.autocomplete_item));
+		autoCompleteTextView.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(
+					AdapterView<?> adapterView,
+					View view,
+					int position, long id) {
+				String string = (String)
+						adapterView.getItemAtPosition(position);
+				search(string);
 			}
 		});
 	}
@@ -181,7 +199,7 @@ public class SearchActivity extends Activity {
 	}
 
 	private void search() {
-		EditText editText = (EditText) findViewById(R.id.search_input);
+		EditText editText = (EditText) findViewById(R.id.autocomplete);
 		String query = editText.getText().toString();
 		search(query);
 	}
@@ -218,7 +236,7 @@ public class SearchActivity extends Activity {
 		showMessage(sb.toString());
 		ListView listView = (ListView) findViewById(R.id.search_result_list);
 		listView.setAdapter(arrayAdapter);
-		EditText editText = (EditText) findViewById(R.id.search_input);
+		EditText editText = (EditText) findViewById(R.id.autocomplete);
 		editText.setText("");
 	}
 

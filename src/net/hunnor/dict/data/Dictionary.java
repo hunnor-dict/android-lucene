@@ -46,6 +46,60 @@ public class Dictionary implements LuceneConstants {
 		return constructIndexReader() && constructAnalyzer();
 	}
 
+	public List<Entry> suggest(String queryString) {
+		if (indexReader == null) {
+			if (!constructIndexReader()) {
+				return null;
+			}
+		}
+		if (analyzer == null) {
+			if (!constructAnalyzer()) {
+				return null;
+			}
+		}
+
+		List<Entry> results = new ArrayList<Entry>();
+		IndexSearcher indexSearcher = null;
+		try {
+			indexSearcher = new IndexSearcher(indexReader);
+			QueryParser queryParser =
+					new QueryParser(LUCENE_VERSION, LUCENE_FIELD_ID, analyzer);
+			StringBuilder sb = new StringBuilder();
+			sb.append(LUCENE_FIELD_HU_ROOTS)
+					.append(":").append(queryString).append("*");
+			sb.append(" ");
+			sb.append(LUCENE_FIELD_NO_ROOTS)
+					.append(":").append(queryString).append("*");
+			Query query = queryParser.parse(sb.toString());
+			TopDocs topDocs = indexSearcher.search(query, indexReader.maxDoc());
+			ScoreDoc[] scoreDoc = topDocs.scoreDocs;
+			int totalHits = topDocs.totalHits;
+			for (int i = 0; i < totalHits; i++) {
+				Document document = indexSearcher.doc(scoreDoc[i].doc);
+				String root = getRoots(document);
+				Entry entry = new Entry(
+						document.get(LUCENE_FIELD_ID),
+						document.get(LUCENE_FIELD_LANG),
+						root,
+						document.get(LUCENE_FIELD_TEXT));
+				results.add(entry);
+			}
+		} catch (ParseException e) {
+			return null;
+		} catch (IOException e) {
+			return null;
+		} finally {
+			if (indexSearcher != null) {
+				try {
+					indexSearcher.close();
+				} catch (IOException e) {
+					return null;
+				}
+			}
+		}
+		return results;
+	}
+
 	public List<Entry> lookup(String queryString, String lang) {
 		if (indexReader == null) {
 			if (!constructIndexReader()) {
@@ -78,9 +132,11 @@ public class Dictionary implements LuceneConstants {
 				int totalHits = topDocs.totalHits;
 				for (int i = 0; i < totalHits; i++) {
 					Document document = indexSearcher.doc(scoreDoc[i].doc);
+					String root = getRoots(document);
 					Entry entry = new Entry(
 							document.get(LUCENE_FIELD_ID),
 							document.get(LUCENE_FIELD_LANG),
+							root,
 							document.get(LUCENE_FIELD_TEXT));
 					results.add(entry);
 				}
@@ -102,6 +158,24 @@ public class Dictionary implements LuceneConstants {
 			}
 		}
 		return results;
+	}
+
+	private String getRoots(Document document) {
+		StringBuilder sb = new StringBuilder();
+		String field = null;
+		if (LANG_HU.equals(document.get(LUCENE_FIELD_LANG))) {
+			field = LUCENE_FIELD_HU_ROOTS;
+		} else if (LANG_NO.equals(document.get(LUCENE_FIELD_LANG))) {
+			field = LUCENE_FIELD_NO_ROOTS;
+		}
+		String[] roots = document.getValues(field);
+		for (String root: roots) {
+			if (sb.length() > 0) {
+				sb.append(", ");
+			}
+			sb.append(root);
+		}
+		return sb.toString();
 	}
 
 	private List<List<String>> getRuns(String lang) {

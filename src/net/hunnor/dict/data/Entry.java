@@ -6,15 +6,18 @@ public class Entry {
 
 	private String lang;
 
+	private String root;
+
 	private String text;
 
 	public Entry () {
 		super();
 	}
 
-	public Entry(String id, String lang, String text) {
+	public Entry(String id, String lang, String root, String text) {
 		this.id = id;
 		this.lang = lang;
+		this.root = root;
 		this.text = text;
 	}
 
@@ -32,6 +35,14 @@ public class Entry {
 
 	public void setLang(String lang) {
 		this.lang = lang;
+	}
+
+	public String getRoot() {
+		return root;
+	}
+
+	public void setRoot(String root) {
+		this.root = root;
 	}
 
 	public String getText() {

@@ -19,9 +19,7 @@ public class SearchArrayAdapter extends ArrayAdapter<Entry> {
 	private final Entry[] resultArray;
 
 	public SearchArrayAdapter(
-			Context context,
-			int resourceId,
-			Entry[] resultArray) {
+			Context context, int resourceId, Entry[] resultArray) {
 		super(context, resourceId, resultArray);
 		this.context = context;
 		this.resourceId = resourceId;
