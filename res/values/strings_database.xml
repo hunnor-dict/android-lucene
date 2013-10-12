@@ -15,11 +15,11 @@
 	<string name="database_local_storage_not_ready">A tárhely nem elérhető</string>
 	<string name="database_local_storage_not_ready_hint">A tárhely nincs telepítve, nincs felcsatolva, vagy használatban van.</string>
 	<string name="database_local_dir_missing">A szótár nincs telepítve</string>
-	<string name="database_local_dir_missing_hint">A \'Szótár letöltése\' gombbal letöltheted a szótár legfrissebb kiadását.</string>
+	<string name="database_local_dir_missing_hint">A \'Frissítés letöltése\' gombbal letöltheted a szótár legfrissebb kiadását.</string>
 	<string name="database_local_dir_empty">A szótár nincs telepítve</string>
-	<string name="database_local_dir_empty_hint">A \'Szótár letöltése\' gombbal letöltheted a szótár legfrissebb kiadását.</string>
+	<string name="database_local_dir_empty_hint">A \'Frissítés letöltése\' gombbal letöltheted a szótár legfrissebb kiadását.</string>
 	<string name="database_local_index_corrupt">A telepített szótár nem nyitható meg</string>
-	<string name="database_local_index_corrupt_hint">Töltsd le újra a szótárat a \'Szótár letöltése\' gombbal.</string>
+	<string name="database_local_index_corrupt_hint">Töltsd le újra a szótárat a \'Frissítés letöltése\' gombbal.</string>
 
 	<string name="database_check_begin">Frissítés keresése</string>
 	<string name="database_check_dialog">Frissítés keresése</string>
