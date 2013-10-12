@@ -99,7 +99,7 @@ public class DatabaseDownloadTask extends AsyncTask<String, Void, String> {
 		} else {
 			if (ERROR_OFFLINE.equals(result)) {
 				sb.append(context.getResources().getString(
-						R.string.database_download_error_download));
+						R.string.database_download_error_offline));
 			} else if (ERROR_DOWNLOAD.equals(result)) {
 				sb.append(context.getResources().getString(
 						R.string.database_download_error_download));

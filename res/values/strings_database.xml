@@ -11,6 +11,7 @@
 	<string name="database_button_download_updates">Frissítés letöltése</string>
 
 	<string name="database_local_begin">Szótár ellenőrzése</string>
+	<string name="database_local_details">A telepített szótár</string>
 	<string name="database_local_storage_not_ready">A tárhely nem elérhető</string>
 	<string name="database_local_storage_not_ready_hint">A tárhely nincs telepítve, nincs felcsatolva, vagy használatban van.</string>
 	<string name="database_local_dir_missing">A szótár nincs telepítve</string>
@@ -33,10 +34,11 @@
 	<string name="database_download_downloading">Letöltés</string>
 	<string name="database_download_extracting">Kitömörítés</string>
 	<string name="database_download_installing">Telepítés</string>
-	<string name="database_download_finished">A frissítés sikeresen befejeződött</string>
-	<string name="database_download_error_download">Hiba a letöltés során</string>
-	<string name="database_download_error_extract">Hiba a szótár kitömörítése során</string>
-	<string name="database_download_error_delete">Hiba a régi szótár telepítése során</string>
-	<string name="database_download_error_move">Hiba a szótár telepítése során</string>
+	<string name="database_download_finished">A frissítés sikeresen befejeződött.</string>
+	<string name="database_download_error_offline">Frissítés letöltéséhez csatlakoznod kell az internethez.</string>
+	<string name="database_download_error_download">Hiba történt a letöltés során.</string>
+	<string name="database_download_error_extract">Hiba történt a szótár kitömörítése során.</string>
+	<string name="database_download_error_delete">Hiba történt a régi szótár telepítése során</string>
+	<string name="database_download_error_move">Hiba történt a szótár telepítése során</string>
 
 </resources>

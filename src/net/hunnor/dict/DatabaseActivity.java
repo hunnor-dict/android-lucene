@@ -150,6 +150,9 @@ public class DatabaseActivity extends Activity {
 			directory = new NIOFSDirectory(indexDirectory);
 			@SuppressWarnings("deprecation")
 			long lastMod = IndexReader.lastModified(directory);
+			sb.append(getResources().getString(
+					R.string.database_local_details));
+			sb.append(":<br>");
 			sb.append(getResources().getString(R.string.last_modified));
 			sb.append(": ").append(Formatter.date(lastMod));
 		} catch (IOException exception) {
@@ -196,8 +199,6 @@ public class DatabaseActivity extends Activity {
 		textView.setText(Html.fromHtml(result.toString()));
 
 		getRemote();
-
-		checkLocals();
 	}
 
 	private void getRemote() {
@@ -211,6 +212,11 @@ public class DatabaseActivity extends Activity {
 						progressDialog.setMessage(message);
 					}
 				});
+			}
+			@Override
+			public void onPostExecute(String result) {
+				super.onPostExecute(result);
+				checkLocals();
 			}
 		}.execute(LuceneConstants.INDEX_URL);
 	}
