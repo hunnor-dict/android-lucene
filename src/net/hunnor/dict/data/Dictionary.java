@@ -13,7 +13,8 @@ import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.CharArraySet;
 import org.apache.lucene.analysis.KeywordAnalyzer;
 import org.apache.lucene.analysis.PerFieldAnalyzerWrapper;
-import org.apache.lucene.analysis.snowball.SnowballAnalyzer;
+import org.apache.lucene.analysis.hu.HungarianAnalyzer;
+import org.apache.lucene.analysis.no.NorwegianAnalyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.CorruptIndexException;
@@ -27,7 +28,6 @@ import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.NIOFSDirectory;
 
-@SuppressWarnings("deprecation")
 public class Dictionary implements LuceneConstants {
 
 	private File indexDirectory = null;
@@ -228,21 +228,24 @@ public class Dictionary implements LuceneConstants {
 	private boolean constructAnalyzer() {
 		try {
 			KeywordAnalyzer keywordAnalyzer = new KeywordAnalyzer();
-			StandardAnalyzer standardAnalyzer = new StandardAnalyzer(LUCENE_VERSION);
-			SnowballAnalyzer norwegianSnowballAnalyzer = new SnowballAnalyzer(LUCENE_VERSION, "Norwegian", CharArraySet.EMPTY_SET);
-			SnowballAnalyzer hungarianSnowballAnalyzer = new SnowballAnalyzer(LUCENE_VERSION, "Hungarian", CharArraySet.EMPTY_SET);
+			StandardAnalyzer standardAnalyzer = new StandardAnalyzer(
+					LUCENE_VERSION);
+			HungarianAnalyzer hungarianAnalyzer = new HungarianAnalyzer(
+					LUCENE_VERSION, CharArraySet.EMPTY_SET);
+			NorwegianAnalyzer norwegianAnalyzer = new NorwegianAnalyzer(
+					LUCENE_VERSION, CharArraySet.EMPTY_SET);
 
 			Map<String, Analyzer> mapping = new HashMap<String, Analyzer>();
 			mapping.put(LUCENE_FIELD_HU_ROOTS, standardAnalyzer);
 			mapping.put(LUCENE_FIELD_NO_ROOTS, standardAnalyzer);
 			mapping.put(LUCENE_FIELD_HU_FORMS, standardAnalyzer);
 			mapping.put(LUCENE_FIELD_NO_FORMS, standardAnalyzer);
-			mapping.put(LUCENE_FIELD_HU_TRANS, norwegianSnowballAnalyzer);
-			mapping.put(LUCENE_FIELD_NO_TRANS, hungarianSnowballAnalyzer);
-			mapping.put(LUCENE_FIELD_HU_QUOTE, hungarianSnowballAnalyzer );
-			mapping.put(LUCENE_FIELD_NO_QUOTE, norwegianSnowballAnalyzer );
-			mapping.put(LUCENE_FIELD_HU_QUOTETRANS, norwegianSnowballAnalyzer );
-			mapping.put(LUCENE_FIELD_NO_QUOTETRANS, hungarianSnowballAnalyzer );
+			mapping.put(LUCENE_FIELD_HU_TRANS, norwegianAnalyzer);
+			mapping.put(LUCENE_FIELD_NO_TRANS, hungarianAnalyzer);
+			mapping.put(LUCENE_FIELD_HU_QUOTE, hungarianAnalyzer );
+			mapping.put(LUCENE_FIELD_NO_QUOTE, norwegianAnalyzer );
+			mapping.put(LUCENE_FIELD_HU_QUOTETRANS, norwegianAnalyzer );
+			mapping.put(LUCENE_FIELD_NO_QUOTETRANS, hungarianAnalyzer );
 
 			analyzer = new PerFieldAnalyzerWrapper(keywordAnalyzer, mapping);
 		} catch (Exception exception) {
