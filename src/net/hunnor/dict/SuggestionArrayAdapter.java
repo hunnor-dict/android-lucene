@@ -7,14 +7,16 @@ import net.hunnor.dict.data.Dictionary;
 import net.hunnor.dict.data.Entry;
 import net.hunnor.dict.util.Device;
 import android.content.Context;
+import android.text.Html;
+import android.text.Spanned;
 import android.widget.ArrayAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
 
 public class SuggestionArrayAdapter
-		extends ArrayAdapter<String> implements Filterable {
+		extends ArrayAdapter<Spanned> implements Filterable {
 
-	private ArrayList<String> resultList;
+	private ArrayList<Spanned> resultList;
 
 	public SuggestionArrayAdapter(Context context, int textViewResourceId) {
 		super(context, textViewResourceId);
@@ -26,7 +28,7 @@ public class SuggestionArrayAdapter
 	}
 
 	@Override
-	public String getItem(int index) {
+	public Spanned getItem(int index) {
 		return resultList.get(index);
 	}
 
@@ -38,7 +40,11 @@ public class SuggestionArrayAdapter
 			protected FilterResults performFiltering(CharSequence constraint) {
 				FilterResults filterResults = new FilterResults();
 				if (constraint != null) {
-					resultList = autocomplete(constraint.toString());
+					List<String> suggestionList = autocomplete(constraint.toString());
+					resultList = new ArrayList<Spanned>();
+					for (String suggestion: suggestionList) {
+						resultList.add(Html.fromHtml(suggestion));
+					}
 					filterResults.values = resultList;
 					filterResults.count = resultList.size();
 				}
@@ -66,9 +72,18 @@ public class SuggestionArrayAdapter
 			Device device = new Device();
 			dictionary.open(
 					device.storage().directory(LuceneConstants.INDEX_DIR));
+			dictionary.openSpellChecker(
+					device.storage().directory(LuceneConstants.SPELLING_DIR));
 			List<Entry> searchResults = dictionary.suggest(query);
-			for (Entry searchResult: searchResults) {
-				list.add(searchResult.getRoot());
+			if (searchResults.isEmpty()) {
+				String[] suggestions = dictionary.spellCheck(query);
+				for (String suggestion: suggestions) {
+					list.add("<i>" + suggestion + "</i>");
+				}
+			} else {
+				for (Entry searchResult: searchResults) {
+					list.add(searchResult.getRoot());
+				}
 			}
 		}
 		return list;

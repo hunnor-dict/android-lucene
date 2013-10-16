@@ -8,8 +8,10 @@ public interface LuceneConstants {
 	public static String LANG_NO = "no";
 
 	public static String INDEX_DIR = "index";
+	public static String SPELLING_DIR = "spelling";
 	public static String INDEX_ZIP = "hunnor-lucene-3.6.zip";
 	public static String INDEX_ZIP_DIR = "hunnor-lucene-index";
+	public static String SPELLING_ZIP_DIR = "hunnor-lucene-spelling";
 	public static String INDEX_URL = "http://dict.hunnor.net/port/lucene/hunnor-lucene-3.6.zip";
 
 	public static final Version LUCENE_VERSION = Version.LUCENE_36;

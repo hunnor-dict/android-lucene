@@ -25,6 +25,7 @@ import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
+import org.apache.lucene.search.spell.SpellChecker;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.NIOFSDirectory;
 
@@ -32,6 +33,8 @@ public class Dictionary implements LuceneConstants {
 
 	private File indexDirectory = null;
 	private IndexReader indexReader = null;
+	private File spellingDirectory = null;
+	private SpellChecker spellChecker = null;
 	private Analyzer analyzer = null;
 
 	public boolean open() {
@@ -44,6 +47,11 @@ public class Dictionary implements LuceneConstants {
 	public boolean open(File indexDirectory) {
 		this.indexDirectory = indexDirectory;
 		return constructIndexReader() && constructAnalyzer();
+	}
+
+	public boolean openSpellChecker(File spellingDirectory) {
+		this.spellingDirectory = spellingDirectory;
+		return constructSpellChecker();
 	}
 
 	public List<Entry> suggest(String queryString) {
@@ -98,6 +106,16 @@ public class Dictionary implements LuceneConstants {
 			}
 		}
 		return results;
+	}
+
+	public String[] spellCheck(String queryString) {
+		String[] suggestions = null;
+		try {
+			suggestions = spellChecker.suggestSimilar(queryString, 5);
+		} catch (IOException exception) {
+			return null;
+		}
+		return suggestions;
 	}
 
 	public List<Entry> lookup(String queryString, String lang) {
@@ -219,6 +237,16 @@ public class Dictionary implements LuceneConstants {
 			indexReader = IndexReader.open(directory);
 		} catch (CorruptIndexException exception) {
 			return false;
+		} catch (IOException exception) {
+			return false;
+		}
+		return true;
+	}
+
+	private boolean constructSpellChecker() {
+		try {
+			Directory directory = new NIOFSDirectory(spellingDirectory);
+			spellChecker = new SpellChecker(directory);
 		} catch (IOException exception) {
 			return false;
 		}

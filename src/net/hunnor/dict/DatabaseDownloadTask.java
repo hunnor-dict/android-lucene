@@ -76,11 +76,14 @@ public class DatabaseDownloadTask extends AsyncTask<String, Void, String> {
 		// Install
 		setMessage(progressDialog, context.getResources().getString(
 				R.string.database_download_installing) + "...");
-		if (!device.storage().deleteDirectory(LuceneConstants.INDEX_DIR)) {
+		if (!device.storage().deleteDirectory(LuceneConstants.INDEX_DIR) ||
+				!device.storage().deleteDirectory(LuceneConstants.SPELLING_DIR)) {
 			return ERROR_DELETE;
 		}
 		if (!device.storage().renameDirectory(
-				LuceneConstants.INDEX_ZIP_DIR, LuceneConstants.INDEX_DIR)) {
+					LuceneConstants.INDEX_ZIP_DIR, LuceneConstants.INDEX_DIR) ||
+			!device.storage().renameDirectory(
+					LuceneConstants.SPELLING_ZIP_DIR, LuceneConstants.SPELLING_DIR)) {
 			return ERROR_MOVE;
 		}
 
