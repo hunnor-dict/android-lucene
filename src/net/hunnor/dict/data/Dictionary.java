@@ -15,7 +15,6 @@ import org.apache.lucene.analysis.KeywordAnalyzer;
 import org.apache.lucene.analysis.PerFieldAnalyzerWrapper;
 import org.apache.lucene.analysis.hu.HungarianAnalyzer;
 import org.apache.lucene.analysis.no.NorwegianAnalyzer;
-import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexReader;
@@ -256,7 +255,7 @@ public class Dictionary implements LuceneConstants {
 	private boolean constructAnalyzer() {
 		try {
 			KeywordAnalyzer keywordAnalyzer = new KeywordAnalyzer();
-			StandardAnalyzer standardAnalyzer = new StandardAnalyzer(
+			CustomAnalyzer customAnalyzer = new CustomAnalyzer(
 					LUCENE_VERSION);
 			HungarianAnalyzer hungarianAnalyzer = new HungarianAnalyzer(
 					LUCENE_VERSION, CharArraySet.EMPTY_SET);
@@ -264,10 +263,10 @@ public class Dictionary implements LuceneConstants {
 					LUCENE_VERSION, CharArraySet.EMPTY_SET);
 
 			Map<String, Analyzer> mapping = new HashMap<String, Analyzer>();
-			mapping.put(LUCENE_FIELD_HU_ROOTS, standardAnalyzer);
-			mapping.put(LUCENE_FIELD_NO_ROOTS, standardAnalyzer);
-			mapping.put(LUCENE_FIELD_HU_FORMS, standardAnalyzer);
-			mapping.put(LUCENE_FIELD_NO_FORMS, standardAnalyzer);
+			mapping.put(LUCENE_FIELD_HU_ROOTS, customAnalyzer);
+			mapping.put(LUCENE_FIELD_NO_ROOTS, customAnalyzer);
+			mapping.put(LUCENE_FIELD_HU_FORMS, customAnalyzer);
+			mapping.put(LUCENE_FIELD_NO_FORMS, customAnalyzer);
 			mapping.put(LUCENE_FIELD_HU_TRANS, norwegianAnalyzer);
 			mapping.put(LUCENE_FIELD_NO_TRANS, hungarianAnalyzer);
 			mapping.put(LUCENE_FIELD_HU_QUOTE, hungarianAnalyzer );
