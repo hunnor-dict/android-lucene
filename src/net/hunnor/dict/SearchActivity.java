@@ -132,8 +132,9 @@ public class SearchActivity extends Activity {
 					AdapterView<?> adapterView,
 					View view,
 					int position, long id) {
-				String string = (String)
+				Spanned spanned = (Spanned)
 						adapterView.getItemAtPosition(position);
+				String string = spanned.toString();
 				search(string);
 			}
 		});
