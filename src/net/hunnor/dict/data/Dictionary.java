@@ -2,6 +2,8 @@ package net.hunnor.dict.data;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Reader;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -13,8 +15,11 @@ import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.CharArraySet;
 import org.apache.lucene.analysis.KeywordAnalyzer;
 import org.apache.lucene.analysis.PerFieldAnalyzerWrapper;
+import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.hu.HungarianAnalyzer;
 import org.apache.lucene.analysis.no.NorwegianAnalyzer;
+import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
+import org.apache.lucene.analysis.tokenattributes.OffsetAttribute;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexReader;
@@ -30,11 +35,11 @@ import org.apache.lucene.store.NIOFSDirectory;
 
 public class Dictionary implements LuceneConstants {
 
+	private Analyzer analyzer = null;
 	private File indexDirectory = null;
 	private IndexReader indexReader = null;
-	private File spellingDirectory = null;
 	private SpellChecker spellChecker = null;
-	private Analyzer analyzer = null;
+	private File spellingDirectory = null;
 
 	public boolean open() {
 		return
@@ -67,17 +72,13 @@ public class Dictionary implements LuceneConstants {
 
 		List<Entry> results = new ArrayList<Entry>();
 		IndexSearcher indexSearcher = null;
+		String analyzedQuery = null;
 		try {
 			indexSearcher = new IndexSearcher(indexReader);
 			QueryParser queryParser =
 					new QueryParser(LUCENE_VERSION, LUCENE_FIELD_ID, analyzer);
-			StringBuilder sb = new StringBuilder();
-			sb.append(LUCENE_FIELD_HU_ROOTS)
-					.append(":").append(queryString).append("*");
-			sb.append(" ");
-			sb.append(LUCENE_FIELD_NO_ROOTS)
-					.append(":").append(queryString).append("*");
-			Query query = queryParser.parse(sb.toString());
+			analyzedQuery = analyzeQuery(queryString);
+			Query query = queryParser.parse(analyzedQuery);
 			TopDocs topDocs = indexSearcher.search(query, indexReader.maxDoc());
 			ScoreDoc[] scoreDoc = topDocs.scoreDocs;
 			int totalHits = topDocs.totalHits;
@@ -175,6 +176,30 @@ public class Dictionary implements LuceneConstants {
 			}
 		}
 		return results;
+	}
+
+	@SuppressWarnings("unused")
+	private String analyzeQuery(String query) throws IOException {
+		StringBuilder sb = new StringBuilder();
+		Reader reader = new StringReader(query);
+		TokenStream tokenStream =
+				analyzer.tokenStream(LUCENE_FIELD_HU_FORMS, reader);
+		OffsetAttribute offsetAttribute =
+				tokenStream.getAttribute(OffsetAttribute.class);
+		CharTermAttribute charTermAttribute =
+				tokenStream.addAttribute(CharTermAttribute.class);
+		tokenStream.reset();
+		while (tokenStream.incrementToken()) {
+			int startOffset = offsetAttribute.startOffset();
+			int endOffset = offsetAttribute.endOffset();
+			sb.append(LUCENE_FIELD_HU_ROOTS).append(":");
+			sb.append(charTermAttribute.toString()).append("*");
+			sb.append(" ");
+			sb.append(LUCENE_FIELD_NO_ROOTS).append(":");
+			sb.append(charTermAttribute.toString()).append("*");
+			sb.append(" ");
+		}
+		return sb.toString();
 	}
 
 	private String getRoots(Document document) {
