@@ -93,8 +93,6 @@ public class DatabaseCheckTask extends
 					R.string.database_check_error_malformed_url));
 			break;
 		case NET_NOT_READY:
-			sb.append(context.getResources().getString(R.string.error));
-			sb.append(": ");
 			sb.append(context.getResources().getString(
 					R.string.database_check_error_net_not_ready));
 			break;
