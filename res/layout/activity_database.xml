@@ -5,32 +5,6 @@
 		android:layout_width="match_parent"
 		android:orientation="vertical">
 	<LinearLayout
-			android:background="#d3d3d3"
-			android:gravity="center"
-			android:id="@+id/database_head"
-			android:layout_height="wrap_content"
-			android:layout_width="match_parent"
-			android:orientation="horizontal"
-			android:paddingLeft="4dp"
-			android:paddingRight="4dp"
-			android:paddingTop="4dp">
-		<TextView
-				android:id="@+id/database_head_title"
-				android:layout_height="wrap_content"
-				android:layout_weight="1"
-				android:layout_width="0dp"
-				android:text="@string/database_head_title"
-				android:textSize="14sp"/>
-		<ImageButton
-				android:background="@android:color/transparent"
-				android:contentDescription="@string/database_head_button_back"
-				android:id="@+id/database_head_button_back"
-				android:layout_height="wrap_content"
-				android:layout_margin="4dp"
-				android:layout_width="wrap_content"
-				android:src="@drawable/undo"/>
-	</LinearLayout>
-	<LinearLayout
 	    	android:baselineAligned="false"
 			android:id="@+id/database_controls"
 			android:layout_height="wrap_content"

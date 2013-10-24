@@ -14,13 +14,12 @@
 	<application
 			android:allowBackup="true"
 			android:icon="@drawable/dictionary"
-			android:label="@string/app_name"
-			android:theme="@style/AppTheme">
+			android:label="@string/app_name">
 
 		<activity
 				android:label="@string/app_name"
 				android:name="net.hunnor.dict.SearchActivity"
-				android:theme="@style/AppTheme">
+				android:theme="@style/Theme.AppCompat.Light">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN"/>
 				<category android:name="android.intent.category.LAUNCHER"/>
@@ -34,7 +33,7 @@
 		<activity
 				android:label="@string/app_name"
 				android:name="net.hunnor.dict.DatabaseActivity"
-				android:theme="@style/AppTheme">
+				android:theme="@style/Theme.AppCompat.Light">
 			<intent-filter>
 				<action android:name="net.hunnor.dict.ACTIVITY_DATABASE"/>
 				<category android:name="android.intent.category.DEFAULT"/>

@@ -1,7 +1,9 @@
 <menu
-		xmlns:android="http://schemas.android.com/apk/res/android">
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		xmlns:hunnor="http://schemas.android.com/apk/res-auto">
 	<item
 			android:icon="@android:drawable/ic_menu_save"
 	    	android:id="@+menu/database"
-			android:title="@string/menu_database"/>
+	    	android:title="@string/menu_database"
+			hunnor:showAsAction="ifRoom"/>
 </menu>

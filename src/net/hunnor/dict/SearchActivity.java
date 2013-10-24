@@ -6,7 +6,6 @@ import java.util.List;
 import net.hunnor.dict.data.Dictionary;
 import net.hunnor.dict.data.Entry;
 import net.hunnor.dict.util.Device;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
@@ -15,6 +14,8 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.text.Html;
 import android.text.Spanned;
 import android.view.KeyEvent;
@@ -32,7 +33,7 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class SearchActivity extends Activity {
+public class SearchActivity extends ActionBarActivity {
 
 	private static final int VOICE_RECOGNITION_REQUEST_CODE = 1234;
 
@@ -138,12 +139,15 @@ public class SearchActivity extends Activity {
 				search(string);
 			}
 		});
+
+		ActionBar actionBar = getSupportActionBar();
+		actionBar.setSubtitle(R.string.menu_search);
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.search_menu, menu);
-		return true;
+		return super.onCreateOptionsMenu(menu);
 	}
 
 	@Override

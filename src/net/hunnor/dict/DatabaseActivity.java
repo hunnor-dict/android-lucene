@@ -10,11 +10,12 @@ import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.NIOFSDirectory;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,7 +23,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-public class DatabaseActivity extends Activity {
+public class DatabaseActivity extends ActionBarActivity {
 
 	private static final String ACTIVITY_SEARCH =
 			"net.hunnor.dict.ACTIVITY_SEARCH";
@@ -33,15 +34,6 @@ public class DatabaseActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_database);
-
-		ImageButton searchButton = (ImageButton)
-				findViewById(R.id.database_head_button_back);
-		searchButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				finish();
-			}
-		});
 
 		ImageButton checkUpdateButton = (ImageButton)
 				findViewById(R.id.database_button_check_for_updates);
@@ -61,13 +53,16 @@ public class DatabaseActivity extends Activity {
 			}
 		});
 
+		ActionBar actionBar = getSupportActionBar();
+		actionBar.setSubtitle(R.string.menu_database);
+
 		checkLocals();
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.database_menu, menu);
-		return true;
+		return super.onCreateOptionsMenu(menu);
 	}
 
 	@Override
