@@ -34,7 +34,7 @@
 	<string name="database_download_downloading">Letöltés</string>
 	<string name="database_download_extracting">Kitömörítés</string>
 	<string name="database_download_installing">Telepítés</string>
-	<string name="database_download_finished">A frissítés sikeresen befejeződött.</string>
+	<string name="database_download_finished">A frissítés sikeresen befejeződött. A \'Vissza\' gombbal visszaléphetsz a kereséshez.</string>
 	<string name="database_download_error_offline">Frissítés letöltéséhez csatlakoznod kell az internethez.</string>
 	<string name="database_download_error_download">Hiba történt a letöltés során.</string>
 	<string name="database_download_error_extract">Hiba történt a szótár kitömörítése során.</string>
