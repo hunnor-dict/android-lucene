@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="android:fontFamily">@font/ubuntu</item>
+    </style>
+
+    <style name="DatabaseBlock">
+        <item name="android:layout_margin">@dimen/database_block_margin</item>
+    </style>
+
+    <style name="DatabaseTable">
+        <item name="android:layout_marginTop">@dimen/database_table_margin_top</item>
+    </style>
+
+    <style name="DatabaseTableCellLabel">
+        <item name="android:textSize">@dimen/database_table_cell_font_size</item>
+    </style>
+
+    <style name="DatabaseTableCellValue">
+        <item name="android:textSize">@dimen/database_table_cell_font_size</item>
+        <item name="android:fontFamily">@font/ubuntu_bold</item>
+        <item name="android:paddingLeft">@dimen/database_table_cell_padding</item>
+    </style>
+
+    <style name="DatabaseTextBlock">
+        <item name="android:layout_marginLeft">@dimen/database_text_block_margin_left</item>
+    </style>
+
+    <style name="DatabaseTextTitle">
+        <item name="android:textSize">@dimen/database_text_title_font_size</item>
+        <item name="android:fontFamily">@font/ubuntu_bold</item>
+    </style>
+
+    <style name="SearchInput">
+        <item name="android:padding">@dimen/search_input_padding</item>
+        <item name="android:textSize">@dimen/search_input_font_size</item>
+    </style>
+
+    <style name="SearchResult">
+        <item name="android:padding">@dimen/search_result_padding</item>
+        <item name="android:textSize">@dimen/search_result_font_size</item>
+    </style>
+
+    <style name="SearchSuggestion">
+        <item name="android:padding">@dimen/search_suggestion_padding</item>
+        <item name="android:textSize">@dimen/search_suggestion_font_size</item>
+    </style>
+
+</resources>

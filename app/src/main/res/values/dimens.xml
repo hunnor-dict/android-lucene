@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="database_block_margin">16dp</dimen>
+    <dimen name="database_text_block_margin_left">8dp</dimen>
+    <dimen name="database_text_title_font_size">20sp</dimen>
+    <dimen name="database_table_margin_top">4dp</dimen>
+    <dimen name="database_table_cell_font_size">18sp</dimen>
+    <dimen name="database_table_cell_padding">4dp</dimen>
+
+    <dimen name="search_input_font_size">24sp</dimen>
+    <dimen name="search_input_padding">8dp</dimen>
+    <dimen name="search_result_font_size">20sp</dimen>
+    <dimen name="search_result_padding">8dp</dimen>
+    <dimen name="search_suggestion_font_size">24sp</dimen>
+    <dimen name="search_suggestion_padding">8dp</dimen>
+
+</resources>

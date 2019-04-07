@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:locale="hu">
+    <string name="app_name">HunNor</string>
+
+    <string name="menu_main">Menü</string>
+    <string name="menu_database">Adatbázis</string>
+    <string name="menu_settings">Beállítások</string>
+    <string name="menu_about">Névjegy</string>
+
+    <string name="alert_ok">OK</string>
+
+    <string name="about_dictionary_title">HunNor közösségi szótár</string>
+    <string name="about_dictionary_body">https://dict.hunnor.net</string>
+    <string name="about_source_code_title">Forráskód</string>
+    <string name="about_source_code_body">https://github.com/hunnor-dict</string>
+    <string name="about_icon_title">Ikon</string>
+    <string name="about_icon_body">https://www.flaticon.com/authors/freepik</string>
+
+    <string name="database_cehck_begin">Elérhető frissítés keresése</string>
+    <string name="database_check_offline">Nincs internetkapcsolat</string>
+    <string name="database_check_error">Hiba</string>
+    <string name="database_check_error_status">Hiba (HTTP %1$s)</string>
+    <string name="database_local_title">Telepített szótár</string>
+    <string name="database_remote_title">Elérhető frissítés</string>
+    <string name="database_label_date">Módosítva:</string>
+    <string name="database_label_size">Méret:</string>
+    <string name="database_alert_deploy">A szótár kitömörítése sikeresen befejeződött. Az alkalmazás visszatér a kereséshez.</string>
+    <string name="database_action_download">Letöltés</string>
+
+    <string name="database_status_e_deploy_delete_deploy_index_dir">Hiba történt az ideiglenes mappa törlésénél.</string>
+    <string name="database_status_e_deploy_delete_deploy_spelling_dir">Hiba történt az ideiglenes mappa törlésénél (helyesírás-ellenőrzés).</string>
+    <string name="database_status_e_deploy_delete_index_dir">Hiba történt a korábbi telepítés törlésénél.</string>
+    <string name="database_status_e_deploy_delete_spelling_dir">Hiba történt a korábbi telepítés törlésénél (helyesírás-ellenőrzés).</string>
+    <string name="database_status_e_deploy_rename_index_dir">Hiba történt a mappák átnevezésénél.</string>
+    <string name="database_status_e_deploy_rename_spelling_dir">Hiba történt a mappák átnevezésénél (helyesírás-ellenőrzés).</string>
+    <string name="database_status_e_deploy_zip_entry_dir_create">Hiba történt a kitömörítés során (mappa létrehhozása).</string>
+    <string name="database_status_e_exception_io">Hiba történt a kitömörítés során.</string>
+
+    <string name="search_hint">Keresés</string>
+    <string name="search_alert_deploy">A szótár kitömörítéséhez az alkalmazás megnyitja az adatbáziskezelőt.</string>
+
+    <string name="settings_max_suggestions">Találati lista mérete</string>
+
+</resources>
