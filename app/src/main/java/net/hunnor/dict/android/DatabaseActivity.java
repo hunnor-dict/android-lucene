@@ -264,7 +264,7 @@ public class DatabaseActivity extends ActivityTemplate {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(message).setCancelable(false)
                 .setPositiveButton(R.string.alert_ok, (DialogInterface dialog, int id) ->
-                    dialog.dismiss());
+                        dialog.dismiss());
         AlertDialog alert = builder.create();
         alert.show();
     }
