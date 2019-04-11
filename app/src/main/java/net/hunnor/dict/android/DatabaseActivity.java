@@ -18,8 +18,10 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.text.format.Formatter;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import net.hunnor.dict.android.task.CheckTask;
 
@@ -448,6 +450,7 @@ public class DatabaseActivity extends ActivityTemplate {
     public void doDownload(View view) {
         String externalStorageState = Environment.getExternalStorageState();
         if (Environment.MEDIA_MOUNTED.equals(externalStorageState)) {
+
             File externalFilesDir = getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS);
             File downloadFile = new File(externalFilesDir, "HunNor-Lucene.zip");
             Uri uri = Uri.fromFile(downloadFile);
@@ -456,6 +459,12 @@ public class DatabaseActivity extends ActivityTemplate {
                     Uri.parse(INDEX_URL));
             request.setDestinationUri(uri);
             queueId = downloadManager.enqueue(request);
+
+            Toast toast = Toast.makeText(getApplicationContext(),
+                    R.string.database_download_notification, Toast.LENGTH_LONG);
+            toast.setGravity(Gravity.TOP, 0, 0);
+            toast.show();
+
         }
     }
 
