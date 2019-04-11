@@ -326,6 +326,8 @@ public class DatabaseActivity extends ActivityTemplate {
             Log.e(TAG, "Error deleting downloaded file");
         }
 
+        displayInstalledDictionary();
+
     }
 
     public void displayInstalledDictionary() {
