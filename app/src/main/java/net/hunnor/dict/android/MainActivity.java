@@ -69,7 +69,7 @@ public class MainActivity extends ActivityTemplate {
 
         editText.setOnEditorActionListener((TextView textView, int actionId, KeyEvent keyEvent) -> {
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                doSearch(textView.getText().toString());
+                submitSearch(textView.getText().toString());
             }
             return true;
         });
@@ -78,9 +78,7 @@ public class MainActivity extends ActivityTemplate {
 
         listView.setOnItemClickListener((AdapterView<?> parent, View view, int position, long id) -> {
             TextView textView = (TextView) view;
-            Intent intent = new Intent(DetailsActivity.class.getCanonicalName());
-            intent.putExtra("query", textView.getText().toString());
-            startActivity(intent);
+            submitSearch(textView.getText().toString());
         });
 
     }
@@ -112,6 +110,12 @@ public class MainActivity extends ActivityTemplate {
 
         }
 
+    }
+
+    private void submitSearch(String query) {
+        Intent intent = new Intent(DetailsActivity.class.getCanonicalName());
+        intent.putExtra("query", query);
+        startActivity(intent);
     }
 
     private void checkDictionary() {
