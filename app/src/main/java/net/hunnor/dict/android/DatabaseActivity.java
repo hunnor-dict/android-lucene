@@ -169,6 +169,8 @@ public class DatabaseActivity extends ActivityTemplate {
                     fileOutputStream.write(buffer, 0, length);
                 }
                 fileOutputStream.close();
+                long timestamp = zipEntry.getTime();
+                entryFile.setLastModified(timestamp);
                 zipEntry = zipInputStream.getNextEntry();
             }
             zipInputStream.closeEntry();
