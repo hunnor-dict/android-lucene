@@ -236,6 +236,7 @@ public class DatabaseActivity extends ActivityTemplate {
     private void displayError(Status status) {
 
         String message = "";
+
         switch (status) {
             case E_DEPLOY_DELETE_DEPLOY_INDEX_DIR:
                 message = getString(R.string.database_status_e_deploy_delete_deploy_index_dir);
@@ -271,9 +272,11 @@ public class DatabaseActivity extends ActivityTemplate {
                         dialog.dismiss());
         AlertDialog alert = builder.create();
         alert.show();
+
     }
 
     private void setListeners() {
+
         BroadcastReceiver receiver = new BroadcastReceiver() {
 
             @Override
@@ -301,7 +304,9 @@ public class DatabaseActivity extends ActivityTemplate {
             }
 
         };
+
         registerReceiver(receiver, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+
     }
 
     private void startExtractTask(Uri uri) {
@@ -318,7 +323,14 @@ public class DatabaseActivity extends ActivityTemplate {
         try {
             inputStream = new FileInputStream(file);
             Status status = deployDictionary(inputStream);
-            if (!Status.OK.equals(status)) {
+            if (Status.OK.equals(status)) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setMessage(R.string.database_extract_completed).setCancelable(false)
+                        .setPositiveButton(R.string.alert_ok, (DialogInterface dialog, int id) ->
+                                dialog.dismiss());
+                AlertDialog alert = builder.create();
+                alert.show();
+            } else {
                 displayError(status);
             }
         } catch (IOException e) {
@@ -453,10 +465,23 @@ public class DatabaseActivity extends ActivityTemplate {
         String externalStorageState = Environment.getExternalStorageState();
         if (Environment.MEDIA_MOUNTED.equals(externalStorageState)) {
 
+            downloadManager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
+
+            Query query = new Query();
+            query.setFilterById(queueId);
+            Cursor cursor = downloadManager.query(query);
+            if (cursor.moveToFirst()) {
+                Toast toast = Toast.makeText(getApplicationContext(),
+                        R.string.database_download_running, Toast.LENGTH_LONG);
+                toast.setGravity(Gravity.CENTER, 0, 0);
+                toast.show();
+                return;
+            }
+
             File externalFilesDir = getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS);
             File downloadFile = new File(externalFilesDir, "HunNor-Lucene.zip");
             Uri uri = Uri.fromFile(downloadFile);
-            downloadManager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
+
             Request request = new Request(
                     Uri.parse(INDEX_URL));
             request.setDestinationUri(uri);

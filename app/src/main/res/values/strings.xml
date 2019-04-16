@@ -27,6 +27,8 @@
     <string name="database_alert_deploy">A szótár kitömörítése sikeresen befejeződött. Az alkalmazás visszatér a kereséshez.</string>
     <string name="database_action_download">Letöltés</string>
     <string name="database_download_notification">Letöltés folyamatát a Letöltéskezelőben követheted. Az alkalmazás a letöltés végeztével telepíti a frissítést.</string>
+    <string name="database_download_running">Letöltés folyamatban, ellenőrizd a Letöltéskezelőt.</string>
+    <string name="database_extract_completed">A szótár kitömörítése befejeződött.</string>
 
     <string name="database_status_e_deploy_delete_deploy_index_dir">Hiba történt az ideiglenes mappa törlésénél.</string>
     <string name="database_status_e_deploy_delete_deploy_spelling_dir">Hiba történt az ideiglenes mappa törlésénél (helyesírás-ellenőrzés).</string>
