@@ -287,6 +287,8 @@ public class DatabaseActivity extends ActivityTemplate {
                     return;
                 }
 
+                downloadManager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
+
                 Query query = new Query();
                 query.setFilterById(queueId);
                 Cursor cursor = downloadManager.query(query);
