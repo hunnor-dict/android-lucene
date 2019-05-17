@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="themeLabels">
+        <item>@string/settings_app_theme_item_day</item>
+        <item>@string/settings_app_theme_item_night</item>
+    </array>
+    <array name="themeValues">
+        <item>day</item>
+        <item>night</item>
+    </array>
+</resources>

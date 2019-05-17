@@ -42,6 +42,10 @@
     <string name="search_hint">Keresés</string>
     <string name="search_alert_deploy">A szótár kitömörítéséhez az alkalmazás megnyitja az adatbáziskezelőt.</string>
 
+    <string name="settings_app_theme_item_day">Világos</string>
+    <string name="settings_app_theme_item_night">Sötét</string>
+    <string name="settings_app_theme_summary">Sötét mód ki- és bekapcsolása</string>
+    <string name="settings_app_theme_title">Sötét mód</string>
     <string name="settings_max_suggestions">Találati lista mérete</string>
 
 </resources>

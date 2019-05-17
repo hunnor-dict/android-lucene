@@ -1,13 +1,35 @@
 package net.hunnor.dict.android;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.preference.PreferenceManager;
+
+import net.hunnor.dict.android.constants.Preferences;
 
 public abstract class ActivityTemplate extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+
+        super.onCreate(savedInstanceState);
+
+        SharedPreferences sharedPreferences =
+                PreferenceManager.getDefaultSharedPreferences(this);
+        String theme = sharedPreferences.getString(Preferences.THEME_KEY, Preferences.THEME_DAY);
+        if (Preferences.THEME_DAY.equals(theme)) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        } else if (Preferences.THEME_NIGHT.equals(theme)) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        }
+
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
