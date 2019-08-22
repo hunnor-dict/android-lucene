@@ -26,10 +26,10 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 } else if (Preferences.THEME_NIGHT.equals(theme)) {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
                 }
-            }
-            Activity activity = getActivity();
-            if (activity != null) {
-                activity.recreate();
+                Activity activity = getActivity();
+                if (activity != null) {
+                    activity.recreate();
+                }
             }
         };
 
