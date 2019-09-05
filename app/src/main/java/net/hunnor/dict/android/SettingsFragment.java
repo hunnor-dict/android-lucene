@@ -32,10 +32,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
                         break;
                 }
-                Activity activity = getActivity();
-                if (activity != null) {
-                    activity.recreate();
-                }
             }
         };
 
