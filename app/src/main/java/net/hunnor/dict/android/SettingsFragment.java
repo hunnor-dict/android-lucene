@@ -21,10 +21,16 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         preferenceChangeListener = (sharedPreferences, key) -> {
             if (Preferences.THEME_KEY.equals(key)) {
                 String theme = sharedPreferences.getString(Preferences.THEME_KEY, Preferences.THEME_DAY);
-                if (Preferences.THEME_DAY.equals(theme)) {
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                } else if (Preferences.THEME_NIGHT.equals(theme)) {
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                switch (theme) {
+                    case Preferences.THEME_DAY:
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                        break;
+                    case Preferences.THEME_NIGHT:
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                        break;
+                    case Preferences.THEME_SYSTEM:
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+                        break;
                 }
                 Activity activity = getActivity();
                 if (activity != null) {

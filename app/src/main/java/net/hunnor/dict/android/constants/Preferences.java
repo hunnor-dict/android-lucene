@@ -8,4 +8,6 @@ public class Preferences {
 
     public static final String THEME_NIGHT = "night";
 
+    public static final String THEME_SYSTEM = "system";
+
 }
