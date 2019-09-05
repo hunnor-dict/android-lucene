@@ -3,9 +3,11 @@
     <array name="themeLabels">
         <item>@string/settings_app_theme_item_day</item>
         <item>@string/settings_app_theme_item_night</item>
+        <item>@string/settings_app_theme_item_power</item>
     </array>
     <array name="themeValues">
         <item>day</item>
         <item>night</item>
+        <item>power</item>
     </array>
 </resources>

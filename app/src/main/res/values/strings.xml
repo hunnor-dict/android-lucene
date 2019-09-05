@@ -44,8 +44,9 @@
 
     <string name="settings_app_theme_item_day">Világos</string>
     <string name="settings_app_theme_item_night">Sötét</string>
-    <string name="settings_app_theme_summary">Sötét mód ki- és bekapcsolása</string>
+    <string name="settings_app_theme_item_power">Akkumulátorkímélő</string>
     <string name="settings_app_theme_item_system">Rendszerbeállítások</string>
+    <string name="settings_app_theme_summary">Sötét mód ki- és bekapcsolása</string>
     <string name="settings_app_theme_title">Sötét mód</string>
     <string name="settings_max_suggestions">Találati lista mérete</string>
 

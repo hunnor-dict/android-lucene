@@ -30,6 +30,9 @@ public abstract class ActivityTemplate extends AppCompatActivity {
             case Preferences.THEME_NIGHT:
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
                 break;
+            case Preferences.THEME_POWER:
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY);
+                break;
             case Preferences.THEME_SYSTEM:
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
                 break;

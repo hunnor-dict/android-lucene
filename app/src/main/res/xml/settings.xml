@@ -11,7 +11,7 @@
         app:title="@string/settings_max_suggestions" />
 
     <ListPreference
-        android:defaultValue="day"
+        android:defaultValue="power"
         android:entries="@array/themeLabels"
         android:entryValues="@array/themeValues"
         android:key="theme"
