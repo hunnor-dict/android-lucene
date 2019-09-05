@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <SeekBarPreference
+        android:defaultValue="10"
+        android:max="50"
+        app:key="searchMaxSuggestions"
+        app:min="5"
+        app:seekBarIncrement="5"
+        app:title="@string/settings_max_suggestions" />
+
+    <ListPreference
+        android:defaultValue="system"
+        android:entries="@array/themeLabels"
+        android:entryValues="@array/themeValues"
+        android:key="theme"
+        android:summary="@string/settings_app_theme_summary"
+        android:title="@string/settings_app_theme_title" />
+
+</androidx.preference.PreferenceScreen>
