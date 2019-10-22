@@ -8,6 +8,7 @@
         app:key="searchMaxSuggestions"
         app:min="5"
         app:seekBarIncrement="5"
+        app:showSeekBarValue="true"
         app:title="@string/settings_max_suggestions" />
 
     <ListPreference
