@@ -1,12 +1,12 @@
-package net.hunnor.dict.android;
+package net.hunnor.dict.android.activity.settings;
 
-import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.preference.PreferenceFragmentCompat;
 
+import net.hunnor.dict.android.R;
 import net.hunnor.dict.android.constants.Preferences;
 
 public class SettingsFragment extends PreferenceFragmentCompat {

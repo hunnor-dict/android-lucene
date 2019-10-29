@@ -1,6 +1,9 @@
-package net.hunnor.dict.android;
+package net.hunnor.dict.android.activity.settings;
 
 import android.os.Bundle;
+
+import net.hunnor.dict.android.R;
+import net.hunnor.dict.android.activity.ActivityTemplate;
 
 public class SettingsActivity extends ActivityTemplate {
 

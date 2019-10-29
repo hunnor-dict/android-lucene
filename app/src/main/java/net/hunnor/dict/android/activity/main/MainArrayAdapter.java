@@ -1,4 +1,4 @@
-package net.hunnor.dict.android;
+package net.hunnor.dict.android.activity.main;
 
 import android.content.Context;
 import android.graphics.Typeface;
@@ -8,9 +8,11 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import java.util.List;
-
 import androidx.annotation.NonNull;
+
+import net.hunnor.dict.android.R;
+
+import java.util.List;
 
 public class MainArrayAdapter extends ArrayAdapter<String> {
 
@@ -40,7 +42,7 @@ public class MainArrayAdapter extends ArrayAdapter<String> {
 
     }
 
-    public void setSuggestions(boolean suggestions) {
+    void setSuggestions(boolean suggestions) {
         this.suggestions = suggestions;
     }
 

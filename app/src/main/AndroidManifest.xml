@@ -15,16 +15,16 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".DetailsActivity"
-            android:parentActivityName=".MainActivity">
+            android:name=".activity.details.DetailsActivity"
+            android:parentActivityName=".activity.main.MainActivity">
             <intent-filter>
-                <action android:name="net.hunnor.dict.android.DetailsActivity" />
+                <action android:name="net.hunnor.dict.android.activity.details.DetailsActivity" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".activity.main.MainActivity"
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -35,28 +35,28 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             <intent-filter>
-                <action android:name="net.hunnor.dict.android.MainActivity" />
+                <action android:name="net.hunnor.dict.android.activity.main.MainActivity" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".DatabaseActivity">
+        <activity android:name=".activity.database.DatabaseActivity">
             <intent-filter>
-                <action android:name="net.hunnor.dict.android.DatabaseActivity" />
+                <action android:name="net.hunnor.dict.android.activity.database.DatabaseActivity" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".SettingsActivity">
+        <activity android:name=".activity.settings.SettingsActivity">
             <intent-filter>
-                <action android:name="net.hunnor.dict.android.SettingsActivity" />
+                <action android:name="net.hunnor.dict.android.activity.settings.SettingsActivity" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".AboutActivity">
+        <activity android:name=".activity.about.AboutActivity">
             <intent-filter>
-                <action android:name="net.hunnor.dict.android.AboutActivity" />
+                <action android:name="net.hunnor.dict.android.activity.about.AboutActivity" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>

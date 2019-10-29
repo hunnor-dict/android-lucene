@@ -24,7 +24,6 @@
     <string name="database_remote_title">Elérhető frissítés</string>
     <string name="database_label_date">Módosítva:</string>
     <string name="database_label_size">Méret:</string>
-    <string name="database_alert_deploy">A szótár kitömörítése sikeresen befejeződött. Az alkalmazás visszatér a kereséshez.</string>
     <string name="database_action_download">Letöltés</string>
     <string name="database_download_notification">Letöltés folyamatát a Letöltéskezelőben követheted. Az alkalmazás a letöltés végeztével telepíti a frissítést.</string>
     <string name="database_download_running">Letöltés folyamatban, ellenőrizd a Letöltéskezelőt.</string>
@@ -40,7 +39,7 @@
     <string name="database_status_e_exception_io">Hiba történt a kitömörítés során.</string>
 
     <string name="search_hint">Keresés</string>
-    <string name="search_alert_deploy">A szótár kitömörítéséhez az alkalmazás megnyitja az adatbáziskezelőt.</string>
+    <string name="search_alert_deploy">A szótár kitömörítése folyamatban…</string>
 
     <string name="settings_app_theme_item_day">Világos</string>
     <string name="settings_app_theme_item_night">Sötét</string>

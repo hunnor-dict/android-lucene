@@ -1,10 +1,8 @@
-package net.hunnor.dict.android.task;
+package net.hunnor.dict.android.activity.database;
 
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.util.Log;
-
-import net.hunnor.dict.android.DatabaseActivity;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
@@ -20,7 +18,7 @@ public class CheckTask extends AsyncTask<String, Void, Map<String, String>> {
 
     private WeakReference<Activity> activityWeakReference;
 
-    public CheckTask(Activity activity) {
+    CheckTask(Activity activity) {
         activityWeakReference = new WeakReference<>(activity);
     }
 
@@ -41,7 +39,7 @@ public class CheckTask extends AsyncTask<String, Void, Map<String, String>> {
             throw new IllegalArgumentException("The URL parameter must be a valid URL", e);
         }
 
-        Map<String, String> result = new HashMap<>();;
+        Map<String, String> result = new HashMap<>();
 
         try {
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -72,8 +70,6 @@ public class CheckTask extends AsyncTask<String, Void, Map<String, String>> {
         final Activity activity = activityWeakReference.get();
 
         if (!DatabaseActivity.class.equals(activity.getClass())) {
-            Log.w(TAG, "Task called by unexpected Activity "
-                    + activity.getClass().getCanonicalName());
             return;
         }
 

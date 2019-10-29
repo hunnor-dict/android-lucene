@@ -1,4 +1,4 @@
-package net.hunnor.dict.android;
+package net.hunnor.dict.android.activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,6 +11,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.preference.PreferenceManager;
 
+import net.hunnor.dict.android.R;
+import net.hunnor.dict.android.activity.about.AboutActivity;
+import net.hunnor.dict.android.activity.database.DatabaseActivity;
+import net.hunnor.dict.android.activity.main.MainActivity;
+import net.hunnor.dict.android.activity.settings.SettingsActivity;
 import net.hunnor.dict.android.constants.Preferences;
 
 public abstract class ActivityTemplate extends AppCompatActivity {

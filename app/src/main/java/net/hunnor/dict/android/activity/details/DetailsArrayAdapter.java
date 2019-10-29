@@ -1,4 +1,4 @@
-package net.hunnor.dict.android;
+package net.hunnor.dict.android.activity.details;
 
 import android.content.Context;
 import android.text.Html;
@@ -8,11 +8,12 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+
+import net.hunnor.dict.android.R;
 import net.hunnor.dict.lucene.model.Entry;
 
 import java.util.List;
-
-import androidx.annotation.NonNull;
 
 public class DetailsArrayAdapter extends ArrayAdapter<Entry> {
 
