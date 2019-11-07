@@ -197,7 +197,8 @@ public class MainActivity extends ActivityTemplate {
 
     public void deployFinished(Storage.Status status) {
 
-        if (alert != null) {
+        if (!MainActivity.this.isFinishing()
+                && alert != null && alert.isShowing()) {
             alert.dismiss();
         }
 
