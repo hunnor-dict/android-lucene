@@ -55,6 +55,15 @@ public class MainActivity extends ActivityTemplate {
 
     }
 
+    protected void onStop() {
+
+        super.onStop();
+        if (alert != null) {
+            alert.dismiss();
+        }
+
+    }
+
     private void setListeners() {
 
         EditText editText = findViewById(R.id.search_input);
