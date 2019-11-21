@@ -18,7 +18,10 @@
             android:hint="@string/search_hint"
             android:imeOptions="actionSearch"
             android:inputType="text"
-            tools:ignore="Autofill" />
+            tools:ignore="Autofill">
+
+            <requestFocus />
+        </EditText>
 
         <ListView
             android:id="@+id/search_results"
