@@ -16,7 +16,7 @@
         android:entries="@array/themeLabels"
         android:entryValues="@array/themeValues"
         android:key="theme"
-        android:summary="@string/settings_app_theme_summary"
-        android:title="@string/settings_app_theme_title" />
+        android:title="@string/settings_app_theme_title"
+        app:useSimpleSummaryProvider="true" />
 
 </androidx.preference.PreferenceScreen>
