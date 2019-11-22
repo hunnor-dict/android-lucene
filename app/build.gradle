@@ -8,6 +8,9 @@ android {
         applicationId 'net.hunnor.dict.android'
         minSdkVersion 19
         targetSdkVersion 29
+        vectorDrawables {
+            useSupportLibrary true
+        }
         versionCode 9
         versionName '3.2.1'
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
