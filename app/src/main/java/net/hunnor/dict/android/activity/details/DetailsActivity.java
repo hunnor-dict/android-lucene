@@ -14,6 +14,7 @@ import net.hunnor.dict.lucene.searcher.LuceneSearcher;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class DetailsActivity extends AppCompatActivity {
@@ -81,7 +82,12 @@ public class DetailsActivity extends AppCompatActivity {
 
             LuceneSearcher luceneSearcher = LuceneSearcher.getInstance();
 
-            List<Entry> entries = luceneSearcher.search(query, SEARCH_MAX_RESULTS);
+            List<Entry> entries = new ArrayList<>();
+            try {
+                entries = luceneSearcher.search(query, SEARCH_MAX_RESULTS);
+            } catch (IOException e) {
+                Log.e(TAG, e.getMessage(), e);
+            }
             DetailsArrayAdapter detailsArrayAdapter = new DetailsArrayAdapter(this, entries);
 
             ListView listView = findViewById(R.id.details_list);

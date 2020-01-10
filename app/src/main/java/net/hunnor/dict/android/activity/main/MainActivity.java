@@ -28,6 +28,7 @@ import net.hunnor.dict.lucene.searcher.LuceneSearcher;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends ActivityTemplate {
@@ -118,12 +119,17 @@ public class MainActivity extends ActivityTemplate {
         int max = sharedPreferences.getInt(
                 "searchMaxSuggestions", SEARCH_MAX_SUGGESTIONS);
 
-        List<String> suggestionList = luceneSearcher.suggestions(query, max);
+        List<String> suggestionList = new ArrayList<>();
         boolean suggestions = false;
 
-        if (suggestionList.isEmpty() && !query.isEmpty()) {
-            suggestionList = luceneSearcher.spellingSuggestions(query, max);
-            suggestions = true;
+        try {
+            suggestionList = luceneSearcher.suggestions(query, max);
+            if (suggestionList.isEmpty() && !query.isEmpty()) {
+                suggestionList = luceneSearcher.spellingSuggestions(query, max);
+                suggestions = true;
+            }
+        } catch (IOException e) {
+            Log.e(TAG, e.getMessage(), e);
         }
 
         MainArrayAdapter adapter = new MainArrayAdapter(this, suggestionList);
