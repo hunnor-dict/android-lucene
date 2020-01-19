@@ -23,7 +23,9 @@ import androidx.preference.PreferenceManager;
 import net.hunnor.dict.android.R;
 import net.hunnor.dict.android.activity.ActivityTemplate;
 import net.hunnor.dict.android.activity.details.DetailsActivity;
-import net.hunnor.dict.android.util.Storage;
+import net.hunnor.dict.android.service.StorageService;
+import net.hunnor.dict.android.task.ExtractTask;
+import net.hunnor.dict.android.task.ExtractTaskStatus;
 import net.hunnor.dict.lucene.searcher.LuceneSearcher;
 
 import java.io.File;
@@ -203,21 +205,22 @@ public class MainActivity extends ActivityTemplate {
             alert = builder.create();
             alert.show();
 
-            extractTask = new ExtractTask(this);
+            StorageService storageService = new StorageService();
+            extractTask = new ExtractTask(this, storageService);
             extractTask.execute();
 
         }
 
     }
 
-    public void deployFinished(Storage.Status status) {
+    public void deployFinished(ExtractTaskStatus status) {
 
         if (!MainActivity.this.isFinishing()
                 && alert != null && alert.isShowing()) {
             alert.dismiss();
         }
 
-        if (Storage.Status.OK.equals(status)) {
+        if (ExtractTaskStatus.OK.equals(status)) {
             openDictionary();
         } else {
             displayError(status);
@@ -225,7 +228,7 @@ public class MainActivity extends ActivityTemplate {
 
     }
 
-    protected void displayError(Storage.Status status) {
+    protected void displayError(ExtractTaskStatus status) {
 
         String message = "";
 
@@ -248,7 +251,7 @@ public class MainActivity extends ActivityTemplate {
             case E_DEPLOY_RENAME_SPELLING_DIR:
                 message = getString(R.string.database_status_e_deploy_rename_spelling_dir);
                 break;
-            case E_DEPLOY_ZIP_ENTRY_DIR_CREATE:
+            case E_DEPLOY_ZIP_EXTRACT:
                 message = getString(R.string.database_status_e_deploy_zip_entry_dir_create);
                 break;
             case E_EXCEPTION_IO:

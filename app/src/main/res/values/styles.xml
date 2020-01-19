@@ -12,6 +12,17 @@
         <item name="android:layout_margin">@dimen/database_block_margin</item>
     </style>
 
+    <style name="DatabaseProgressReport">
+        <item name="android:layout_margin">@dimen/database_block_margin</item>
+        <item name="android:textSize">@dimen/database_progress_font_size</item>
+        <item name="android:fontFamily">@font/ubuntu</item>
+    </style>
+
+    <style name="DatabaseStatusLine">
+        <item name="android:textSize">@dimen/database_status_font_size</item>
+        <item name="android:fontFamily">@font/ubuntu</item>
+    </style>
+
     <style name="DatabaseTable">
         <item name="android:layout_marginTop">@dimen/database_table_margin_top</item>
     </style>

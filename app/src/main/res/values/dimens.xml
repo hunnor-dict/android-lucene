@@ -2,6 +2,8 @@
 <resources>
 
     <dimen name="database_block_margin">16dp</dimen>
+    <dimen name="database_progress_font_size">14sp</dimen>
+    <dimen name="database_status_font_size">14sp</dimen>
     <dimen name="database_text_block_margin_left">8dp</dimen>
     <dimen name="database_text_title_font_size">20sp</dimen>
     <dimen name="database_table_margin_top">4dp</dimen>

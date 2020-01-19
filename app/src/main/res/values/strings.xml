@@ -35,8 +35,8 @@
     <string name="database_status_e_deploy_delete_spelling_dir">Hiba történt a korábbi telepítés törlésénél (helyesírás-ellenőrzés).</string>
     <string name="database_status_e_deploy_rename_index_dir">Hiba történt a mappák átnevezésénél.</string>
     <string name="database_status_e_deploy_rename_spelling_dir">Hiba történt a mappák átnevezésénél (helyesírás-ellenőrzés).</string>
-    <string name="database_status_e_deploy_zip_entry_dir_create">Hiba történt a kitömörítés során (mappa létrehhozása).</string>
-    <string name="database_status_e_exception_io">Hiba történt a kitömörítés során.</string>
+    <string name="database_status_e_deploy_zip_entry_dir_create">Hiba történt a kitömörítés során.</string>
+    <string name="database_status_e_exception_io">Hiba történt a fájlműveletek során.</string>
 
     <string name="search_hint">Keresés</string>
     <string name="search_alert_deploy">A szótár kitömörítése folyamatban…</string>
