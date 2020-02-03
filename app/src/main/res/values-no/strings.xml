@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:locale="no">
+
+    <string name="app_name">HunNor</string>
+
+    <string name="menu_main">Søk</string>
+    <string name="menu_database">Database</string>
+    <string name="menu_settings">Innstillinger</string>
+    <string name="menu_about">Om HunNor</string>
+
+    <string name="alert_ok">OK</string>
+
+    <string name="about_dictionary_title">HunNor nettordbok</string>
+    <string name="about_dictionary_body">https://dict.hunnor.net</string>
+    <string name="about_source_code_title">Kildekode</string>
+    <string name="about_source_code_body">https://github.com/hunnor-dict</string>
+    <string name="about_icon_title">Ikon</string>
+    <string name="about_icon_body">https://www.flaticon.com/authors/freepik</string>
+
+    <string name="database_cehck_begin">Ser etter oppdateringer</string>
+    <string name="database_check_offline">Ingen internettforbindelse</string>
+    <string name="database_check_error">Feil</string>
+    <string name="database_check_error_status">Feil (HTTP %1$s)</string>
+    <string name="database_local_title">Installert ordbok</string>
+    <string name="database_remote_title">Tilgjengelig oppdatering</string>
+    <string name="database_label_date">Dato:</string>
+    <string name="database_label_size">Størrelse:</string>
+    <string name="database_action_download">Nedlasting</string>
+    <string name="database_download_notification">Du kan følge nedlastingen i Nedlastinger. Applikasjonen installerer oppdateringen når nedlastingen er ferdig.</string>
+    <string name="database_download_running">Nedlasting er i gang, sjekk Nedlastinger.</string>
+    <string name="database_extract_completed">Ordboka er klar til bruk.</string>
+
+    <string name="database_status_e_deploy_delete_deploy_index_dir">Feil ved sletting av midlertidig mappe.</string>
+    <string name="database_status_e_deploy_delete_deploy_spelling_dir">Feil ved sletting av midlertidig mappe (stavekontroll).</string>
+    <string name="database_status_e_deploy_delete_index_dir">Feil ved sletting av forrige installasjon.</string>
+    <string name="database_status_e_deploy_delete_spelling_dir">Feil ved sletting av forrige installasjon (stavekontroll).</string>
+    <string name="database_status_e_deploy_rename_index_dir">Feil ved bytte av mappenavn.</string>
+    <string name="database_status_e_deploy_rename_spelling_dir">Feil ved bytte av mappenavn (stavekontroll).</string>
+    <string name="database_status_e_deploy_zip_entry_dir_create">Feil ved dekomprimering.</string>
+    <string name="database_status_e_exception_io">Feil ved filoperasjoner.</string>
+
+    <string name="search_hint">Søk</string>
+    <string name="search_alert_deploy">Pakker ut ordboka…</string>
+
+    <string name="settings_app_theme_item_day">Lyst</string>
+    <string name="settings_app_theme_item_night">Mørkt</string>
+    <string name="settings_app_theme_item_power">Batterisparing</string>
+    <string name="settings_app_theme_item_system">Systeminnstillinger</string>
+    <string name="settings_app_theme_title">Mørkt tema</string>
+    <string name="settings_max_suggestions">Resultatlistens størrelse</string>
+
+</resources>

@@ -2,6 +2,8 @@ package net.hunnor.dict.android.activity.about;
 
 import androidx.test.rule.ActivityTestRule;
 
+import net.hunnor.dict.android.R;
+
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -18,9 +20,12 @@ public class AboutActivityTest {
 
     @Test
     public void testAboutActivity() {
-        onView(withText("HunNor")).check(matches(isDisplayed()));
-        onView(withText("Forráskód")).check(matches(isDisplayed()));
-        onView(withText("Ikon")).check(matches(isDisplayed()));
+        onView(withText(activityRule.getActivity().getResources().getString(
+                R.string.about_dictionary_title))).check(matches(isDisplayed()));
+        onView(withText(activityRule.getActivity().getResources().getString(
+                R.string.about_source_code_title))).check(matches(isDisplayed()));
+        onView(withText(activityRule.getActivity().getResources().getString(
+                R.string.about_icon_title))).check(matches(isDisplayed()));
     }
 
 }

@@ -1,4 +1,4 @@
-package net.hunnor.dict.android.activity.settings;
+package net.hunnor.dict.android.activity.database;
 
 import androidx.test.rule.ActivityTestRule;
 
@@ -12,18 +12,18 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
-public class SettingsActivityTest {
+public class DatabaseActivityTest {
 
     @Rule
-    public ActivityTestRule<SettingsActivity> activityRule =
-            new ActivityTestRule<>(SettingsActivity.class);
+    public ActivityTestRule<DatabaseActivity> activityRule =
+            new ActivityTestRule<>(DatabaseActivity.class);
 
     @Test
-    public void testSettingsActivity() {
+    public void testDatabaseActivity() {
         onView(withText(activityRule.getActivity().getResources().getString(
-                R.string.settings_app_theme_title))).check(matches(isDisplayed()));
+                R.string.database_local_title))).check(matches(isDisplayed()));
         onView(withText(activityRule.getActivity().getResources().getString(
-                R.string.settings_max_suggestions))).check(matches(isDisplayed()));
+                R.string.database_remote_title))).check(matches(isDisplayed()));
     }
 
 }

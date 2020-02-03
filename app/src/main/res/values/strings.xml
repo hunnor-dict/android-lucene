@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:locale="hu">
+
     <string name="app_name">HunNor</string>
 
-    <string name="menu_main">Menü</string>
+    <string name="menu_main">Keresés</string>
     <string name="menu_database">Adatbázis</string>
     <string name="menu_settings">Beállítások</string>
     <string name="menu_about">Névjegy</string>
