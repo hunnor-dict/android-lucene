@@ -2,6 +2,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:locale="en">
 
     <string name="app_name">HunNor</string>
+    <string name="app_details_label">Search in HunNor</string>
 
     <string name="menu_main">Search</string>
     <string name="menu_database">Database</string>
@@ -39,6 +40,7 @@
     <string name="database_status_e_deploy_zip_entry_dir_create">Error while extracting the dictionary.</string>
     <string name="database_status_e_exception_io">File system error.</string>
 
+    <string name="search_empty">No results</string>
     <string name="search_hint">Search</string>
     <string name="search_alert_deploy">Extracting dictionary…</string>
 
@@ -46,7 +48,7 @@
     <string name="settings_app_theme_item_night">Dark</string>
     <string name="settings_app_theme_item_power">Power saver settings</string>
     <string name="settings_app_theme_item_system">System settings</string>
-    <string name="settings_app_theme_title">Dark themew</string>
+    <string name="settings_app_theme_title">Dark theme</string>
     <string name="settings_max_suggestions">Result list size</string>
 
 </resources>

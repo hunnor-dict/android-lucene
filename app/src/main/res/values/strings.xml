@@ -2,6 +2,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:locale="hu">
 
     <string name="app_name">HunNor</string>
+    <string name="app_details_label">HunNor Szótár</string>
 
     <string name="menu_main">Keresés</string>
     <string name="menu_database">Adatbázis</string>
@@ -39,6 +40,7 @@
     <string name="database_status_e_deploy_zip_entry_dir_create">Hiba történt a kitömörítés során.</string>
     <string name="database_status_e_exception_io">Hiba történt a fájlműveletek során.</string>
 
+    <string name="search_empty">Nincs találat</string>
     <string name="search_hint">Keresés</string>
     <string name="search_alert_deploy">A szótár kitömörítése folyamatban…</string>
 

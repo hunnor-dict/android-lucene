@@ -2,6 +2,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:locale="no">
 
     <string name="app_name">HunNor</string>
+    <string name="app_details_label">Søk i HunNor</string>
 
     <string name="menu_main">Søk</string>
     <string name="menu_database">Database</string>
@@ -39,6 +40,7 @@
     <string name="database_status_e_deploy_zip_entry_dir_create">Feil ved dekomprimering.</string>
     <string name="database_status_e_exception_io">Feil ved filoperasjoner.</string>
 
+    <string name="search_empty">Ingen treff</string>
     <string name="search_hint">Søk</string>
     <string name="search_alert_deploy">Pakker ut ordboka…</string>
 

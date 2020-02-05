@@ -51,6 +51,11 @@
         <item name="android:textSize">@dimen/search_input_font_size</item>
     </style>
 
+    <style name="SearchMessage">
+        <item name="android:padding">@dimen/search_message_padding</item>
+        <item name="android:textSize">@dimen/search_message_font_size</item>
+    </style>
+
     <style name="SearchResult">
         <item name="android:padding">@dimen/search_result_padding</item>
         <item name="android:textSize">@dimen/search_result_font_size</item>

@@ -1,6 +1,7 @@
 package net.hunnor.dict.android.activity.details;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -50,8 +51,18 @@ public class DetailsActivity extends AppCompatActivity {
     }
 
     private String getQuery() {
+
         Intent intent = getIntent();
-        return intent.getStringExtra("query");
+
+        if (Intent.ACTION_SEND.equals(intent.getAction())) {
+            return intent.getStringExtra(Intent.EXTRA_TEXT);
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+                && Intent.ACTION_PROCESS_TEXT.equals(intent.getAction())) {
+            return intent.getStringExtra(Intent.EXTRA_PROCESS_TEXT);
+        } else {
+            return intent.getStringExtra("query");
+        }
+
     }
 
     private boolean isDictionaryOpen() {
@@ -91,6 +102,7 @@ public class DetailsActivity extends AppCompatActivity {
             DetailsArrayAdapter detailsArrayAdapter = new DetailsArrayAdapter(this, entries);
 
             ListView listView = findViewById(R.id.details_list);
+            listView.setEmptyView(findViewById(R.id.search_empty));
             listView.setAdapter(detailsArrayAdapter);
 
         }
