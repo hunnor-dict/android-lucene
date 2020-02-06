@@ -21,7 +21,7 @@ public class DateFormatter {
 
     public static String reformatDate(String original) throws DateFormatterException {
         SimpleDateFormat httpHeaderFormat =
-                new SimpleDateFormat("EEE, dd MMM yyyy H:m:s zzz", Locale.getDefault());
+                new SimpleDateFormat("EEE, dd MMM yyyy H:m:s zzz", Locale.ENGLISH);
         String result = null;
         try {
             Date date = httpHeaderFormat.parse(original);
