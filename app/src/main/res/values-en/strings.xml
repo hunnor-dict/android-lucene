@@ -37,6 +37,7 @@
     <string name="database_status_e_deploy_delete_spelling_dir">Error deleting previous installation (spell checking).</string>
     <string name="database_status_e_deploy_rename_index_dir">Error renaming directories.</string>
     <string name="database_status_e_deploy_rename_spelling_dir">Error renaming directories (spell checking).</string>
+    <string name="database_status_e_deploy_reopen_index">Error reopening the database.</string>
     <string name="database_status_e_deploy_zip_entry_dir_create">Error while extracting the dictionary.</string>
     <string name="database_status_e_exception_io">File system error.</string>
 

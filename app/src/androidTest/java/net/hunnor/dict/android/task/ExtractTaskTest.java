@@ -59,7 +59,7 @@ public class ExtractTaskTest {
         doAnswer(answer -> {
             fail();
             return null;
-        }).when(mainActivity).deployFinished(any());
+        }).when(mainActivity).extractTaskCallback(any());
 
         ExtractTask task = new ExtractTask(databaseActivity, storageService);
         task.execute(uri);
@@ -80,7 +80,7 @@ public class ExtractTaskTest {
         doAnswer(answer -> {
             fail();
             return null;
-        }).when(mainActivity).deployFinished(any());
+        }).when(mainActivity).extractTaskCallback(any());
 
         ExtractTask task = new ExtractTask(databaseActivity, storageService);
         Uri uri = Uri.parse("mailto:user@localhost");
@@ -105,7 +105,7 @@ public class ExtractTaskTest {
             ExtractTaskStatus status = answer.getArgument(0);
             assertEquals(ExtractTaskStatus.OK, status);
             return null;
-        }).when(mainActivity).deployFinished(any());
+        }).when(mainActivity).extractTaskCallback(any());
 
         ExtractTask task = new ExtractTask(mainActivity, storageService);
         task.execute();

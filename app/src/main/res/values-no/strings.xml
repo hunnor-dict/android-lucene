@@ -37,6 +37,7 @@
     <string name="database_status_e_deploy_delete_spelling_dir">Feil ved sletting av forrige installasjon (stavekontroll).</string>
     <string name="database_status_e_deploy_rename_index_dir">Feil ved bytte av mappenavn.</string>
     <string name="database_status_e_deploy_rename_spelling_dir">Feil ved bytte av mappenavn (stavekontroll).</string>
+    <string name="database_status_e_deploy_reopen_index">Feil ved åpning av ny database.</string>
     <string name="database_status_e_deploy_zip_entry_dir_create">Feil ved dekomprimering.</string>
     <string name="database_status_e_exception_io">Feil ved filoperasjoner.</string>
 

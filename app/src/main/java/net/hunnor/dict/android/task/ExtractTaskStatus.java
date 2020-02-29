@@ -18,6 +18,8 @@ public enum ExtractTaskStatus {
 
     E_DEPLOY_RENAME_SPELLING_DIR,
 
+    E_DEPLOY_REOPEN_INDEX,
+
     E_DEPLOY_ZIP_EXTRACT,
 
     E_EXCEPTION_IO,

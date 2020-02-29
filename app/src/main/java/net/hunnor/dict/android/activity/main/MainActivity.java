@@ -213,7 +213,7 @@ public class MainActivity extends ActivityTemplate {
 
     }
 
-    public void deployFinished(ExtractTaskStatus status) {
+    public void extractTaskCallback(ExtractTaskStatus status) {
 
         if (!MainActivity.this.isFinishing()
                 && alert != null && alert.isShowing()) {

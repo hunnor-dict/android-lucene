@@ -34,8 +34,10 @@ import net.hunnor.dict.android.task.ExtractTask;
 import net.hunnor.dict.android.task.ExtractTaskStatus;
 import net.hunnor.dict.android.util.DateFormatter;
 import net.hunnor.dict.android.util.DateFormatterException;
+import net.hunnor.dict.lucene.searcher.LuceneSearcher;
 
 import java.io.File;
+import java.io.IOException;
 
 public class DatabaseActivity extends ActivityTemplate {
 
@@ -133,6 +135,28 @@ public class DatabaseActivity extends ActivityTemplate {
     }
 
     public void extractTaskCallback(ExtractTaskStatus status) {
+
+        if (ExtractTaskStatus.OK.equals(status)) {
+
+            try {
+
+                LuceneSearcher luceneSearcher = LuceneSearcher.getInstance();
+
+                luceneSearcher.closeSpellChecker();
+                luceneSearcher.close();
+
+                File externalFilesDir = getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS);
+                File indexDirectory = new File(externalFilesDir, StorageService.DICTIONARY_INDEX_DIRECTORY);
+                File spellingIndexDirectory = new File(externalFilesDir, StorageService.DICTIONARY_SPELLING_DIRECTORY);
+
+                luceneSearcher.open(indexDirectory);
+                luceneSearcher.openSpellChecker(spellingIndexDirectory);
+
+            } catch (IOException e) {
+                status = ExtractTaskStatus.E_DEPLOY_REOPEN_INDEX;
+            }
+
+        }
 
         if (ExtractTaskStatus.OK.equals(status)) {
             startCheckLocalFiles();

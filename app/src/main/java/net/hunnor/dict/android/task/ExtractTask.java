@@ -74,7 +74,7 @@ public class ExtractTask extends AsyncTask<Uri, Void, ExtractTaskStatus> {
 
         if (MainActivity.class.isAssignableFrom(activity.getClass())) {
             MainActivity mainActivity = (MainActivity) activity;
-            mainActivity.deployFinished(status);
+            mainActivity.extractTaskCallback(status);
         } else if (DatabaseActivity.class.isAssignableFrom(activity.getClass())) {
             DatabaseActivity databaseActivity = (DatabaseActivity) activity;
             databaseActivity.extractTaskCallback(status);
