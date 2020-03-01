@@ -1,15 +1,20 @@
 package net.hunnor.dict.android.activity.details;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 import android.widget.ListView;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import net.hunnor.dict.android.R;
+import net.hunnor.dict.android.service.StorageService;
+import net.hunnor.dict.android.task.ExtractTask;
+import net.hunnor.dict.android.task.ExtractTaskStatus;
 import net.hunnor.dict.lucene.model.Entry;
 import net.hunnor.dict.lucene.searcher.LuceneSearcher;
 
@@ -25,6 +30,10 @@ public class DetailsActivity extends AppCompatActivity {
     private static final String DICTIONARY_INDEX_DIRECTORY = "hunnor-lucene-index";
 
     private static final int SEARCH_MAX_RESULTS = 25;
+
+    private static ExtractTask extractTask;
+
+    private AlertDialog alert;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +51,10 @@ public class DetailsActivity extends AppCompatActivity {
 
         if (!isDictionaryOpen()) {
             openDictionary();
+        }
+
+        if (!isDictionaryOpen()) {
+            startDictionaryDeploy();
         }
 
         if (isDictionaryOpen()) {
@@ -83,6 +96,39 @@ public class DetailsActivity extends AppCompatActivity {
                     Log.e(TAG, e.getMessage(), e);
                 }
             }
+        }
+
+    }
+
+    private void startDictionaryDeploy() {
+
+        if (extractTask == null || !AsyncTask.Status.RUNNING.equals(extractTask.getStatus())) {
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage(R.string.search_alert_deploy).setCancelable(false);
+
+            alert = builder.create();
+            alert.show();
+
+            StorageService storageService = new StorageService();
+            extractTask = new ExtractTask(this, storageService);
+            extractTask.execute();
+
+        }
+
+    }
+
+    public void extractTaskCallback(ExtractTaskStatus status) {
+
+        if (!DetailsActivity.this.isFinishing()
+                && alert != null && alert.isShowing()) {
+            alert.dismiss();
+        }
+
+        if (ExtractTaskStatus.OK.equals(status)) {
+            openDictionary();
+            String query = getQuery();
+            doSearch(query);
         }
 
     }

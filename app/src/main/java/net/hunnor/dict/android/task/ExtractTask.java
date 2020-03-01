@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.os.Environment;
 
 import net.hunnor.dict.android.activity.database.DatabaseActivity;
+import net.hunnor.dict.android.activity.details.DetailsActivity;
 import net.hunnor.dict.android.activity.main.MainActivity;
 import net.hunnor.dict.android.service.StorageService;
 
@@ -75,6 +76,9 @@ public class ExtractTask extends AsyncTask<Uri, Void, ExtractTaskStatus> {
         if (MainActivity.class.isAssignableFrom(activity.getClass())) {
             MainActivity mainActivity = (MainActivity) activity;
             mainActivity.extractTaskCallback(status);
+        } else if (DetailsActivity.class.isAssignableFrom(activity.getClass())) {
+            DetailsActivity detailsActivity = (DetailsActivity) activity;
+            detailsActivity.extractTaskCallback(status);
         } else if (DatabaseActivity.class.isAssignableFrom(activity.getClass())) {
             DatabaseActivity databaseActivity = (DatabaseActivity) activity;
             databaseActivity.extractTaskCallback(status);
