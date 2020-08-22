@@ -19,8 +19,6 @@ The application uses the search module from [`export-lucene`](https://github.com
 
 The dictionary is stored as Lucene index and spell checking index directories. Lucene version 3.6.2 is used because of compatibility issues with Android.
 
-# Screenshots
+![Screenshot of main search](docs/fp3-activity-main.png "Screenshot of main search")
 
-![Screenshot of main search](docs/activity-main.png "Screenshot of main search")
-
-![Screenshot of content view](docs/activity-details.png "Screenshot of content view")
+![Screenshot of content view](docs/fp3-activity-details.png "Screenshot of content view")
