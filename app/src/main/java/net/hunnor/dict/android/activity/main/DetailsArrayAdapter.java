@@ -1,4 +1,4 @@
-package net.hunnor.dict.android.activity.details;
+package net.hunnor.dict.android.activity.main;
 
 import android.content.Context;
 import android.text.Html;

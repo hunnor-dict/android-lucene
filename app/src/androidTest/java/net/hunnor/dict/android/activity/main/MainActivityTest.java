@@ -10,7 +10,6 @@ import org.junit.Test;
 
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.Espresso.pressBack;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
@@ -38,18 +37,13 @@ public class MainActivityTest {
         onData(is("eplekake"))
                 .perform(click());
 
-        onView(withId(R.id.details_list))
+        onView(withId(R.id.search_results))
                 .check(matches(isDisplayed()))
                 .check(matches(hasChildCount(1)));
 
         onData(is(instanceOf(Entry.class)))
                 .check(matches(isDisplayed()))
                 .check(matches(withText(containsString("almáspite"))));
-
-        pressBack();
-
-        onData(is("eplekake"))
-                .check(matches(isDisplayed()));
 
     }
 

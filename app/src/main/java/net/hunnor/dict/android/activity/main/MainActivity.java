@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.Editable;
@@ -22,10 +23,10 @@ import androidx.preference.PreferenceManager;
 
 import net.hunnor.dict.android.R;
 import net.hunnor.dict.android.activity.ActivityTemplate;
-import net.hunnor.dict.android.activity.details.DetailsActivity;
 import net.hunnor.dict.android.service.StorageService;
 import net.hunnor.dict.android.task.ExtractTask;
 import net.hunnor.dict.android.task.ExtractTaskStatus;
+import net.hunnor.dict.lucene.model.Entry;
 import net.hunnor.dict.lucene.searcher.LuceneSearcher;
 
 import java.io.File;
@@ -41,6 +42,8 @@ public class MainActivity extends ActivityTemplate {
 
     private static final String DICTIONARY_SPELLING_DIRECTORY = "hunnor-lucene-spelling";
 
+    private static final int SEARCH_MAX_RESULTS = 25;
+
     private static final int SEARCH_MAX_SUGGESTIONS = 50;
 
     private static ExtractTask extractTask;
@@ -54,7 +57,9 @@ public class MainActivity extends ActivityTemplate {
         setContentView(R.layout.activity_main);
 
         setListeners();
+
         checkDictionary();
+        checkQuery();
 
     }
 
@@ -90,7 +95,7 @@ public class MainActivity extends ActivityTemplate {
 
         editText.setOnEditorActionListener((TextView textView, int actionId, KeyEvent keyEvent) -> {
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                showDetails(textView.getText().toString());
+                showResults(textView.getText().toString());
             }
             return true;
         });
@@ -99,7 +104,7 @@ public class MainActivity extends ActivityTemplate {
 
         listView.setOnItemClickListener((AdapterView<?> parent, View view, int position, long id) -> {
             TextView textView = (TextView) view;
-            showDetails(textView.getText().toString());
+            showResults(textView.getText().toString());
         });
 
     }
@@ -138,14 +143,53 @@ public class MainActivity extends ActivityTemplate {
         adapter.setSuggestions(suggestions);
 
         ListView listView = findViewById(R.id.search_results);
+        listView.setEmptyView(findViewById(R.id.search_empty));
         listView.setAdapter(adapter);
 
     }
 
-    private void showDetails(String query) {
-        Intent intent = new Intent(DetailsActivity.class.getCanonicalName());
-        intent.putExtra("query", query);
-        startActivity(intent);
+    private void showResults(String query) {
+
+        if (query == null) {
+            return;
+        }
+
+        EditText editText = findViewById(R.id.search_input);
+        editText.setText("");
+
+        LuceneSearcher luceneSearcher = LuceneSearcher.getInstance();
+
+        List<Entry> entries = new ArrayList<>();
+        try {
+            entries = luceneSearcher.search(query, SEARCH_MAX_RESULTS);
+        } catch (IOException e) {
+            Log.e(TAG, e.getMessage(), e);
+        }
+        DetailsArrayAdapter detailsArrayAdapter = new DetailsArrayAdapter(this, entries);
+
+        ListView listView = findViewById(R.id.search_results);
+        listView.setEmptyView(findViewById(R.id.search_empty));
+        listView.setAdapter(detailsArrayAdapter);
+
+    }
+
+    private void checkQuery() {
+
+        String query = null;
+
+        Intent intent = getIntent();
+
+        if (Intent.ACTION_SEND.equals(intent.getAction())) {
+            query = intent.getStringExtra(Intent.EXTRA_TEXT);
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+                && Intent.ACTION_PROCESS_TEXT.equals(intent.getAction())) {
+            query = intent.getStringExtra(Intent.EXTRA_PROCESS_TEXT);
+        }
+
+        if (isDictionaryOpen()) {
+            showResults(query);
+        }
+
     }
 
     private void checkDictionary() {
@@ -158,6 +202,11 @@ public class MainActivity extends ActivityTemplate {
             startDictionaryDeploy();
         }
 
+    }
+
+    private boolean isDictionaryOpen() {
+        LuceneSearcher luceneSearcher = LuceneSearcher.getInstance();
+        return luceneSearcher.isOpen() && luceneSearcher.isSpellCheckerOpen();
     }
 
     private boolean isDictionaryNotOpen() {
@@ -222,6 +271,7 @@ public class MainActivity extends ActivityTemplate {
 
         if (ExtractTaskStatus.OK.equals(status)) {
             openDictionary();
+            checkQuery();
         } else {
             displayError(status);
         }

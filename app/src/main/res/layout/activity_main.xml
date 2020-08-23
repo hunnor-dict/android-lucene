@@ -28,6 +28,15 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
+        <TextView
+            android:id="@+id/search_empty"
+            style="@style/SearchMessage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/search_empty"
+            android:textAlignment="center"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
