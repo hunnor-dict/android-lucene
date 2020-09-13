@@ -48,11 +48,13 @@
 
     <style name="SearchEntry">
         <item name="android:padding">@dimen/search_entry_padding</item>
+        <item name="android:textColor">?android:textColorPrimary</item>
         <item name="android:textSize">@dimen/search_entry_font_size</item>
     </style>
 
     <style name="SearchInput">
         <item name="android:padding">@dimen/search_input_padding</item>
+        <item name="android:textColor">?android:textColorSecondary</item>
         <item name="android:textSize">@dimen/search_input_font_size</item>
     </style>
 
@@ -63,6 +65,7 @@
 
     <style name="SearchWord">
         <item name="android:padding">@dimen/search_word_padding</item>
+        <item name="android:textColor">?android:textColorPrimary</item>
         <item name="android:textSize">@dimen/search_word_font_size</item>
     </style>
 

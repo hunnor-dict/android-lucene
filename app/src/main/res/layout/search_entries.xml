@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clickable="false"
-    android:focusable="true"
-    android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium">
+    android:focusable="true">
 
 </TextView>

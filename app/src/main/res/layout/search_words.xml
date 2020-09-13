@@ -3,7 +3,6 @@
     android:id="@+id/search_word"
     style="@style/SearchWord"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium">
+    android:layout_height="match_parent">
 
 </TextView>
