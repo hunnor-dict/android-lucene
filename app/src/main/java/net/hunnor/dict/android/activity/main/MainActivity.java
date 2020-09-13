@@ -42,9 +42,9 @@ public class MainActivity extends ActivityTemplate {
 
     private static final String DICTIONARY_SPELLING_DIRECTORY = "hunnor-lucene-spelling";
 
-    private static final int SEARCH_MAX_RESULTS = 25;
+    private static final int SEARCH_MAX_ENTRIES = 25;
 
-    private static final int SEARCH_MAX_SUGGESTIONS = 50;
+    private static final int SEARCH_MAX_WORDS = 50;
 
     private static ExtractTask extractTask;
 
@@ -85,7 +85,7 @@ public class MainActivity extends ActivityTemplate {
             @Override
             public void onTextChanged(
                     CharSequence charSequence, int start, int before, int count) {
-                showSuggestions(charSequence.toString());
+                showWords(charSequence.toString());
             }
 
             @Override
@@ -95,21 +95,21 @@ public class MainActivity extends ActivityTemplate {
 
         editText.setOnEditorActionListener((TextView textView, int actionId, KeyEvent keyEvent) -> {
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                showResults(textView.getText().toString());
+                showEntries(textView.getText().toString());
             }
             return true;
         });
 
-        ListView listView = findViewById(R.id.search_results);
+        ListView listView = findViewById(R.id.search_list);
 
         listView.setOnItemClickListener((AdapterView<?> parent, View view, int position, long id) -> {
             TextView textView = (TextView) view;
-            showResults(textView.getText().toString());
+            showEntries(textView.getText().toString());
         });
 
     }
 
-    private void showSuggestions(String query) {
+    private void showWords(String query) {
 
         if (query == null) {
             return;
@@ -124,31 +124,31 @@ public class MainActivity extends ActivityTemplate {
         SharedPreferences sharedPreferences =
                 PreferenceManager.getDefaultSharedPreferences(this);
         int max = sharedPreferences.getInt(
-                "searchMaxSuggestions", SEARCH_MAX_SUGGESTIONS);
+                "searchMaxWords", SEARCH_MAX_WORDS);
 
-        List<String> suggestionList = new ArrayList<>();
+        List<String> wordList = new ArrayList<>();
         boolean suggestions = false;
 
         try {
-            suggestionList = luceneSearcher.suggestions(query, max);
-            if (suggestionList.isEmpty() && !query.isEmpty()) {
-                suggestionList = luceneSearcher.spellingSuggestions(query, max);
+            wordList = luceneSearcher.suggestions(query, max);
+            if (wordList.isEmpty() && !query.isEmpty()) {
+                wordList = luceneSearcher.spellingSuggestions(query, max);
                 suggestions = true;
             }
         } catch (IOException e) {
             Log.e(TAG, e.getMessage(), e);
         }
 
-        MainArrayAdapter adapter = new MainArrayAdapter(this, suggestionList);
+        WordArrayAdapter adapter = new WordArrayAdapter(this, wordList);
         adapter.setSuggestions(suggestions);
 
-        ListView listView = findViewById(R.id.search_results);
+        ListView listView = findViewById(R.id.search_list);
         listView.setEmptyView(findViewById(R.id.search_empty));
         listView.setAdapter(adapter);
 
     }
 
-    private void showResults(String query) {
+    private void showEntries(String query) {
 
         if (query == null) {
             return;
@@ -161,15 +161,15 @@ public class MainActivity extends ActivityTemplate {
 
         List<Entry> entries = new ArrayList<>();
         try {
-            entries = luceneSearcher.search(query, SEARCH_MAX_RESULTS);
+            entries = luceneSearcher.search(query, SEARCH_MAX_ENTRIES);
         } catch (IOException e) {
             Log.e(TAG, e.getMessage(), e);
         }
-        DetailsArrayAdapter detailsArrayAdapter = new DetailsArrayAdapter(this, entries);
+        EntryArrayAdapter entryArrayAdapter = new EntryArrayAdapter(this, entries);
 
-        ListView listView = findViewById(R.id.search_results);
+        ListView listView = findViewById(R.id.search_list);
         listView.setEmptyView(findViewById(R.id.search_empty));
-        listView.setAdapter(detailsArrayAdapter);
+        listView.setAdapter(entryArrayAdapter);
 
     }
 
@@ -187,7 +187,7 @@ public class MainActivity extends ActivityTemplate {
         }
 
         if (isDictionaryOpen()) {
-            showResults(query);
+            showEntries(query);
         }
 
     }

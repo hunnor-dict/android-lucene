@@ -37,7 +37,7 @@ public class MainActivityTest {
         onData(is("eplekake"))
                 .perform(click());
 
-        onView(withId(R.id.search_results))
+        onView(withId(R.id.search_list))
                 .check(matches(isDisplayed()))
                 .check(matches(hasChildCount(1)));
 

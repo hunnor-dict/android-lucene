@@ -14,12 +14,12 @@ import net.hunnor.dict.android.R;
 
 import java.util.List;
 
-public class MainArrayAdapter extends ArrayAdapter<String> {
+public class WordArrayAdapter extends ArrayAdapter<String> {
 
     private boolean suggestions;
 
-    MainArrayAdapter(Context context, List<String> entryList) {
-        super(context, 0, entryList);
+    WordArrayAdapter(Context context, List<String> wordList) {
+        super(context, 0, wordList);
     }
 
     @Override
@@ -28,15 +28,15 @@ public class MainArrayAdapter extends ArrayAdapter<String> {
 
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext())
-                    .inflate(R.layout.search_result, parent, false);
+                    .inflate(R.layout.search_words, parent, false);
         }
 
-        String str = getItem(position);
-        TextView textView = convertView.findViewById(R.id.search_result);
+        String word = getItem(position);
+        TextView textView = convertView.findViewById(R.id.search_word);
         if (suggestions) {
             textView.setTypeface(null, Typeface.ITALIC);
         }
-        textView.setText(str);
+        textView.setText(word);
 
         return convertView;
 

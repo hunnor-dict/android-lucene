@@ -50,6 +50,6 @@
     <string name="settings_app_theme_item_power">Power saver settings</string>
     <string name="settings_app_theme_item_system">System settings</string>
     <string name="settings_app_theme_title">Dark theme</string>
-    <string name="settings_max_suggestions">Result list size</string>
+    <string name="settings_max_words">Result list size</string>
 
 </resources>

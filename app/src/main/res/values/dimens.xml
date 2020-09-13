@@ -10,13 +10,13 @@
     <dimen name="database_table_cell_font_size">18sp</dimen>
     <dimen name="database_table_cell_padding">4dp</dimen>
 
+    <dimen name="search_entry_font_size">20sp</dimen>
+    <dimen name="search_entry_padding">8dp</dimen>
     <dimen name="search_input_font_size">24sp</dimen>
     <dimen name="search_input_padding">8dp</dimen>
     <dimen name="search_message_font_size">20sp</dimen>
     <dimen name="search_message_padding">8dp</dimen>
-    <dimen name="search_result_font_size">20sp</dimen>
-    <dimen name="search_result_padding">8dp</dimen>
-    <dimen name="search_suggestion_font_size">24sp</dimen>
-    <dimen name="search_suggestion_padding">8dp</dimen>
+    <dimen name="search_word_font_size">24sp</dimen>
+    <dimen name="search_word_padding">8dp</dimen>
 
 </resources>

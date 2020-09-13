@@ -24,7 +24,7 @@
         </EditText>
 
         <ListView
-            android:id="@+id/search_results"
+            android:id="@+id/search_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 

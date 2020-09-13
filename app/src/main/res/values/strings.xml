@@ -50,6 +50,6 @@
     <string name="settings_app_theme_item_power">Akkumulátorkímélő</string>
     <string name="settings_app_theme_item_system">Rendszerbeállítások</string>
     <string name="settings_app_theme_title">Sötét mód</string>
-    <string name="settings_max_suggestions">Találati lista mérete</string>
+    <string name="settings_max_words">Találati lista mérete</string>
 
 </resources>

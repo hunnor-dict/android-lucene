@@ -23,7 +23,7 @@ public class SettingsActivityTest {
         onView(withText(activityRule.getActivity().getResources().getString(
                 R.string.settings_app_theme_title))).check(matches(isDisplayed()));
         onView(withText(activityRule.getActivity().getResources().getString(
-                R.string.settings_max_suggestions))).check(matches(isDisplayed()));
+                R.string.settings_max_words))).check(matches(isDisplayed()));
     }
 
 }
