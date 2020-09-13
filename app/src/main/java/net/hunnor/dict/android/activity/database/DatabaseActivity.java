@@ -165,6 +165,10 @@ public class DatabaseActivity extends ActivityTemplate {
         getViewModel().setProgressReport(null);
         getViewModel().setActiveDownloadId(0L);
 
+        if (DatabaseActivity.this.isFinishing()) {
+            return;
+        }
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         switch (status) {
