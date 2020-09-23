@@ -136,7 +136,8 @@ public class DatabaseActivity extends ActivityTemplate {
 
     public void extractTaskCallback(ExtractTaskStatus status) {
 
-        if (ExtractTaskStatus.OK.equals(status)) {
+        if (ExtractTaskStatus.OK.equals(status)
+                || ExtractTaskStatus.E_DOWNLOAD_DELETE.equals(status)) {
 
             try {
 
@@ -158,7 +159,8 @@ public class DatabaseActivity extends ActivityTemplate {
 
         }
 
-        if (ExtractTaskStatus.OK.equals(status)) {
+        if (ExtractTaskStatus.OK.equals(status)
+                || ExtractTaskStatus.E_DOWNLOAD_DELETE.equals(status)) {
             startCheckLocalFiles();
         }
 
@@ -196,6 +198,7 @@ public class DatabaseActivity extends ActivityTemplate {
             case E_EXCEPTION_IO:
                 builder.setMessage(R.string.database_status_e_exception_io);
                 break;
+            case E_DOWNLOAD_DELETE:
             case OK:
                 builder.setMessage(R.string.database_extract_completed);
                 break;

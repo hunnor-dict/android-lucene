@@ -22,6 +22,8 @@ public enum ExtractTaskStatus {
 
     E_DEPLOY_ZIP_EXTRACT,
 
+    E_DOWNLOAD_DELETE,
+
     E_EXCEPTION_IO,
 
     OK

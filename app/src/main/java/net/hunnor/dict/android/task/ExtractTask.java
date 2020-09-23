@@ -59,6 +59,11 @@ public class ExtractTask extends AsyncTask<Uri, Void, ExtractTaskStatus> {
                     File baseDirectory = activity.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS);
                     status = deployFile(file, baseDirectory);
                 }
+                if (ExtractTaskStatus.OK.equals(status)) {
+                    if (!file.delete()) {
+                        status = ExtractTaskStatus.E_DOWNLOAD_DELETE;
+                    }
+                }
             }
 
         }
