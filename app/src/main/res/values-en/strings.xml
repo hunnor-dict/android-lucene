@@ -27,9 +27,10 @@
     <string name="database_label_date">Date:</string>
     <string name="database_label_size">Size:</string>
     <string name="database_action_download">Download</string>
-    <string name="database_download_notification">Download started. Check the progress in the Download Manager. The application will install the new dictionary when download is complete.</string>
-    <string name="database_download_running">Download in progress. Check the Download Manager.</string>
-    <string name="database_extract_completed">Dictionary installed successfully.</string>
+    <string name="database_update_download_start">Download started</string>
+    <string name="database_update_extract_start">Extracting</string>
+    <string name="database_update_error">Dictionary update failed.</string>
+    <string name="database_update_finished">Dictionary updated successfully.</string>
 
     <string name="database_status_e_deploy_delete_deploy_index_dir">Error deleting temporary directory.</string>
     <string name="database_status_e_deploy_delete_deploy_spelling_dir">Error deleting temporary directory (spell checking).</string>

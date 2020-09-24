@@ -5,7 +5,6 @@ import android.app.DownloadManager.Query;
 import android.app.DownloadManager.Request;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
@@ -19,7 +18,7 @@ import android.text.format.Formatter;
 import android.util.Log;
 import android.view.View;
 
-import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.AppCompatImageView;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -117,6 +116,7 @@ public class DatabaseActivity extends ActivityTemplate {
                 String uriString = cursor.getString(cursor.getColumnIndex(
                         DownloadManager.COLUMN_LOCAL_URI));
                 Uri uri = Uri.parse(uriString);
+                getViewModel().setProgressReport(getString(R.string.database_update_extract_start));
                 startExtractTask(uri);
             }
         }
@@ -165,51 +165,59 @@ public class DatabaseActivity extends ActivityTemplate {
         }
 
         getViewModel().setProgressReport(null);
+        getViewModel().setProgressReportText(null);
         getViewModel().setActiveDownloadId(0L);
 
         if (DatabaseActivity.this.isFinishing()) {
             return;
         }
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        String message = "";
 
         switch (status) {
             case E_DEPLOY_DELETE_DEPLOY_INDEX_DIR:
-                builder.setMessage(R.string.database_status_e_deploy_delete_deploy_index_dir);
+                message = getString(R.string.database_status_e_deploy_delete_deploy_index_dir);
                 break;
             case E_DEPLOY_DELETE_DEPLOY_SPELLING_DIR:
-                builder.setMessage(R.string.database_status_e_deploy_delete_deploy_spelling_dir);
+                message = getString(R.string.database_status_e_deploy_delete_deploy_spelling_dir);
                 break;
             case E_DEPLOY_DELETE_INDEX_DIR:
-                builder.setMessage(R.string.database_status_e_deploy_delete_index_dir);
+                message = getString(R.string.database_status_e_deploy_delete_index_dir);
                 break;
             case E_DEPLOY_DELETE_SPELLING_DIR:
-                builder.setMessage(R.string.database_status_e_deploy_delete_spelling_dir);
+                message = getString(R.string.database_status_e_deploy_delete_spelling_dir);
                 break;
             case E_DEPLOY_RENAME_INDEX_DIR:
-                builder.setMessage(R.string.database_status_e_deploy_rename_index_dir);
+                message = getString(R.string.database_status_e_deploy_rename_index_dir);
                 break;
             case E_DEPLOY_RENAME_SPELLING_DIR:
-                builder.setMessage(R.string.database_status_e_deploy_rename_spelling_dir);
+                message = getString(R.string.database_status_e_deploy_rename_spelling_dir);
                 break;
             case E_DEPLOY_ZIP_EXTRACT:
-                builder.setMessage(R.string.database_status_e_deploy_zip_entry_dir_create);
+                message = getString(R.string.database_status_e_deploy_zip_entry_dir_create);
                 break;
             case E_EXCEPTION_IO:
-                builder.setMessage(R.string.database_status_e_exception_io);
+                message = getString(R.string.database_status_e_exception_io);
                 break;
             case E_DOWNLOAD_DELETE:
             case OK:
-                builder.setMessage(R.string.database_extract_completed);
+                message = getString(R.string.database_update_finished);
                 break;
             default:
                 break;
         }
 
-        builder.setCancelable(false).setPositiveButton(
-                R.string.alert_ok, (DialogInterface dialog, int id) -> dialog.dismiss());
-        AlertDialog alert = builder.create();
-        alert.show();
+        AppCompatImageView icon = findViewById(R.id.database_block_progress_icon);
+        if (ExtractTaskStatus.OK.equals(status)
+                || ExtractTaskStatus.E_DOWNLOAD_DELETE.equals(status)) {
+            icon.setImageResource(R.drawable.ic_baseline_check_gray_24dp);
+            getViewModel().setProgressReport(message);
+            getViewModel().setProgressReportText(null);
+        } else {
+            icon.setImageResource(R.drawable.ic_baseline_close_gray_24dp);
+            getViewModel().setProgressReport(getString(R.string.database_update_error));
+            getViewModel().setProgressReportText(message);
+        }
 
     }
 
@@ -308,7 +316,6 @@ public class DatabaseActivity extends ActivityTemplate {
             query.setFilterById(activeDownloadId);
             Cursor cursor = downloadManager.query(query);
             if (cursor.moveToFirst()) {
-                model.setProgressReport(getString(R.string.database_download_running));
                 return;
             }
         }
@@ -322,7 +329,9 @@ public class DatabaseActivity extends ActivityTemplate {
         long queueId = downloadManager.enqueue(request);
         model.setActiveDownloadId(queueId);
 
-        model.setProgressReport(getString(R.string.database_download_notification));
+        AppCompatImageView icon = findViewById(R.id.database_block_progress_icon);
+        icon.setImageResource(R.drawable.ic_baseline_loop_gray_24dp);
+        model.setProgressReport(getString(R.string.database_update_download_start));
 
     }
 

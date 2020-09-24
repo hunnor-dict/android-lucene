@@ -34,14 +34,13 @@
                     app:srcCompat="@drawable/ic_sd_card_gray_24dp" />
 
                 <LinearLayout
-                    style="@style/DatabaseTextBlock"
-                    android:layout_width="wrap_content"
+                    style="@style/DatabaseBlockContent"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/database_local_title"
-                        style="@style/DatabaseTextTitle"
+                        style="@style/DatabaseBlockTitle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/database_local_title" />
@@ -49,17 +48,16 @@
                     <TableLayout
                         style="@style/DatabaseTable"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:visibility="@{viewModel.localStatus == null || viewModel.localStatus.isEmpty() ? View.VISIBLE : View.GONE}">
 
                         <TableRow>
 
                             <TextView
-                                android:id="@+id/database_local_date_label"
                                 style="@style/DatabaseTableCellLabel"
                                 android:text="@string/database_label_date" />
 
                             <TextView
-                                android:id="@+id/database_local_date"
                                 style="@style/DatabaseTableCellValue"
                                 android:text="@{viewModel.localDate}" />
                         </TableRow>
@@ -67,20 +65,17 @@
                         <TableRow>
 
                             <TextView
-                                android:id="@+id/database_local_size_label"
                                 style="@style/DatabaseTableCellLabel"
                                 android:text="@string/database_label_size" />
 
                             <TextView
-                                android:id="@+id/database_local_size"
                                 style="@style/DatabaseTableCellValue"
                                 android:text="@{viewModel.localSize}" />
                         </TableRow>
                     </TableLayout>
 
                     <TextView
-                        android:id="@+id/database_local_status"
-                        style="@style/DatabaseStatusLine"
+                        style="@style/DatabaseBlockStatus"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@{viewModel.localStatus}"
@@ -97,17 +92,16 @@
                 <androidx.appcompat.widget.AppCompatImageView
                     android:layout_width="64sp"
                     android:layout_height="64sp"
-                    app:srcCompat="@drawable/ic_file_download_gray_24dp" />
+                    app:srcCompat="@drawable/ic_baseline_cloud_download_gray_24dp" />
 
                 <LinearLayout
-                    style="@style/DatabaseTextBlock"
-                    android:layout_width="wrap_content"
+                    style="@style/DatabaseBlockContent"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/database_available_update_title"
-                        style="@style/DatabaseTextTitle"
+                        style="@style/DatabaseBlockTitle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/database_remote_title" />
@@ -115,17 +109,16 @@
                     <TableLayout
                         style="@style/DatabaseTable"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:visibility="@{viewModel.remoteStatus == null || viewModel.remoteStatus.isEmpty() ? View.VISIBLE : View.GONE}">
 
                         <TableRow>
 
                             <TextView
-                                android:id="@+id/database_remote_date_label"
                                 style="@style/DatabaseTableCellLabel"
                                 android:text="@string/database_label_date" />
 
                             <TextView
-                                android:id="@+id/database_remote_date"
                                 style="@style/DatabaseTableCellValue"
                                 android:text="@{viewModel.remoteDate}" />
                         </TableRow>
@@ -133,20 +126,17 @@
                         <TableRow>
 
                             <TextView
-                                android:id="@+id/database_remote_size_label"
                                 style="@style/DatabaseTableCellLabel"
                                 android:text="@string/database_label_size" />
 
                             <TextView
-                                android:id="@+id/database_remote_size"
                                 style="@style/DatabaseTableCellValue"
                                 android:text="@{viewModel.remoteSize}" />
                         </TableRow>
                     </TableLayout>
 
                     <TextView
-                        android:id="@+id/database_available_update_status"
-                        style="@style/DatabaseStatusLine"
+                        style="@style/DatabaseBlockStatus"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@{viewModel.remoteStatus}"
@@ -154,16 +144,40 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/database_progress_status"
-                style="@style/DatabaseProgressReport"
+            <LinearLayout
+                style="@style/DatabaseBlock"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@{viewModel.progressReport}"
-                android:visibility="@{viewModel.progressReport == null || viewModel.progressReport.isEmpty() ? View.GONE : View.VISIBLE}" />
+                android:orientation="horizontal"
+                android:visibility="@{viewModel.progressReport == null || viewModel.progressReport.isEmpty() ? View.GONE : View.VISIBLE}">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/database_block_progress_icon"
+                    android:layout_width="64sp"
+                    android:layout_height="64sp"
+                    app:srcCompat="@drawable/ic_baseline_loop_gray_24dp" />
+
+                <LinearLayout
+                    style="@style/DatabaseBlockContent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/DatabaseBlockStatus"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@{viewModel.progressReport}" />
+
+                    <TextView
+                        style="@style/DatabaseBlockStatus"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@{viewModel.progressReportText}" />
+                </LinearLayout>
+            </LinearLayout>
 
             <Button
-                android:id="@+id/database_button_download"
                 style="@style/DatabaseBlock"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

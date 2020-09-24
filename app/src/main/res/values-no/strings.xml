@@ -27,9 +27,10 @@
     <string name="database_label_date">Dato:</string>
     <string name="database_label_size">Størrelse:</string>
     <string name="database_action_download">Nedlasting</string>
-    <string name="database_download_notification">Du kan følge nedlastingen i Nedlastinger. Applikasjonen installerer oppdateringen når nedlastingen er ferdig.</string>
-    <string name="database_download_running">Nedlasting er i gang, sjekk Nedlastinger.</string>
-    <string name="database_extract_completed">Ordboka er klar til bruk.</string>
+    <string name="database_update_download_start">Nedlasting startet</string>
+    <string name="database_update_extract_start">Pakker ut</string>
+    <string name="database_update_error">Oppdatering av ordboka feilet.</string>
+    <string name="database_update_finished">Oppdatering av ordboka er ferdig.</string>
 
     <string name="database_status_e_deploy_delete_deploy_index_dir">Feil ved sletting av midlertidig mappe.</string>
     <string name="database_status_e_deploy_delete_deploy_spelling_dir">Feil ved sletting av midlertidig mappe (stavekontroll).</string>

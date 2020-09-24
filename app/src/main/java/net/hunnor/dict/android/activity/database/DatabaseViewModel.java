@@ -10,6 +10,8 @@ public class DatabaseViewModel extends ViewModel {
 
     private MutableLiveData<String> progressReport;
 
+    private MutableLiveData<String> progressReportText;
+
     private MutableLiveData<String> remoteDate;
 
     private MutableLiveData<String> remoteSize;
@@ -34,6 +36,20 @@ public class DatabaseViewModel extends ViewModel {
             activeDownloadId = new MutableLiveData<>();
         }
         activeDownloadId.setValue(id);
+    }
+
+    public MutableLiveData<String> getProgressReportText() {
+        if (progressReportText == null) {
+            progressReportText = new MutableLiveData<>();
+        }
+        return progressReportText;
+    }
+
+    public void setProgressReportText(String report) {
+        if (progressReportText == null) {
+            progressReportText = new MutableLiveData<>();
+        }
+        progressReportText.setValue(report);
     }
 
     public MutableLiveData<String> getProgressReport() {

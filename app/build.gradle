@@ -16,8 +16,8 @@ android {
         versionName '3.4.2'
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
-    dataBinding {
-        enabled = true
+    buildFeatures {
+        dataBinding = true
     }
     buildTypes {
         release {
