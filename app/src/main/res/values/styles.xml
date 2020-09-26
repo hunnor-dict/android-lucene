@@ -12,8 +12,17 @@
         <item name="android:layout_margin">@dimen/database_block_margin</item>
     </style>
 
+    <style name="DatabaseBlockContent">
+        <item name="android:layout_marginLeft">@dimen/database_block_content_margin_left</item>
+    </style>
+
+    <style name="DatabaseBlockTitle">
+        <item name="android:textSize">@dimen/database_block_title_font_size</item>
+        <item name="android:fontFamily">@font/ubuntu_bold</item>
+    </style>
+
     <style name="DatabaseBlockStatus">
-        <item name="android:textSize">@dimen/database_status_font_size</item>
+        <item name="android:textSize">@dimen/database_block_status_font_size</item>
         <item name="android:fontFamily">@font/ubuntu</item>
     </style>
 
@@ -31,21 +40,6 @@
         <item name="android:paddingLeft">@dimen/database_table_cell_padding</item>
     </style>
 
-    <style name="DatabaseBlockContent">
-        <item name="android:layout_marginLeft">@dimen/database_text_block_margin_left</item>
-    </style>
-
-    <style name="DatabaseBlockTitle">
-        <item name="android:textSize">@dimen/database_text_title_font_size</item>
-        <item name="android:fontFamily">@font/ubuntu_bold</item>
-    </style>
-
-    <style name="SearchEntry">
-        <item name="android:padding">@dimen/search_entry_padding</item>
-        <item name="android:textColor">?android:textColorPrimary</item>
-        <item name="android:textSize">@dimen/search_entry_font_size</item>
-    </style>
-
     <style name="SearchInput">
         <item name="android:padding">@dimen/search_input_padding</item>
         <item name="android:textColor">?android:textColorSecondary</item>
@@ -55,6 +49,12 @@
     <style name="SearchMessage">
         <item name="android:padding">@dimen/search_message_padding</item>
         <item name="android:textSize">@dimen/search_message_font_size</item>
+    </style>
+
+    <style name="SearchEntry">
+        <item name="android:padding">@dimen/search_entry_padding</item>
+        <item name="android:textColor">?android:textColorPrimary</item>
+        <item name="android:textSize">@dimen/search_entry_font_size</item>
     </style>
 
     <style name="SearchWord">
