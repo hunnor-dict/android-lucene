@@ -12,8 +12,8 @@ android {
         vectorDrawables {
             useSupportLibrary true
         }
-        versionCode 16
-        versionName '3.4.2'
+        versionCode 17
+        versionName '3.5.0'
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
     buildFeatures {
