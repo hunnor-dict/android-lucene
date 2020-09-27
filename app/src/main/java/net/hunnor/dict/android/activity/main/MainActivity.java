@@ -23,6 +23,8 @@ import androidx.preference.PreferenceManager;
 
 import net.hunnor.dict.android.R;
 import net.hunnor.dict.android.activity.ActivityTemplate;
+import net.hunnor.dict.android.constants.Preferences;
+import net.hunnor.dict.android.constants.Resources;
 import net.hunnor.dict.android.service.StorageService;
 import net.hunnor.dict.android.task.ExtractTask;
 import net.hunnor.dict.android.task.ExtractTaskStatus;
@@ -38,41 +40,38 @@ public class MainActivity extends ActivityTemplate {
 
     private static final String TAG = MainActivity.class.getName();
 
-    private static final String DICTIONARY_INDEX_DIRECTORY = "hunnor-lucene-index";
-
-    private static final String DICTIONARY_SPELLING_DIRECTORY = "hunnor-lucene-spelling";
-
     private static final int SEARCH_MAX_ENTRIES = 25;
 
     private static final int SEARCH_MAX_WORDS = 50;
 
     private static ExtractTask extractTask;
 
-    private AlertDialog alert;
+    private AlertDialog alertDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        setListeners();
+        setupViews();
 
         checkDictionary();
         checkQuery();
 
     }
 
+    @Override
     protected void onStop() {
 
         super.onStop();
-        if (alert != null) {
-            alert.dismiss();
+
+        if (alertDialog != null) {
+            alertDialog.dismiss();
         }
 
     }
 
-    private void setListeners() {
+    private void setupViews() {
 
         EditText editText = findViewById(R.id.search_input);
 
@@ -111,35 +110,30 @@ public class MainActivity extends ActivityTemplate {
 
     private void showWords(String query) {
 
-        if (query == null) {
-            return;
-        }
-
-        LuceneSearcher luceneSearcher = LuceneSearcher.getInstance();
-
-        if (!luceneSearcher.isOpen() || !luceneSearcher.isSpellCheckerOpen()) {
+        if (query == null || isDictionaryNotOpen()) {
             return;
         }
 
         SharedPreferences sharedPreferences =
                 PreferenceManager.getDefaultSharedPreferences(this);
         int max = sharedPreferences.getInt(
-                "searchMaxWords", SEARCH_MAX_WORDS);
+                Preferences.SEARCH_MAX_WORDS, SEARCH_MAX_WORDS);
 
-        List<String> wordList = new ArrayList<>();
+        LuceneSearcher luceneSearcher = LuceneSearcher.getInstance();
+        List<String> words = new ArrayList<>();
         boolean suggestions = false;
 
         try {
-            wordList = luceneSearcher.suggestions(query, max);
-            if (wordList.isEmpty() && !query.isEmpty()) {
-                wordList = luceneSearcher.spellingSuggestions(query, max);
+            words = luceneSearcher.suggestions(query, max);
+            if (words.isEmpty() && !query.isEmpty()) {
+                words = luceneSearcher.spellingSuggestions(query, max);
                 suggestions = true;
             }
         } catch (IOException e) {
             Log.e(TAG, e.getMessage(), e);
         }
 
-        WordArrayAdapter adapter = new WordArrayAdapter(this, wordList);
+        WordArrayAdapter adapter = new WordArrayAdapter(this, words);
         adapter.setSuggestions(suggestions);
 
         ListView listView = findViewById(R.id.search_list);
@@ -150,7 +144,7 @@ public class MainActivity extends ActivityTemplate {
 
     private void showEntries(String query) {
 
-        if (query == null) {
+        if (query == null || isDictionaryNotOpen()) {
             return;
         }
 
@@ -158,13 +152,14 @@ public class MainActivity extends ActivityTemplate {
         editText.setText("");
 
         LuceneSearcher luceneSearcher = LuceneSearcher.getInstance();
-
         List<Entry> entries = new ArrayList<>();
+
         try {
             entries = luceneSearcher.search(query, SEARCH_MAX_ENTRIES);
         } catch (IOException e) {
             Log.e(TAG, e.getMessage(), e);
         }
+
         EntryArrayAdapter entryArrayAdapter = new EntryArrayAdapter(this, entries);
 
         ListView listView = findViewById(R.id.search_list);
@@ -186,9 +181,7 @@ public class MainActivity extends ActivityTemplate {
             query = intent.getStringExtra(Intent.EXTRA_PROCESS_TEXT);
         }
 
-        if (isDictionaryOpen()) {
-            showEntries(query);
-        }
+        showEntries(query);
 
     }
 
@@ -202,11 +195,6 @@ public class MainActivity extends ActivityTemplate {
             startDictionaryDeploy();
         }
 
-    }
-
-    private boolean isDictionaryOpen() {
-        LuceneSearcher luceneSearcher = LuceneSearcher.getInstance();
-        return luceneSearcher.isOpen() && luceneSearcher.isSpellCheckerOpen();
     }
 
     private boolean isDictionaryNotOpen() {
@@ -223,7 +211,7 @@ public class MainActivity extends ActivityTemplate {
             if (baseDirectory != null) {
                 try {
                     luceneSearcher.open(new File(
-                            baseDirectory, DICTIONARY_INDEX_DIRECTORY));
+                            baseDirectory, Resources.DICTIONARY_INDEX_DIRECTORY));
                 } catch (IOException e) {
                     Log.e(TAG, e.getMessage(), e);
                 }
@@ -235,7 +223,7 @@ public class MainActivity extends ActivityTemplate {
             if (baseDirectory != null) {
                 try {
                     luceneSearcher.openSpellChecker(new File(
-                            baseDirectory, DICTIONARY_SPELLING_DIRECTORY));
+                            baseDirectory, Resources.DICTIONARY_SPELLING_DIRECTORY));
                 } catch (IOException e) {
                     Log.e(TAG, e.getMessage(), e);
                 }
@@ -251,8 +239,8 @@ public class MainActivity extends ActivityTemplate {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setMessage(R.string.search_alert_deploy).setCancelable(false);
 
-            alert = builder.create();
-            alert.show();
+            alertDialog = builder.create();
+            alertDialog.show();
 
             StorageService storageService = new StorageService();
             extractTask = new ExtractTask(this, storageService);
@@ -265,8 +253,8 @@ public class MainActivity extends ActivityTemplate {
     public void extractTaskCallback(ExtractTaskStatus status) {
 
         if (!MainActivity.this.isFinishing()
-                && alert != null && alert.isShowing()) {
-            alert.dismiss();
+                && alertDialog != null && alertDialog.isShowing()) {
+            alertDialog.dismiss();
         }
 
         if (ExtractTaskStatus.OK.equals(status)) {
