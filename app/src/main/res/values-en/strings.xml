@@ -15,8 +15,6 @@
     <string name="about_dictionary_body">https://dict.hunnor.net</string>
     <string name="about_source_code_title">Source code</string>
     <string name="about_source_code_body">https://github.com/hunnor-dict</string>
-    <string name="about_icon_title">App icon</string>
-    <string name="about_icon_body">https://www.flaticon.com/authors/freepik</string>
 
     <string name="database_cehck_begin">Looking for updates</string>
     <string name="database_check_offline">No Internet connection</string>

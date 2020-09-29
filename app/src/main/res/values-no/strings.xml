@@ -15,8 +15,6 @@
     <string name="about_dictionary_body">https://dict.hunnor.net</string>
     <string name="about_source_code_title">Kildekode</string>
     <string name="about_source_code_body">https://github.com/hunnor-dict</string>
-    <string name="about_icon_title">Ikon</string>
-    <string name="about_icon_body">https://www.flaticon.com/authors/freepik</string>
 
     <string name="database_cehck_begin">Ser etter oppdateringer</string>
     <string name="database_check_offline">Ingen internettforbindelse</string>
