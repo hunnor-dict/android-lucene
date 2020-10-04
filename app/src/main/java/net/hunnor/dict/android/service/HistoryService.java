@@ -56,7 +56,7 @@ public class HistoryService {
     private List<String> limitListSize(List<String> list, int maxLength) {
         List<String> result = list;
         if (result.size() > maxLength) {
-            result = result.subList(0, maxLength - 1);
+            result = result.subList(0, maxLength);
         }
         return result;
     }
