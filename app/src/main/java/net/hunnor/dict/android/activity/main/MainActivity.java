@@ -114,9 +114,19 @@ public class MainActivity extends ActivityTemplate {
 
     }
 
+    private boolean isHistoryEnabled() {
+        SharedPreferences sharedPreferences =
+                PreferenceManager.getDefaultSharedPreferences(this);
+        return sharedPreferences.getBoolean(Preferences.HISTORY_ENABLED, true);
+    }
+
     private void saveToHistory(String query) {
 
         if (query == null || query.isEmpty()) {
+            return;
+        }
+
+        if (!isHistoryEnabled()) {
             return;
         }
 
@@ -152,13 +162,18 @@ public class MainActivity extends ActivityTemplate {
 
     private List<Word> loadWordsFromHistory() {
 
+        List<Word> words = new ArrayList<>();
+
+        if (!isHistoryEnabled()) {
+            return words;
+        }
+
         HistoryService historyService = new HistoryService();
 
         SharedPreferences sharedPreferences =
                 PreferenceManager.getDefaultSharedPreferences(this);
         String wordChain = sharedPreferences.getString(Preferences.HISTORY_WORDS, "");
         List<String> historyWords = historyService.readToList(wordChain);
-        List<Word> words = new ArrayList<>();
         if (!historyWords.isEmpty()) {
             for (String historyWord : historyWords) {
                 Word word = new Word(historyWord, Word.Source.HISTORY);

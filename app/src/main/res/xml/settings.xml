@@ -19,4 +19,9 @@
         android:title="@string/settings_app_theme_title"
         app:useSimpleSummaryProvider="true" />
 
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="historyEnabled"
+        android:title="@string/settings_history_enabled" />
+
 </androidx.preference.PreferenceScreen>

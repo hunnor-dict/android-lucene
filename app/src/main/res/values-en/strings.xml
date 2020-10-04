@@ -50,6 +50,7 @@
     <string name="settings_app_theme_item_system">System settings</string>
     <string name="settings_app_theme_title">Dark theme</string>
     <string name="settings_history_delete">Delete history</string>
+    <string name="settings_history_enabled">Search history</string>
     <string name="settings_max_words">Result list size</string>
 
 </resources>
