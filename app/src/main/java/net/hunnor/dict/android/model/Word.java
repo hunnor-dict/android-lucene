@@ -33,4 +33,9 @@ public class Word {
         this.source = source;
     }
 
+    @Override
+    public String toString() {
+        return value;
+    }
+
 }

@@ -24,8 +24,6 @@ public class AboutActivityTest {
                 R.string.about_dictionary_title))).check(matches(isDisplayed()));
         onView(withText(activityRule.getActivity().getResources().getString(
                 R.string.about_source_code_title))).check(matches(isDisplayed()));
-        onView(withText(activityRule.getActivity().getResources().getString(
-                R.string.about_icon_title))).check(matches(isDisplayed()));
     }
 
 }

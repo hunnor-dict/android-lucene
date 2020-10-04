@@ -3,6 +3,7 @@ package net.hunnor.dict.android.activity.main;
 import androidx.test.rule.ActivityTestRule;
 
 import net.hunnor.dict.android.R;
+import net.hunnor.dict.android.model.Word;
 import net.hunnor.dict.lucene.model.Entry;
 
 import org.junit.Rule;
@@ -18,6 +19,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.hasToString;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 
@@ -34,7 +36,7 @@ public class MainActivityTest {
                 .perform(click())
                 .perform(typeText("eple"));
 
-        onData(is("eplekake"))
+        onData(hasToString("eplekake"))
                 .perform(click());
 
         onView(withId(R.id.search_list))
