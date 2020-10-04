@@ -25,6 +25,8 @@ import net.hunnor.dict.android.R;
 import net.hunnor.dict.android.activity.ActivityTemplate;
 import net.hunnor.dict.android.constants.Preferences;
 import net.hunnor.dict.android.constants.Resources;
+import net.hunnor.dict.android.model.Word;
+import net.hunnor.dict.android.service.HistoryService;
 import net.hunnor.dict.android.service.StorageService;
 import net.hunnor.dict.android.task.ExtractTask;
 import net.hunnor.dict.android.task.ExtractTaskStatus;
@@ -43,6 +45,8 @@ public class MainActivity extends ActivityTemplate {
     private static final int SEARCH_MAX_ENTRIES = 25;
 
     private static final int SEARCH_MAX_WORDS = 50;
+
+    private static final int HISTORY_MAX_WORDS = 10;
 
     private static ExtractTask extractTask;
 
@@ -94,6 +98,7 @@ public class MainActivity extends ActivityTemplate {
 
         editText.setOnEditorActionListener((TextView textView, int actionId, KeyEvent keyEvent) -> {
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                saveToHistory(textView.getText().toString());
                 showEntries(textView.getText().toString());
             }
             return true;
@@ -103,43 +108,97 @@ public class MainActivity extends ActivityTemplate {
 
         listView.setOnItemClickListener((AdapterView<?> parent, View view, int position, long id) -> {
             TextView textView = (TextView) view;
+            saveToHistory(textView.getText().toString());
             showEntries(textView.getText().toString());
         });
 
     }
 
-    private void showWords(String query) {
+    private void saveToHistory(String query) {
 
-        if (query == null || isDictionaryNotOpen()) {
+        if (query == null || query.isEmpty()) {
             return;
         }
 
+        SharedPreferences sharedPreferences =
+                PreferenceManager.getDefaultSharedPreferences(this);
+        String wordsInHistory = sharedPreferences.getString(Preferences.HISTORY_WORDS, "");
+
+        HistoryService historyService = new HistoryService();
+        String newHistoryStr = historyService.append(wordsInHistory, query, HISTORY_MAX_WORDS);
+
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(Preferences.HISTORY_WORDS, newHistoryStr);
+        editor.apply();
+
+    }
+
+    private void showWords(String query) {
+
+        List<Word> words;
+
+        if (query == null || query.isEmpty()) {
+            words = loadWordsFromHistory();
+        } else {
+            words = loadWordsFromDictionary(query);
+        }
+
+        WordArrayAdapter adapter = new WordArrayAdapter(this, words);
+
+        ListView listView = findViewById(R.id.search_list);
+        listView.setAdapter(adapter);
+
+    }
+
+    private List<Word> loadWordsFromHistory() {
+
+        HistoryService historyService = new HistoryService();
+
+        SharedPreferences sharedPreferences =
+                PreferenceManager.getDefaultSharedPreferences(this);
+        String wordChain = sharedPreferences.getString(Preferences.HISTORY_WORDS, "");
+        List<String> historyWords = historyService.readToList(wordChain);
+        List<Word> words = new ArrayList<>();
+        if (!historyWords.isEmpty()) {
+            for (String historyWord : historyWords) {
+                Word word = new Word(historyWord, Word.Source.HISTORY);
+                words.add(word);
+            }
+        }
+        return words;
+    }
+
+    private List<Word> loadWordsFromDictionary(String query) {
+        List<Word> words = new ArrayList<>();
         SharedPreferences sharedPreferences =
                 PreferenceManager.getDefaultSharedPreferences(this);
         int max = sharedPreferences.getInt(
                 Preferences.SEARCH_MAX_WORDS, SEARCH_MAX_WORDS);
 
         LuceneSearcher luceneSearcher = LuceneSearcher.getInstance();
-        List<String> words = new ArrayList<>();
-        boolean suggestions = false;
+
+        if (isDictionaryNotOpen()) {
+            return words;
+        }
 
         try {
-            words = luceneSearcher.suggestions(query, max);
-            if (words.isEmpty() && !query.isEmpty()) {
-                words = luceneSearcher.spellingSuggestions(query, max);
-                suggestions = true;
+            List<String> roots = luceneSearcher.suggestions(query, max);
+            for (String root : roots) {
+                Word word = new Word(root, Word.Source.ROOTS);
+                words.add(word);
+            }
+            if (roots.isEmpty() && !query.isEmpty()) {
+                List<String> spellingSuggestions = luceneSearcher.spellingSuggestions(query, max);
+                for (String spellingSuggestion : spellingSuggestions) {
+                    Word word = new Word(spellingSuggestion, Word.Source.SPELLING);
+                    words.add(word);
+                }
             }
         } catch (IOException e) {
             Log.e(TAG, e.getMessage(), e);
         }
 
-        WordArrayAdapter adapter = new WordArrayAdapter(this, words);
-        adapter.setSuggestions(suggestions);
-
-        ListView listView = findViewById(R.id.search_list);
-        listView.setEmptyView(findViewById(R.id.search_empty));
-        listView.setAdapter(adapter);
-
+        return words;
     }
 
     private void showEntries(String query) {
@@ -181,7 +240,11 @@ public class MainActivity extends ActivityTemplate {
             query = intent.getStringExtra(Intent.EXTRA_PROCESS_TEXT);
         }
 
-        showEntries(query);
+        if (query == null || query.isEmpty()) {
+            showWords(query);
+        } else {
+            showEntries(query);
+        }
 
     }
 

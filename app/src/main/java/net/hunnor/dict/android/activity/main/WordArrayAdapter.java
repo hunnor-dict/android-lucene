@@ -11,14 +11,13 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 
 import net.hunnor.dict.android.R;
+import net.hunnor.dict.android.model.Word;
 
 import java.util.List;
 
-public class WordArrayAdapter extends ArrayAdapter<String> {
+public class WordArrayAdapter extends ArrayAdapter<Word> {
 
-    private boolean suggestions;
-
-    WordArrayAdapter(Context context, List<String> wordList) {
+    WordArrayAdapter(Context context, List<Word> wordList) {
         super(context, 0, wordList);
     }
 
@@ -31,19 +30,29 @@ public class WordArrayAdapter extends ArrayAdapter<String> {
                     .inflate(R.layout.search_words, parent, false);
         }
 
-        String word = getItem(position);
+        Word word = getItem(position);
         TextView textView = convertView.findViewById(R.id.search_word);
-        if (suggestions) {
-            textView.setTypeface(null, Typeface.ITALIC);
+
+        switch (word.getSource()) {
+            case ROOTS:
+                textView.setTypeface(null, Typeface.NORMAL);
+                textView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+                break;
+            case SPELLING:
+                textView.setTypeface(null, Typeface.ITALIC);
+                textView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+                break;
+            case HISTORY:
+                textView.setTypeface(null, Typeface.NORMAL);
+                textView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_baseline_history_gray_24dp, 0, 0, 0);
+                break;
+            default:
+                break;
         }
-        textView.setText(word);
+        textView.setText(word.getValue());
 
         return convertView;
 
-    }
-
-    void setSuggestions(boolean suggestions) {
-        this.suggestions = suggestions;
     }
 
 }

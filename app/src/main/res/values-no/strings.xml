@@ -49,6 +49,7 @@
     <string name="settings_app_theme_item_power">Batterisparing</string>
     <string name="settings_app_theme_item_system">Systeminnstillinger</string>
     <string name="settings_app_theme_title">Mørkt tema</string>
+    <string name="settings_history_delete">Slett søkehistorikk</string>
     <string name="settings_max_words">Resultatlistens størrelse</string>
 
 </resources>

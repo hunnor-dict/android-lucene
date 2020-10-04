@@ -4,6 +4,8 @@ public class Preferences {
 
     public static final String SEARCH_MAX_WORDS = "searchMaxWords";
 
+    public static final String HISTORY_WORDS = "historyWords";
+
     public static final String THEME_KEY = "theme";
 
     public static final String THEME_DAY = "day";
