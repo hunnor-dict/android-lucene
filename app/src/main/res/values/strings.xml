@@ -13,6 +13,7 @@
 
     <string name="about_dictionary_title">HunNor közösségi szótár</string>
     <string name="about_dictionary_body">https://dict.hunnor.net</string>
+    <string name="about_facebook_logo_description">Kövess a Facebookon</string>
     <string name="about_source_code_title">Forráskód</string>
     <string name="about_source_code_body">https://github.com/hunnor-dict</string>
 

@@ -13,6 +13,7 @@
 
     <string name="about_dictionary_title">HunNor nettordbok</string>
     <string name="about_dictionary_body">https://dict.hunnor.net</string>
+    <string name="about_facebook_logo_description">Følg oss på Facebook</string>
     <string name="about_source_code_title">Kildekode</string>
     <string name="about_source_code_body">https://github.com/hunnor-dict</string>
 
