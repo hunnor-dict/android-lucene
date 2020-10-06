@@ -28,8 +28,8 @@
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Small" />
 
         <ImageView
-            android:layout_width="128dp"
-            android:layout_height="128dp"
+            android:layout_width="96dp"
+            android:layout_height="96dp"
             android:layout_gravity="center"
             android:layout_marginTop="32dp"
             android:contentDescription="@string/app_name"
@@ -53,8 +53,8 @@
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Small" />
 
         <ImageView
-            android:layout_width="64dp"
-            android:layout_height="64dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:layout_gravity="center"
             android:layout_marginTop="32dp"
             android:contentDescription="@string/about_facebook_logo_description"
