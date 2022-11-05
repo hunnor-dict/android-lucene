@@ -346,7 +346,7 @@ public class MainActivity extends ActivityTemplate {
 
     protected void displayError(ExtractTaskStatus status) {
 
-        String message = "";
+        String message = status.toString();
 
         switch (status) {
             case E_DEPLOY_DELETE_DEPLOY_INDEX_DIR:

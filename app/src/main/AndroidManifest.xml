@@ -17,7 +17,8 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".activity.main.MainActivity"
-            android:launchMode="singleTop">
+            android:launchMode="singleTop"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
@@ -40,19 +41,22 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.database.DatabaseActivity">
+        <activity android:name=".activity.database.DatabaseActivity"
+            android:exported="false">
             <intent-filter>
                 <action android:name="net.hunnor.dict.android.activity.database.DatabaseActivity" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.settings.SettingsActivity">
+        <activity android:name=".activity.settings.SettingsActivity"
+            android:exported="false">
             <intent-filter>
                 <action android:name="net.hunnor.dict.android.activity.settings.SettingsActivity" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.about.AboutActivity">
+        <activity android:name=".activity.about.AboutActivity"
+            android:exported="false">
             <intent-filter>
                 <action android:name="net.hunnor.dict.android.activity.about.AboutActivity" />
                 <category android:name="android.intent.category.DEFAULT" />
