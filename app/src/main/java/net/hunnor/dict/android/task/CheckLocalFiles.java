@@ -12,9 +12,9 @@ import java.util.Map;
 
 public class CheckLocalFiles extends AsyncTask<File, Void, Map<String, Long>> {
 
-    private WeakReference<Activity> activityWeakReference;
+    private final WeakReference<Activity> activityWeakReference;
 
-    private StorageService storageService;
+    private final StorageService storageService;
 
     public CheckLocalFiles(Activity activity, StorageService storageService) {
         this.activityWeakReference = new WeakReference<>(activity);

@@ -33,7 +33,7 @@ public class EntryArrayAdapter extends ArrayAdapter<Entry> {
         Entry entry = getItem(position);
         if (entry != null) {
             TextView textView = convertView.findViewById(R.id.search_entry);
-            textView.setText(Html.fromHtml(entry.getText()));
+            textView.setText(Html.fromHtml(entry.getText(), Html.FROM_HTML_MODE_LEGACY));
         }
 
         return convertView;

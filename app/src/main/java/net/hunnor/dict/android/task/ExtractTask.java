@@ -21,9 +21,9 @@ public class ExtractTask extends AsyncTask<Uri, Void, ExtractTaskStatus> {
 
     private static final String DICTIONARY_ASSET = "lucene-index.zip";
 
-    private WeakReference<Activity> activityWeakReference;
+    private final WeakReference<Activity> activityWeakReference;
 
-    private StorageService storageService;
+    private final StorageService storageService;
 
     public ExtractTask(Activity activity, StorageService storageService) {
         this.activityWeakReference = new WeakReference<>(activity);

@@ -24,9 +24,9 @@ public class CheckForUpdates extends AsyncTask<String, Void, Map<String, String>
 
     private static final String SIZE = "size";
 
-    private WeakReference<Activity> activityWeakReference;
+    private final WeakReference<Activity> activityWeakReference;
 
-    private NetworkService networkService;
+    private final NetworkService networkService;
 
     public CheckForUpdates(Activity activity, NetworkService networkService) {
         this.activityWeakReference = new WeakReference<>(activity);

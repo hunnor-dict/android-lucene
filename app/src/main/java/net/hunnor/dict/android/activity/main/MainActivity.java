@@ -4,7 +4,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.Editable;
@@ -250,8 +249,7 @@ public class MainActivity extends ActivityTemplate {
 
         if (Intent.ACTION_SEND.equals(intent.getAction())) {
             query = intent.getStringExtra(Intent.EXTRA_TEXT);
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-                && Intent.ACTION_PROCESS_TEXT.equals(intent.getAction())) {
+        } else if (Intent.ACTION_PROCESS_TEXT.equals(intent.getAction())) {
             query = intent.getStringExtra(Intent.EXTRA_PROCESS_TEXT);
         }
 

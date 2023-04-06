@@ -143,11 +143,4 @@ public class DatabaseViewModel extends ViewModel {
         return localStatus;
     }
 
-    public void setLocalStatus(String status) {
-        if (localStatus == null) {
-            localStatus = new MutableLiveData<>();
-        }
-        localStatus.setValue(status);
-    }
-
 }

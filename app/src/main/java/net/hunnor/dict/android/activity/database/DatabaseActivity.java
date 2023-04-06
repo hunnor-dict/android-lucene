@@ -109,16 +109,21 @@ public class DatabaseActivity extends ActivityTemplate {
 
         Query query = new Query();
         query.setFilterById(activeDownloadId);
-        Cursor cursor = downloadManager.query(query);
-        if (cursor.moveToFirst()) {
-            int columnIndex = cursor.getColumnIndex(DownloadManager.COLUMN_STATUS);
-            if (DownloadManager.STATUS_SUCCESSFUL == cursor.getInt(columnIndex)) {
-                String uriString = cursor.getString(cursor.getColumnIndex(
-                        DownloadManager.COLUMN_LOCAL_URI));
-                Uri uri = Uri.parse(uriString);
-                getViewModel().setProgressReport(getString(R.string.database_update_extract_start));
-                startExtractTask(uri);
+        try (Cursor cursor = downloadManager.query(query)) {
+            if (cursor.moveToFirst()) {
+                int statusColumnIndex = cursor.getColumnIndex(DownloadManager.COLUMN_STATUS);
+                if (DownloadManager.STATUS_SUCCESSFUL == cursor.getInt(statusColumnIndex)) {
+                    int localUriColumnIndex = cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI);
+                    if (localUriColumnIndex >= 0) {
+                        String uriString = cursor.getString(localUriColumnIndex);
+                        Uri uri = Uri.parse(uriString);
+                        getViewModel().setProgressReport(getString(R.string.database_update_extract_start));
+                        startExtractTask(uri);
+                    }
+                }
             }
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage(), e);
         }
     }
 
@@ -314,8 +319,12 @@ public class DatabaseActivity extends ActivityTemplate {
         if (activeDownloadId != null && activeDownloadId != 0) {
             Query query = new Query();
             query.setFilterById(activeDownloadId);
-            Cursor cursor = downloadManager.query(query);
-            if (cursor.moveToFirst()) {
+            try (Cursor cursor = downloadManager.query(query)) {
+                if (cursor.moveToFirst()) {
+                    return;
+                }
+            } catch (Exception e) {
+                Log.e(TAG, e.getMessage(), e);
                 return;
             }
         }
