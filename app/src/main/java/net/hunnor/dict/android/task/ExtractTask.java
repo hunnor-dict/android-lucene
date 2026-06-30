@@ -5,6 +5,7 @@ import android.content.res.AssetManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
+import android.util.Log;
 
 import net.hunnor.dict.android.activity.database.DatabaseActivity;
 import net.hunnor.dict.android.activity.main.MainActivity;
@@ -33,6 +34,7 @@ public class ExtractTask extends AsyncTask<Uri, Void, ExtractTaskStatus> {
     @Override
     protected ExtractTaskStatus doInBackground(Uri... uris) {
 
+        Log.d("ExtractTask", "Starting extraction");
         ExtractTaskStatus status = ExtractTaskStatus.E_EXCEPTION_IO;
 
         if (uris == null || uris.length == 0) {
@@ -75,6 +77,7 @@ public class ExtractTask extends AsyncTask<Uri, Void, ExtractTaskStatus> {
     @Override
     protected void onPostExecute(ExtractTaskStatus status) {
 
+        Log.d("ExtractTask", "Extraction finished with status: " + status);
         final Activity activity = activityWeakReference.get();
 
         if (MainActivity.class.isAssignableFrom(activity.getClass())) {

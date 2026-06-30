@@ -87,15 +87,17 @@ public class DatabaseActivity extends ActivityTemplate {
             }
         };
 
+        Log.d(TAG, "Registering broadcast receiver");
         ContextCompat.registerReceiver(this, receiver,
                 new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE),
-                ContextCompat.RECEIVER_NOT_EXPORTED);
+                ContextCompat.RECEIVER_EXPORTED);
 
     }
 
     private void receiveBroadcast(Intent intent) {
 
         String action = intent.getAction();
+        Log.d(TAG, "Broadcast received: " + action);
         if (!DownloadManager.ACTION_DOWNLOAD_COMPLETE.equals(action)) {
             return;
         }
@@ -115,15 +117,24 @@ public class DatabaseActivity extends ActivityTemplate {
         try (Cursor cursor = downloadManager.query(query)) {
             if (cursor.moveToFirst()) {
                 int statusColumnIndex = cursor.getColumnIndex(DownloadManager.COLUMN_STATUS);
-                if (DownloadManager.STATUS_SUCCESSFUL == cursor.getInt(statusColumnIndex)) {
+                int status = cursor.getInt(statusColumnIndex);
+                Log.d(TAG, "Download status: " + status);
+                if (DownloadManager.STATUS_SUCCESSFUL == status) {
                     int localUriColumnIndex = cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI);
                     if (localUriColumnIndex >= 0) {
                         String uriString = cursor.getString(localUriColumnIndex);
                         Uri uri = Uri.parse(uriString);
+                        Log.d(TAG, "Download successful, URI: " + uriString);
                         getViewModel().setProgressReport(getString(R.string.database_update_extract_start));
                         startExtractTask(uri);
                     }
+                } else if (DownloadManager.STATUS_FAILED == status) {
+                    int reasonColumnIndex = cursor.getColumnIndex(DownloadManager.COLUMN_REASON);
+                    int reason = cursor.getInt(reasonColumnIndex);
+                    Log.e(TAG, "Download failed, reason: " + reason);
                 }
+            } else {
+                Log.w(TAG, "Download cursor empty for ID: " + activeDownloadId);
             }
         } catch (Exception e) {
             Log.e(TAG, e.getMessage(), e);
@@ -306,8 +317,10 @@ public class DatabaseActivity extends ActivityTemplate {
 
     public void doDownload(View view) {
 
+        Log.d(TAG, "doDownload called");
         String externalStorageState = Environment.getExternalStorageState();
         if (!Environment.MEDIA_MOUNTED.equals(externalStorageState)) {
+            Log.e(TAG, "External storage not mounted: " + externalStorageState);
             return;
         }
 
@@ -332,13 +345,10 @@ public class DatabaseActivity extends ActivityTemplate {
             }
         }
 
-        File externalFilesDir = getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS);
-        File downloadFile = new File(externalFilesDir, INDEX_FILE);
-        Uri uri = Uri.fromFile(downloadFile);
-
         Request request = new Request(Uri.parse(INDEX_URL));
-        request.setDestinationUri(uri);
+        request.setDestinationInExternalFilesDir(this, Environment.DIRECTORY_DOWNLOADS, INDEX_FILE);
         long queueId = downloadManager.enqueue(request);
+        Log.d(TAG, "Download enqueued, ID: " + queueId);
         model.setActiveDownloadId(queueId);
 
         AppCompatImageView icon = findViewById(R.id.database_block_progress_icon);
