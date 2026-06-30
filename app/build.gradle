@@ -3,11 +3,11 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdkVersion 33
+    compileSdkVersion 35
     defaultConfig {
         applicationId 'net.hunnor.dict.android'
         minSdkVersion 24
-        targetSdkVersion 33
+        targetSdkVersion 35
         vectorDrawables {
             useSupportLibrary true
         }
@@ -26,33 +26,35 @@ android {
         }
     }
     compileOptions {
-        targetCompatibility 1.8
-        sourceCompatibility 1.8
+        targetCompatibility JavaVersion.VERSION_17
+        sourceCompatibility JavaVersion.VERSION_17
+    }
+    kotlinOptions {
+        jvmTarget = '17'
     }
     namespace 'net.hunnor.dict.android'
 }
 
 dependencies {
 
-    def lifecycle_version = '2.2.0'
-
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
-    implementation 'androidx.preference:preference-ktx:1.2.0'
+    implementation 'androidx.appcompat:appcompat:1.7.1'
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.7"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.8.7"
+    implementation 'androidx.preference:preference-ktx:1.2.1'
 
     implementation group: 'net.hunnor.dict', name: 'export-lucene-searcher', version: '1.0.0'
     implementation group: 'commons-io', name: 'commons-io', version: '2.5'
 
     testImplementation 'junit:junit:4.13.2'
-    testImplementation 'org.mockito:mockito-core:3.12.4'
+    testImplementation 'org.mockito:mockito-core:5.12.0'
 
-    androidTestImplementation 'androidx.test:core:1.5.0'
-    androidTestImplementation 'androidx.test:runner:1.5.2'
-    androidTestImplementation 'androidx.test:rules:1.5.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
-    androidTestImplementation 'org.mockito:mockito-android:3.12.4'
+    androidTestImplementation 'androidx.test:core:1.6.1'
+    androidTestImplementation 'androidx.test:runner:1.6.2'
+    androidTestImplementation 'androidx.test:rules:1.6.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
+    androidTestImplementation 'org.mockito:mockito-android:5.12.0'
 
     implementation 'androidx.core:core-ktx:1.10.0'
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.10'

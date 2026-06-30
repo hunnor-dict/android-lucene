@@ -16,9 +16,9 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
         setPreferencesFromResource(R.xml.settings, rootKey)
 
-        preferenceChangeListener = OnSharedPreferenceChangeListener { sharedPreferences: SharedPreferences, key: String ->
+        preferenceChangeListener = OnSharedPreferenceChangeListener { sharedPreferences: SharedPreferences?, key: String? ->
             if (Preferences.THEME_KEY == key) {
-                when (sharedPreferences.getString(Preferences.THEME_KEY, Preferences.THEME_DAY)) {
+                when (sharedPreferences?.getString(Preferences.THEME_KEY, Preferences.THEME_DAY)) {
                     Preferences.THEME_DAY -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
                     Preferences.THEME_NIGHT -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
                     Preferences.THEME_POWER -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY)

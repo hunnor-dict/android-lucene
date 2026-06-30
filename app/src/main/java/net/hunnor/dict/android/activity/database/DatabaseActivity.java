@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.View;
 
 import androidx.appcompat.widget.AppCompatImageView;
+import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -86,7 +87,9 @@ public class DatabaseActivity extends ActivityTemplate {
             }
         };
 
-        registerReceiver(receiver, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+        ContextCompat.registerReceiver(this, receiver,
+                new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE),
+                ContextCompat.RECEIVER_NOT_EXPORTED);
 
     }
 
